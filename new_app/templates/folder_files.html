@@ -1,0 +1,10 @@
+<!-- home.html -->
+{% extends "layout.html" %}
+{% block content %}
+<h1>{{folder_name}}</h1>
+<ul>
+{% for file in files %}
+    <li><a href="{{url_for('static', filename='projects/'+folder_name+'/'+file)}}">{{file}}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
