@@ -10,5 +10,9 @@ def home():
 def jay():
     return render_template('jay.html')
 
+@app.route('/test')
+def test():
+    return render_template('jay.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
