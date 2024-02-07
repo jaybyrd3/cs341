@@ -16,7 +16,9 @@ class User(db.Model):
         return '<User %r>' % self.username
 
 # Create the database tables
-db.create_all()
+def create_database():
+    with app.app_context():
+        db.create_all()
 
 # Define a route for the default page
 @app.route('/')
@@ -70,4 +72,5 @@ def submit():
 #     return render_template('index.html')
 
 if __name__ == '__main__':
+    create_database()
     app.run(debug=True)
