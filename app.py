@@ -1,5 +1,5 @@
-from flask import Flask
-from db_config import db
+from flask import Flask, request, render_template, redirect, url_for
+from db_config import db, User
 import os
 
 app = Flask(__name__)
