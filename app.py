@@ -23,5 +23,23 @@ with app.app_context():
 def home():
     return render_template('home.html')
 
+@app.route('/add', methods=['GET', 'POST'])
+def add_user():
+    if request.method == 'POST':
+        username = request.form['username']
+        email = request.form['email']
+        if username and email:
+            new_user = User(username=username, email=email)
+            db.session.add(new_user)
+            db.session.commit()
+            return redirect(url_for('view_users'))
+    return render_template('add_user.html')
+
+@app.route('/users')
+def view_users():
+    users = User.query.all()
+    return render_template('view_users.html', users=users)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
