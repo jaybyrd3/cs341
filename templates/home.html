@@ -1,14 +1,115 @@
 <!-- home.html -->
 <!DOCTYPE html>
+<link rel="stylesheet" href="../static/styles.css">
+
+<!--**Collapsable Sidebar Stylesheet Imports [START]**-->
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> 
+<!--**Collapsable Sidebar Stylesheet Imports [END]**-->
+
 <html lang = "en">
     <head>
         <title>CS341Proj - Home</title>
     </head>
     <body>
-        <h1>Home</h1>
-        <p>Welcome to this extremely epic homepage!</p>
-        <a href="/add" id = "addButton"style="display:inline-block; margin-top:20px; padding:10px; background-color:blue; color:white; text-decoration:none; border-radius:5px;" target="_blank">Add User</a>
-        <a href="/users" id = "usersButton" style="display:inline-block; margin-top:20px; padding:10px; background-color:blue; color:white; text-decoration:none; border-radius:5px;" target="_blank">View All Users</a>
+
+        <!--**Collapsable Sidebar HTML [START]**-->
+
+        <div class = "w3-container container" style = "display: inline-block; z-index: 999; width: fit-content; position: fixed;" onclick = "menuAnimation(this); openClose();" id = "menuButton">
+            <div class = "bar1"></div>
+            <div class = "bar2"></div>
+            <div class = "bar3"></div>
+        </div>
+        <div class = "w3-sidebar w3-bar-block w3-border-right" style = "display: none; z-index: 0;" id = "mainMenu">
+            <a class = "w3-bar-item" style = "margin-top: 25px;" id = "stealthButton"> </a>
+            <a href = "/" class = "w3-bar-item w3-button">Home</a>
+            <a href = "/add" class = "w3-bar-item w3-button">Add New User</a>
+            <a href = "/users" class = "w3-bar-item w3-button">View All Users</a>
+        </div>
+
+        <!--**Collapsable Sidebar HTML [END]**-->
+
+        <div class = "w3-container" style = "z-index: -999; margin-top: 20px">
+            <h1>Home</h1>
+            <p>Welcome to this extremely epic homepage!</p>
+            <p> <!--Placeholder text for testing scrolling effects [START]-->
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin vulputate nulla id ullamcorper malesuada. 
+                Nunc molestie molestie elit et luctus. Praesent imperdiet, urna eget lacinia varius, dui orci accumsan erat, nec ultricies justo ipsum et est. 
+                Ut consectetur, metus sit amet scelerisque elementum, turpis risus tincidunt odio, in auctor lectus urna vel tellus. 
+                Aliquam venenatis pharetra massa, eget laoreet sem dictum eget. Phasellus ultricies diam vel felis aliquam interdum. 
+                In vel vestibulum turpis. Praesent orci arcu, elementum eget magna eget, cursus blandit justo. Nulla pharetra porta sem non rhoncus. 
+                Sed blandit dolor ut nisl porttitor, vel porta massa elementum.
+            </p>
+            <p>
+                Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce interdum nulla sit amet ex vestibulum euismod. 
+                Aliquam auctor, purus vel viverra aliquet, odio dolor commodo massa, sit amet vestibulum sapien odio vel urna. 
+                Aliquam quis condimentum felis. Ut maximus felis in risus dignissim venenatis. Phasellus nec mi tempor, consectetur metus tempus, placerat orci. 
+                Pellentesque ut condimentum nunc.
+            </p>
+            <p>
+                Quisque luctus pellentesque nulla euismod ultricies. In sodales quam ultrices molestie tincidunt. Nulla ac dui nisi. 
+                Suspendisse scelerisque tincidunt blandit. Ut eleifend faucibus dapibus. Suspendisse a ex hendrerit, congue ligula at, vulputate nulla. 
+                Maecenas nisi felis, hendrerit at lectus ut, dictum dignissim felis. Praesent lacinia ullamcorper maximus. Mauris at mauris nibh. 
+                Aenean suscipit erat sed nulla vehicula pretium. Mauris iaculis, erat at sagittis consectetur, purus dui tincidunt erat, quis consequat urna nisl quis nunc. 
+                Sed quis lectus ut quam tristique imperdiet non in dolor. Sed interdum velit ac sagittis posuere. 
+                Nunc vestibulum, sem vel ultrices iaculis, quam dolor congue purus, ac laoreet libero purus quis orci.
+            </p>
+            <p>
+                Praesent eget egestas ligula. Sed porta interdum condimentum. Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                Integer malesuada turpis arcu, in luctus neque aliquam eget. Sed vitae hendrerit leo. Duis a nisl tristique, dictum nisl ut, vulputate nibh. 
+                Vestibulum sollicitudin, lorem at faucibus facilisis, quam lectus placerat dolor, vel egestas magna magna a diam. 
+                Morbi a elementum arcu, eu sagittis ipsum. Proin at finibus velit. Etiam condimentum est ac purus lobortis luctus. 
+                Suspendisse pretium metus ac ex auctor, eget facilisis orci pretium. Interdum et malesuada fames ac ante ipsum primis in faucibus. 
+                Suspendisse rutrum ligula id pharetra malesuada. Curabitur pulvinar quam condimentum, tincidunt risus quis, ultricies nunc. 
+                Mauris eget ligula eu augue tristique tristique.
+            </p>
+            <p>
+                Nulla quis iaculis ante, sed scelerisque turpis. Aenean nunc ex, hendrerit non bibendum sit amet, commodo ut magna. 
+                Sed sodales semper nisl, in scelerisque leo vehicula sit amet. In a turpis sed nisi dapibus pellentesque. Aenean eu interdum neque. 
+                Suspendisse potenti. In id turpis sit amet odio finibus lacinia. Ut pharetra porta nisi in rutrum. Pellentesque semper mollis lacus nec porta. 
+                Praesent sollicitudin turpis dolor, sed egestas justo vehicula nec. Pellentesque id nunc sit amet ipsum ullamcorper placerat. Morbi vitae sagittis urna. 
+                Duis rhoncus diam lectus, mollis consequat purus venenatis a. Mauris convallis malesuada efficitur.
+            </p> 
+            <p>
+                Nulla quis iaculis ante, sed scelerisque turpis. Aenean nunc ex, hendrerit non bibendum sit amet, commodo ut magna. 
+                Sed sodales semper nisl, in scelerisque leo vehicula sit amet. In a turpis sed nisi dapibus pellentesque. Aenean eu interdum neque. 
+                Suspendisse potenti. In id turpis sit amet odio finibus lacinia. Ut pharetra porta nisi in rutrum. Pellentesque semper mollis lacus nec porta. 
+                Praesent sollicitudin turpis dolor, sed egestas justo vehicula nec. Pellentesque id nunc sit amet ipsum ullamcorper placerat. Morbi vitae sagittis urna. 
+                Duis rhoncus diam lectus, mollis consequat purus venenatis a. Mauris convallis malesuada efficitur.
+            </p>
+            <p>
+                Nulla quis iaculis ante, sed scelerisque turpis. Aenean nunc ex, hendrerit non bibendum sit amet, commodo ut magna. 
+                Sed sodales semper nisl, in scelerisque leo vehicula sit amet. In a turpis sed nisi dapibus pellentesque. Aenean eu interdum neque. 
+                Suspendisse potenti. In id turpis sit amet odio finibus lacinia. Ut pharetra porta nisi in rutrum. Pellentesque semper mollis lacus nec porta. 
+                Praesent sollicitudin turpis dolor, sed egestas justo vehicula nec. Pellentesque id nunc sit amet ipsum ullamcorper placerat. Morbi vitae sagittis urna. 
+                Duis rhoncus diam lectus, mollis consequat purus venenatis a. Mauris convallis malesuada efficitur.
+            </p>
+            <p>
+                Nulla quis iaculis ante, sed scelerisque turpis. Aenean nunc ex, hendrerit non bibendum sit amet, commodo ut magna. 
+                Sed sodales semper nisl, in scelerisque leo vehicula sit amet. In a turpis sed nisi dapibus pellentesque. Aenean eu interdum neque. 
+                Suspendisse potenti. In id turpis sit amet odio finibus lacinia. Ut pharetra porta nisi in rutrum. Pellentesque semper mollis lacus nec porta. 
+                Praesent sollicitudin turpis dolor, sed egestas justo vehicula nec. Pellentesque id nunc sit amet ipsum ullamcorper placerat. Morbi vitae sagittis urna. 
+                Duis rhoncus diam lectus, mollis consequat purus venenatis a. Mauris convallis malesuada efficitur.
+            </p> <!--Placeholder text for testing scrolling effects [END]-->
+            <a href="/add" id = "addButton"style="display:inline-block; margin-top:20px; padding:10px; background-color:blue; color:white; text-decoration:none; border-radius:5px;" target="_blank">Add User</a>
+            <a href="/users" id = "usersButton" style="display:inline-block; margin-top:20px; padding:10px; background-color:blue; color:white; text-decoration:none; border-radius:5px;" target="_blank">View All Users</a>
+        </div>
+        
+        <!--**Collapsable Sidebar JS [START]**-->
+        <script>
+            function menuAnimation(x) {
+                x.classList.toggle("trans");
+            }
+            
+            function openClose() {
+                if (document.getElementById("mainMenu").checkVisibility()) {
+                    document.getElementById("mainMenu").style.display = "none";
+                } else {
+                    document.getElementById("mainMenu").style.display = "inline-block";
+                }
+            }
+        </script>
+        <!--**Collapsable Sidebar JS [END]**-->
+
     </body>
 </html>
 
