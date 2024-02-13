@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Calendar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h2>Select a Day for Your Appointment</h2>
+<div id="calendar">
+    <!-- Dynamically generate calendar days here -->
+  {% for day in days %}
+    <div class="day" data-day="{{ day }}">{{ day.day }}</div>
+  {% endfor %}
+</div>
+
+<h2>Select a Time</h2>
+<select id="timeSelect" disabled>
+    <option value="">Select a time</option>
+    <option value="09:00">09:00 AM</option>
+    <option value="10:00">10:00 AM</option>
+    <!-- Add more times as needed -->
+</select>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
