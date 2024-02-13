@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, redirect, url_for
 from db_config import db, User
+from datetime import date, timedelta
 import os
 
 app = Flask(__name__)
@@ -39,6 +40,20 @@ def add_user():
 def view_users():
     users = User.query.all()
     return render_template('view_users.html', users=users)
+
+@app.route('/calendar')
+def calendar():
+    # Example for February 2024; adjust accordingly
+    start_date = date(2024, 2, 1)
+    end_date = date(2024, 2, 28)
+    delta = timedelta(days=1)
+    days = []
+    
+    while start_date <= end_date:
+        days.append(start_date)
+        start_date += delta
+
+    return render_template('calendar.html', days=days)
 
 
 if __name__ == '__main__':
