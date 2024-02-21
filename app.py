@@ -55,6 +55,17 @@ def calendar():
 
     return render_template('calendar.html', days=days)
 
+# START Jinja test routes
+
+@app.route('/base')
+def base():
+    return render_template('base.html')
+
+@app.route('/childOfBase')
+def childOfBase():
+    return render_template('jinjaBootstrapTest.html')
+
+# END Jinja test routes
 
 if __name__ == '__main__':
     app.run(debug=True)
