@@ -1,0 +1,30 @@
+<!--MAIN JINJA TEMPLATE ACCROSS ALL PAGES (usually "base.html")-->
+<!--note: all jinja files can be parents of other jinja files-->
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        {% block head %}
+            <!--Boostrap boilerplate metadata tags-->
+            <meta charset = "utf-8">
+            <meta name = "viewport" content = "width = device-width, initial-scale = 1">
+            <!-- Latest compiled and minified Bootstrap CSS -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+            <!-- Latest compiled Bootstrap JavaScript -->
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+        {% endblock head %}
+    </head>
+
+    <body>
+        <div id = "content">
+            {% block content %}
+                <p>This is a paragraph block inherited from its parent file, base.html.</p>
+            {% endblock content %}
+        </div>
+
+        <div id = "footer">
+            {% block footer %}
+                &copy; Copyright 2024 by CS341 Team #4
+            {% endblock footer %}
+        </div>
+    </body>
+</html>

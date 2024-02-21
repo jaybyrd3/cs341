@@ -1,0 +1,25 @@
+<!--A test file for the jinja template (see "base.html")-->
+{% extends "base.html" %} <!--does not have an endblock-->
+<!DOCTYPE html!>
+<html lang = "en">
+    <head>
+        {% block head %}
+            {{ super() }} <!--gets replaced from stuff in head block of parent template-->
+        {% endblock head %}
+    </head>
+    <body>
+        {% block content %}
+            {{ super() }}
+            <p>This is a paragraph block exclusive to jinjaBootstrapTest.html.</p>
+        {% endblock content %}
+        {% block footer %}
+            {{ super() }}
+        {% endblock footer %}
+    </body>
+</html>
+
+
+
+
+
+
