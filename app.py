@@ -65,6 +65,10 @@ def base():
 def childOfBase():
     return render_template('jinjaBootstrapTest.html')
 
+@app.route('/index')
+def index():
+    return render_template('index.html')
+
 # END Jinja test routes
 
 if __name__ == '__main__':
