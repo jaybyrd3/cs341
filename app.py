@@ -22,7 +22,11 @@ with app.app_context():
 # Add your Flask routes here
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('index.html')
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_user():
