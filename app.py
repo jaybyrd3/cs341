@@ -1,9 +1,15 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
 from db_config import db, User
 from datetime import date, timedelta
+from logging import FileHandler, WARNING
 import os
 
 app = Flask(__name__)
+
+# START Debug Logging (see 'errorlog.txt' for error history)
+file_handler = FileHandler('errorlog.txt')
+file_handler.setLevel(WARNING)
+# END Debug Logging
 
 # Retrieve the database URL from the environment variables
 database_url = os.getenv('DATABASE_URL')
