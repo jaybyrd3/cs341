@@ -29,6 +29,7 @@ def home():
 def login():
     return render_template('login.html')
 
+'''
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
 	if request.method == 'POST':
@@ -38,7 +39,7 @@ def signup():
 		email = request.form['email']
 		password = request.form['password']
 		confirm = request.form['confirm']
-		if password == confirm:
+		if password == confirm and email and password and confirm:
 			# query db to see if user exists
 			user = User.query.filter_by(email = email).all()
 			if not user:  # Check if user is an empty list
@@ -56,6 +57,7 @@ def signup():
 			flash(f"Your entered passwords do not match.", category="error")
 			return render_template('signup.html')
 	return render_template('signup.html')
+'''
     
 
 @app.route('/add', methods=['GET', 'POST'])
