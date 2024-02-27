@@ -52,7 +52,8 @@ def signup():
 				flash(f"There is already an account registered under the email {email}. Please log in to continue.")
 				return redirect(url_for('login'))
 		else:
-			flash(f"Your entered passwords do not match.", category="error")          
+			flash(f"Your entered passwords do not match.", category="error")
+			return redirect(url_for('signup'))                
 	return render_template('signup.html')
     
 
