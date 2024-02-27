@@ -46,14 +46,14 @@ def signup():
 				db.session.add(new_user)
 				db.session.commit()
 				flash(f"You have successfully made an account under the email {email}!", category="success")
-				return redirect(url_for('home'))
+				return render_template('signup.html')
 			else:
 				# we know the user already exists
 				flash(f"There is already an account registered under the email {email}. Please log in to continue.")
-				return redirect(url_for('login'))
+				return render_template('signup.html')
 		else:
 			flash(f"Your entered passwords do not match.", category="error")
-			return redirect(url_for('signup'))                
+			return render_template('signup.html')                
 	return render_template('signup.html')
     
 
