@@ -6,11 +6,6 @@ import os
 
 app = Flask(__name__)
 
-# START Debug Logging (see 'errorlog.txt' for error history)
-file_handler = FileHandler('errorlog.txt')
-file_handler.setLevel(WARNING)
-# END Debug Logging
-
 # Retrieve the database URL from the environment variables
 database_url = os.getenv('DATABASE_URL')
 if database_url.startswith("postgres://"):
@@ -34,7 +29,7 @@ def home():
 def login():
     return render_template('login.html')
 
-@app.route('/signup', methods = ['GET', 'POST'])
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
 	if request.method == 'POST':
 		# Need to validate 2 things here:
@@ -46,7 +41,7 @@ def signup():
 		if password == confirm:
 			# query db to see if user exists
 			user = User.query.filter(User.email == email).all()
-			if user != None:
+			if not user:  # Check if user is an empty list
 				# we know they're new & can add them
 				new_user = User(email=email, username=email, password=password)
 				db.session.add(new_user)
@@ -59,7 +54,7 @@ def signup():
 				return render_template('signup.html')
 		else:
 			flash(f"Your entered passwords do not match.", category="error")
-			return render_template('signup.html')                
+			return render_template('signup.html')
 	return render_template('signup.html')
     
 
