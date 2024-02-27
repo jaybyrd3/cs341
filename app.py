@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, flash
 from db_config import db, User
 from datetime import date, timedelta
 import os
@@ -27,6 +27,34 @@ def home():
 @app.route('/login')
 def login():
     return render_template('login.html')
+
+@app.route('/signup', methods = ['GET', 'POST'])
+def signup():
+	if request.method == 'POST':
+		# Need to validate 2 things here:
+		# The user doesn't currently exist
+		# The user's passwords match
+		email = request.form['email']
+		password = request.form['password']
+		confirm = request.form['confirm']
+		if password == confirm:
+			# query db to see if user exists
+			user = User.query.filter(User.email == email).all()
+			if user != None:
+				# we know they're new & can add them
+				new_user = User(email=email, username=email, password=password)
+				db.session.add(new_user)
+				db.session.commit()
+				flash(f"You have successfully made an account under the email {email}!", category="success")
+				return redirect(url_for('home'))
+			else:
+				# we know the user already exists
+				flash(f"There is already an account registered under the email {email}. Please log in to continue.")
+				return redirect(url_for('login'))
+		else:
+			flash(f"Your entered passwords do not match.", category="error")          
+	return render_template('signup.html')
+    
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_user():
