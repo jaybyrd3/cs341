@@ -20,6 +20,7 @@ class User(db.Model):
         return f'<User {self.username}>'
 
 class Slot(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.DateTime, unique=True, nullable=False)
     # if user_id == null, then appt slot is open
     user_id = db.Column(db.Integer, db.ForeignKey('theUser.id'), nullable=True)

@@ -1,4 +1,4 @@
-from flask import Flask, flask_login, request, session, render_template, redirect, url_for, flash
+from flask import Flask, request, session, render_template, redirect, url_for, flash
 from flask_login import LoginManager
 from db_config import db, User
 from datetime import date, timedelta
