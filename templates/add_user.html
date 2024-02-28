@@ -23,7 +23,13 @@
             <a href = "/login" class = "nav-link text-white">Login</a>
         </div>
     </div>
-
+    <nav class="navbar navbar-dark our-nav">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
     <!-- [START] FLASH MESSAGING FOR ADD_USER -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -35,14 +41,6 @@
         {% end if %}
     {% endwith %}
     <!-- [END] FLASH MESSAGING FOR ADD_USER -->
-
-    <nav class="navbar navbar-dark our-nav">
-        <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
     <div class="container maincontent rounded-3 my-5">
         <h1>Add a New User</h1>
         <form method="POST">

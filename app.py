@@ -50,6 +50,7 @@ def login():
 		user = User.query.filter_by(email=email).filter_by(password=password).all()
 		if not user:
 			flash(f"Email/password is incorrect, or user does not exist.", category="error")
+			return redirect(url_for('login'))
 		else:
 			session['email'] = email
 			session['password'] = password
@@ -68,6 +69,7 @@ def logout():
 	session.pop('email', None)
 	session.pop('password', None)
 	flash(f"You are now logged out.", category="success")
+	return redirect(url_for('index'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -87,11 +89,14 @@ def signup():
 				db.session.add(new_user)
 				db.session.commit()
 				flash(f"You have successfully made an account under the email {email}!", category="success")
+				return redirect(url_for('index'))
 			else:
 				# we know the user already exists
 				flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
+				return redirect(url_for('signup'))
 		else:
 			flash(f"Your entered passwords do not match.", category="error")
+			return redirect(url_for('signup'))
 	return render_template('signup.html')
 
 @app.route('/add', methods=['GET', 'POST'])

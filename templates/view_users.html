@@ -33,14 +33,14 @@
 
     <!-- [START] FLASH MESSAGING FOR VIEW_USERS -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        <ul class=flashes></ul>
-            {% for category, message in messages %}
-                <li class = "flash {{ category }}">{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% end if %}
-{% endwith %}
+        {% if messages %}
+            <ul class=flashes></ul>
+                {% for category, message in messages %}
+                    <li class = "flash {{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% end if %}
+    {% endwith %}
     <!-- [END] FLASH MESSAGING FOR VIEW_USERS -->
 
     <div class="container maincontent rounded-3 my-5">
