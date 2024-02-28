@@ -58,7 +58,7 @@ def login():
 			session['password'] = password
 			flash(f"Congrats - you are now signed in as {email}!", category="success")
 			# this may have to be '/' instead of 'index'
-			return redirect(url_for('index'))
+			return redirect(url_for('home'))
 	else:
 		return render_template('login.html')
 
