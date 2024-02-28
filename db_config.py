@@ -29,7 +29,7 @@ class Slot(db.Model):
     # if user_id == null, then appt slot is open
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
     # slot will always have a provider
-    provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'), nullable=False)
+    provider_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
     def __repr__(self):
 	    return f'<Slot {self.time}>'
