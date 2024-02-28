@@ -29,7 +29,6 @@ def home():
 def login():
     return render_template('login.html')
 
-'''
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
 	if request.method == 'POST':
@@ -57,8 +56,6 @@ def signup():
 			flash(f"Your entered passwords do not match.", category="error")
 			return render_template('signup.html')
 	return render_template('signup.html')
-'''
-    
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_user():
@@ -90,22 +87,6 @@ def calendar():
         start_date += delta
 
     return render_template('calendar.html', days=days)
-
-# START Jinja test routes
-
-@app.route('/base')
-def base():
-    return render_template('base.html')
-
-@app.route('/childOfBase')
-def childOfBase():
-    return render_template('jinjaBootstrapTest.html')
-
-@app.route('/index')
-def index():
-    return render_template('index.html')
-
-# END Jinja test routes
 
 if __name__ == '__main__':
     app.run(debug=True)
