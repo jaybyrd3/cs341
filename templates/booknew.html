@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Book!</title>
+    </head>
+    <body>
+        <h1>Book with one of these guys</h1>
+        <!--In the endpoint for this page, just need to filter so 
+        the users that are in the list are only those with
+        non-NULL service provider credentials-->
+        <ul>
+            {% for user in users %}
+                <li onclick="viewappt('{{ user.firstname }}', '{{ user.lastname }}', '{{ user.jobtitle }}')">
+                    {{ user.firstname }} - {{ user.lastname }} - {{ user.jobtitle }}
+                </li>
+            {% endfor %}
+            <!--Need to make elements clickable. All point to the same endpoint (/viewappointments)-->
+        </ul>
+    
+        <script>
+            function viewappt(firstName, lastName, jobTitle) {
+                // Example: navigate to /viewappointments with user information
+                window.location.href = '/viewappointments?firstName=' + firstName + '&lastName=' + lastName + '&jobTitle=' + jobTitle;
+            }
+        </script>
+    </body>
+</html>
