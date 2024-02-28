@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>View Appointments!</title>
+    </head>
+    <body>
+        <h1>Appointments for {{ user.username }}</h1>
+
+        {% if appointments %}
+            <ul>
+                {% for appointment in appointments %}
+                    <li>{{ appointment }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No appointments available.</p>
+        {% endif %}
+    </body>
+</html>
