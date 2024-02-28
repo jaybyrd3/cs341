@@ -1,5 +1,5 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
-from flask_login import LoginManager
+#from flask_login import LoginManager
 from db_config import db, User
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
@@ -21,10 +21,10 @@ db.init_app(app)
 # Initialize login manager
 # NOTE: login manager documentation here: 
 # https://flask-login.readthedocs.io/en/latest/
-app.secret_key = 'SECRET_KEY'
-login_manager = LoginManager()
-login_manager.init_app(app)
-login_manager.login_view = 'login'
+#app.secret_key = 'SECRET_KEY'
+#login_manager = LoginManager()
+#login_manager.init_app(app)
+#login_manager.login_view = 'login'
 
 #initialize secret key (we'll change this later)
 
