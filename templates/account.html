@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Account</title>
+    </head>
+    <body>
+        <div class="container">
+            <!--Need to make this <h1> the name of current user-->
+            <h1>YOUR NAME HERE</h1>
+            <form method="POST">
+                <div class="container">
+                    <!--Generic user info-->
+                    <label for="firstname">First:</label>
+                    <input type="text" id="firstname" name="firstname">
+                    <label for="lastname">Last:</label>
+                    <input type="text" id="lastname" name="lastname">
+                    <br>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username">
+                    <br>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email">
+                </div>
+                <br><br>
+                <div class="container">
+                    <!--Service provider info-->
+                    <h3>Want to provide services? ENTER INFO BELOW!</h3>                
+                    <label for="jobtitle">Job Title:</label>
+                    <input type="text" id="jobtitle" name="jobtitle">
+                    <br>
+                    <label for="qualifications">Describe your qualifications:</label>
+                    <input type="text" id="qualifications" name="qualifications">
+                </div>
+                <div class="container">
+                    <!--Submit Button-->
+                    <input type="submit" value="Update User">
+                </div>
+            </form>
+        </div>
+
+    </body>
+</html>
