@@ -18,7 +18,7 @@ class User(db.Model):
     jobTitle = db.Column(db.String(80), unique=False, nullable=True)
     qualifications = db.Column(db.String(80), unique=False, nullable=False)
     appointments = db.relationship('Slot', backref='user', lazy=True) # is a 1-to-many relationship by default
-    slots = db.relationship('Slot', backref='provider', lazy=True)
+    slots = db.relationship('Slot', backref='user', lazy=True)
 
     def __repr__(self):
         return f'<User {self.username}>'
