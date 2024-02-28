@@ -71,7 +71,7 @@ def logout():
 	session.pop('email', None)
 	session.pop('password', None)
 	flash(f"You are now logged out.", category="success")
-	return redirect(url_for('index'))
+	return redirect(url_for('home'))
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -91,7 +91,7 @@ def signup():
 				db.session.add(new_user)
 				db.session.commit()
 				flash(f"You have successfully made an account under the email {email}!", category="success")
-				return redirect(url_for('index'))
+				return redirect(url_for('home'))
 			else:
 				# we know the user already exists
 				flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
