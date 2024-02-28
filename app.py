@@ -4,7 +4,6 @@ from db_config import db, User
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
 import os
-import random
 
 app = Flask(__name__)
 
