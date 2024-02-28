@@ -24,6 +24,18 @@
         </div>
     </div>
 
+    <!-- [START] FLASH MESSAGING FOR ADD_USER -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul class=flashes></ul>
+                {% for category, message in messages %}
+                    <li class = "flash {{ category }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% end if %}
+    {% endwith %}
+    <!-- [END] FLASH MESSAGING FOR ADD_USER -->
+
     <nav class="navbar navbar-dark our-nav">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">

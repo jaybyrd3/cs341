@@ -29,9 +29,19 @@
                 </button>
             </div>
         </nav>
-        {% for category, message in get_flashed_messages(with_categories=true) %}
-			<div class = "flash {{ category }}">{{ message }}</div>
-		{% endfor %}
+
+        <!-- [START] FLASH MESSAGING FOR SIGNIN -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes></ul>
+                    {% for category, message in messages %}
+			            <li class = "flash {{ category }}">{{ message }}</li>
+		            {% endfor %}
+                </ul>
+            {% end if %}
+        {% endwith %}
+        <!-- [END] FLASH MESSAGING FOR SIGNIN -->
+
         <div class="container">
             <div class="row">
             <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">

@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, redirect, url_for, flash
+from flask import Flask, request, LoginManager, session, render_template, redirect, url_for, flash
 from db_config import db, User
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
 import os
+import random
 
 app = Flask(__name__)
 
@@ -17,6 +18,21 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Initialize the db with the app
 db.init_app(app)
 
+# Initialize login manager
+# NOTE: login manager documentation here: 
+# https://flask-login.readthedocs.io/en/latest/
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+#initialize secret key (we'll change this later)
+app.secret_key = 'SECRET_KEY'
+
+# NOTE ON SESSIONS: The "session" object comes as a global-variable import
+# with Flask & LoginManager. It automatically tracks who the current user is & their 
+# information from one login to the next
+# SESSIONS DOCUMENTATION:
+# https://flask.palletsprojects.com/en/latest/quickstart/#sessions
+
 with app.app_context():
     db.create_all()
 
@@ -25,9 +41,33 @@ with app.app_context():
 def home():
     return render_template('index.html')
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
-    return render_template('login.html')
+	if request.method == 'POST':
+		# We need to see if they exist
+		email = request.form['email']
+		password = request.form['password']
+		user = User.query.filter_by(email=email).filter_by(password=password).all()
+		if not user:
+			flash(f"Email/password is incorrect, or user does not exist.", category="error")
+		else:
+			session['email'] = email
+			session['password'] = password
+			flash(f"Congrats - you are now signed in as {email}!", category="success")
+			# this may have to be '/' instead of 'index'
+			return redirect(url_for('index'))
+	else:
+		return render_template('login.html')
+
+# NOTE: I don't believe we need a "logout.html", as we're just 
+# performing an action & flashing a message
+#	>> i.e. will be page-independent & only accessed from header
+@app.route('/logout')
+def logout():
+	# remove username & password from session & redirect to index
+	session.pop('email', None)
+	session.pop('password', None)
+	flash(f"You are now logged out.", category="success")
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -47,14 +87,11 @@ def signup():
 				db.session.add(new_user)
 				db.session.commit()
 				flash(f"You have successfully made an account under the email {email}!", category="success")
-				return render_template('signup.html')
 			else:
 				# we know the user already exists
-				flash(f"There is already an account registered under the email {email}. Please log in to continue.")
-				return render_template('signup.html')
+				flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
 		else:
 			flash(f"Your entered passwords do not match.", category="error")
-			return render_template('signup.html')
 	return render_template('signup.html')
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -88,5 +125,14 @@ def calendar():
 
     return render_template('calendar.html', days=days)
 
+
+# [START] HELPER FUNCTIONS
+
+
+
+# [END] HELPER FUNCTIONS
+
+
+# run app
 if __name__ == '__main__':
     app.run(debug=True)
