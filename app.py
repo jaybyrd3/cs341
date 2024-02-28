@@ -1,5 +1,5 @@
 from flask import Flask, flask_login, request, session, render_template, redirect, url_for, flash
-#from flask_login import LoginManager
+from flask_login import LoginManager
 from db_config import db, User
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
@@ -18,7 +18,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the db with the app
 db.init_app(app)
-'''
+
 # Initialize login manager
 # NOTE: login manager documentation here: 
 # https://flask-login.readthedocs.io/en/latest/
@@ -28,7 +28,7 @@ login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 #initialize secret key (we'll change this later)
-'''
+
 
 # NOTE ON SESSIONS: The "session" object comes as a global-variable import
 # with Flask & LoginManager. It automatically tracks who the current user is & their 
@@ -62,7 +62,7 @@ def login():
 			return redirect(url_for('index'))
 	else:
 		return render_template('login.html')
-'''
+
 # NOTE: I don't believe we need a "logout.html", as we're just 
 # performing an action & flashing a message
 #	>> i.e. will be page-independent & only accessed from header
@@ -73,7 +73,7 @@ def logout():
 	session.pop('password', None)
 	flash(f"You are now logged out.", category="success")
 	return redirect(url_for('index'))
-'''
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
 	if request.method == 'POST':
