@@ -36,6 +36,8 @@ db.init_app(app)
 # https://flask.palletsprojects.com/en/latest/quickstart/#sessions
 
 with app.app_context():
+    # comment this out to keep data
+    db.drop_all()
     db.create_all()
 
 # Add your Flask routes here
