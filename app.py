@@ -95,8 +95,12 @@ def signup():
 		if password == confirm and email and password and confirm:
 			# query db to see if user exists
 			user = User.query.filter_by(email = email).first()
-			if not user:  # Check if user is an empty list
-				# we know they're new & can add them
+			if user:  # Check if user is an empty list
+				# we know the user already exists
+				flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
+				return redirect(url_for('signup'))
+			else:
+                 # we know they're new & can add them
 				new_user = User(email=email, username=username, password=password, firstName=firstname, lastName=lastname)
 				db.session.add(new_user)
 				db.session.commit()
@@ -104,11 +108,7 @@ def signup():
 				session['password'] = password
 				login_user(user)
 				flash(f"You have successfully made an account under the email {email}!", category="success")
-				return redirect(url_for('home'))
-			else:
-				# we know the user already exists
-				flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
-				return redirect(url_for('signup'))
+				return redirect(url_for('home')) 
 		else:
 			flash(f"Your entered passwords do not match.", category="error")
 			return redirect(url_for('signup'))
