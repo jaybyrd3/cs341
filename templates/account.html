@@ -44,25 +44,25 @@
                     <div class="container">
                         <!--Generic user info-->
                         <label for="firstname">First:</label>
-                        <input type="text" id="firstname" name="firstname">
+                        <input type="text" id="firstname" name="firstname" value="{{ first_name }}">
                         <label for="lastname">Last:</label>
-                        <input type="text" id="lastname" name="lastname">
+                        <input type="text" id="lastname" name="lastname" value="{{ last_name }}">
                         <br>
                         <label for="username">Username:</label>
-                        <input type="text" id="username" name="username">
+                        <input type="text" id="username" name="username" value="{{ user_name }}">
                         <br>
                         <label for="email">Email:</label>
-                        <input type="email" id="email" name="email">
+                        <input type="email" id="email" name="email" value="{{ e_mail }}">
                     </div>
                     <br><br>
                     <div class="container">
                         <!--Service provider info-->
                         <h3>Want to provide services? ENTER INFO BELOW!</h3>                
                         <label for="jobtitle">Job Title:</label>
-                        <input type="text" id="jobtitle" name="jobtitle">
+                        <input type="text" id="jobtitle" name="jobtitle" value="{{ job_title }}">
                         <br>
                         <label for="qualifications">Describe your qualifications:</label>
-                        <input type="text" id="qualifications" name="qualifications">
+                        <input type="text" id="qualifications" name="qualifications" value="{{ qualifications_ }}">
                     </div>
                     <div class="container">
                         <!--Submit Button-->

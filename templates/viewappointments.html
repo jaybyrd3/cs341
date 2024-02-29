@@ -47,16 +47,15 @@
                 <h3>Provider Slots:</h3>
                 <ul>
                     {% for pslot in pslots %}
-                        <li>Description</li>
-                        <li>{{ pslot.description }}</li>
-                        <li>Provider</li>
-                        <li>{{ pslot.provider }}</li>
-                        <li>Client</li>
-                        <li>{{ pslot.client }}</li>
-                        <li>Start</li>
-                        <li>{{ pslot.starttime }}</li>
-                        <li>End</li>
-                        <li>{{ pslot.endtime }}</li>
+                        <li>
+                        -----------------------------------------<br>
+                        Description: {{ pslot.description }}<br>
+                        Provider: {{ pslot.provider }}<br>
+                        Client: {{ pslot.client }}<br>
+                        Start {{ pslot.starttime }}<br>
+                        End {{ pslot.endtime }}<br>
+                        -----------------------------------------<br>
+                        </li>
                     {% endfor %}
                 </ul><br>
     
@@ -64,16 +63,15 @@
                 <h3>Client Slots:</h3><br>
                 <ul>
                     {% for cslot in cslots %}
-                        <li>Description</li>
-                        <li>{{ cslot.description }}</li>
-                        <li>Provider</li>
-                        <li>{{ cslot.provider }}</li>
-                        <li>Client</li>
-                        <li>{{ cslot.client }}</li>
-                        <li>Start</li>
-                        <li>{{ cslot.starttime }}</li>
-                        <li>End</li>
-                        <li>{{ cslot.endtime }}</li>
+                        <li>
+                        -----------------------------------------<br>
+                        Description: {{ cslot.description }}<br>
+                        Provider: {{ cslot.provider }}<br>
+                        Client: {{ cslot.client }}<br>
+                        Start {{ cslot.starttime }}<br>
+                        End {{ cslot.endtime }}<br>
+                        -----------------------------------------<br>
+                        </li>
                     {% endfor %}
                 </ul>
             {% else %}

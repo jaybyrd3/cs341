@@ -237,8 +237,18 @@ def account():
                 print("User not found in the database.")
             
             return redirect(url_for('home'))
-
-    return render_template('account.html')
+    current_email = session['email']
+    if current_email:  
+        current_user = User.query.filter_by(email=current_email).first()
+        first_name = current_user.firstName
+        last_name = current_user.lastName
+        user_name = current_user.username
+        e_mail = current_user.email
+        job_title = current_user.jobTitle
+        qualifications_ = current_user.qualifications
+        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
+    else:
+        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?")
 
 # [START] HELPER FUNCTIONS
 

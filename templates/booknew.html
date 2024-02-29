@@ -47,6 +47,7 @@
                 <ul>
                     {% for slot in open_slots %}
                         <li>
+                            -----------------------------------------<br>
                             <form action="/booknew" method="post">
                                 Description: {{ slot.description }}<br>
                                 Provider: {{ slot.provider }}<br>
@@ -56,6 +57,7 @@
                                 <input type="hidden" name="slot_id" value="{{ slot.id }}">
                                 <button type="submit">Book This Slot</button>
                             </form>
+                            -----------------------------------------<br>
                         </li>
                     {% endfor %}
                 </ul><br>
