@@ -55,7 +55,7 @@ def login():
 		# We need to see if they exist
 		email = request.form['email']
 		password = request.form['password']
-		user = User.query.filter_by(email=email).filter_by(password=password).all()
+		user = User.query.filter_by(email=email).filter_by(password=password).first()
 		if not user:
 			flash(f"Email/password is incorrect, or user does not exist.", category="error")
 			return redirect(url_for('login'))
@@ -94,7 +94,7 @@ def signup():
 		confirm = request.form['confirm']
 		if password == confirm and email and password and confirm:
 			# query db to see if user exists
-			user = User.query.filter_by(email = email).all()
+			user = User.query.filter_by(email = email).first()
 			if not user:  # Check if user is an empty list
 				# we know they're new & can add them
 				new_user = User(email=email, username=username, password=password, firstName=firstname, lastName=lastname)
