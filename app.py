@@ -52,11 +52,11 @@ def home():
 @app.route('/makeslot', methods=['GET', 'POST'])
 def makeslot():
 	if request.method == 'POST':
-		start_time = request.form['starttime']
-		end_time = request.form['endtime']
+		starttime = request.form['starttime']
+		endtime = request.form['endtime']
 		client = request.form['client']
 		provider = request.form['provider']
-		slot_description = request.form['description']
+		description = request.form['description']
 		new_slot = Slot(starttime=starttime, endtime=endtime, client=client, provider=provider, description=description)
 		db.session.add(new_slot)
 		db.session.commit()
