@@ -32,7 +32,7 @@
             </div>
         </nav>
 
-        <!-- [START] FLASH MESSAGING FOR INDEX
+        <!-- [START] FLASH MESSAGING FOR INDEX -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class=flashes>
@@ -40,9 +40,9 @@
 			            <li class = "flash {{ category }}">{{ message }}</li>
 		            {% endfor %}
                 </ul>
-            {% end if %}
+            {% endif %}
         {% endwith %}
-         [END] FLASH MESSAGING FOR INDEX -->
+        <!-- [END] FLASH MESSAGING FOR INDEX -->
         
         <div class="container maincontent rounded-3 my-5">
             <h1>Home</h1>

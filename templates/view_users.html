@@ -31,17 +31,17 @@
         </div>
     </nav>
 
-    <!-- [START] FLASH MESSAGING FOR VIEW_USERS
+    <!-- [START] FLASH MESSAGING FOR VIEW_USERS -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
+    {% if messages %}
             <ul class=flashes></ul>
                 {% for category, message in messages %}
                     <li class = "flash {{ category }}">{{ message }}</li>
                 {% endfor %}
             </ul>
-        {% end if %}
+        {% endif %}
     {% endwith %}
-     [END] FLASH MESSAGING FOR VIEW_USERS -->
+    <!-- [END] FLASH MESSAGING FOR VIEW_USERS -->
 
     <div class="container maincontent rounded-3 my-5">
         <h1>All Users</h1>

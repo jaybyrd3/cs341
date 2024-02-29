@@ -30,7 +30,7 @@
             </div>
         </nav>
 
-        <!-- [START] FLASH MESSAGING FOR LOGIN 
+        <!-- [START] FLASH MESSAGING FOR LOGIN -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 <ul class=flashes>
@@ -38,9 +38,9 @@
 			            <li class = "flash {{ category }}">{{ message }}</li>
 		            {% endfor %}
                 </ul>
-            {% end if %}
+            {% endif %}
         {% endwith %}
-         [END] FLASH MESSAGING FOR LOGIN -->
+        <!-- [END] FLASH MESSAGING FOR LOGIN -->
         
         <div class="container">
             <div class="row">
