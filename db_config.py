@@ -4,7 +4,6 @@
 # see: https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/
 
 from flask_sqlalchemy import SQLAlchemy
-from . import Slot
 
 db = SQLAlchemy()
 
