@@ -79,6 +79,7 @@ def booknew():
             return redirect(url_for('booknew'))
     
     open_slots = Slot.query.filter_by(client=None).all()
+    print(open_slots)
     return render_template('booknew.html', open_slots=open_slots)
 # def booknew():
 #     open_slots = Slot.query.filter_by(client=None).all()
