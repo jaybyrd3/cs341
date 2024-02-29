@@ -106,7 +106,7 @@ def signup():
 				db.session.commit()
 				session['email'] = email
 				session['password'] = password
-				login_user(user)
+				login_user(new_user)
 				flash(f"You have successfully made an account under the email {email}!", category="success")
 				return redirect(url_for('home')) 
 		else:
