@@ -21,7 +21,7 @@ db.init_app(app)
 # Initialize login manager
 # NOTE: login manager documentation here: 
 # https://flask-login.readthedocs.io/en/latest/
-#app.secret_key = 'SECRET_KEY'
+app.secret_key = 'SECRET_KEY'
 #login_manager = LoginManager()
 #login_manager.init_app(app)
 #login_manager.login_view = 'login'
