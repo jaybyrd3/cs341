@@ -3,6 +3,7 @@ from flask_login import LoginManager, login_required, login_user
 from db_config import db, User, Slot
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
+from sqlalchemy import or_
 import os
 
 app = Flask(__name__)
@@ -78,7 +79,7 @@ def booknew():
             flash('This slot is no longer available.', 'error')
             return redirect(url_for('booknew'))
     
-    open_slots = Slot.query.filter_by(client=None).all()
+    open_slots = Slot.query.filter_by(or_(Slot.client == None, Slot.client == "")).all()
     print(open_slots)
     return render_template('booknew.html', open_slots=open_slots)
 # def booknew():
