@@ -50,12 +50,18 @@ with app.app_context():
 def home():
     return render_template('index.html')
 
+@app.route('/skynet')
+def wipe():
+	db.drop_all()
+	return "ITS ALL GONE!!!"
+
 @app.route('/makeslot', methods=['GET', 'POST'])
 def makeslot():
 	if request.method == 'POST':
 		starttime = request.form['starttime']
 		endtime = request.form['endtime']
 		client = request.form['client']
+		print(f"make slot client {client}")
 		provider = request.form['provider']
 		description = request.form['description']
 		new_slot = Slot(starttime=starttime, endtime=endtime, client=client, provider=provider, description=description)
@@ -79,7 +85,7 @@ def booknew():
             flash('This slot is no longer available.', 'error')
             return redirect(url_for('booknew'))
     
-    open_slots = Slot.query.filter(or_(Slot.client == None, Slot.client == "")).all()
+    open_slots = Slot.query.filter_by(client=None).all()
     print(open_slots)
     return render_template('booknew.html', open_slots=open_slots)
 # def booknew():
