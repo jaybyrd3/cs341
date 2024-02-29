@@ -97,7 +97,7 @@ def signup():
 			user = User.query.filter_by(email = email).all()
 			if not user:  # Check if user is an empty list
 				# we know they're new & can add them
-				new_user = User(email=email, username=username, password=password, firstname=firstname, lastname=lastname)
+				new_user = User(email=email, username=username, password=password, firstName=firstname, lastName=lastname)
 				db.session.add(new_user)
 				db.session.commit()
 				flash(f"You have successfully made an account under the email {email}!", category="success")
