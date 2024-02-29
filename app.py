@@ -1,6 +1,6 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
 #from flask_login import LoginManager
-from db_config import db, User
+from db_config import db, User, Slot
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
 import os
