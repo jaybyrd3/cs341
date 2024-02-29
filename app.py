@@ -23,7 +23,7 @@ db.init_app(app)
 # https://flask-login.readthedocs.io/en/latest/
 app.secret_key = 'SECRET_KEY'
 login_manager = LoginManager(app)
-# login_manager.init_app(app)
+login_manager.init_app(app)
 login_manager.login_view = 'login'
 
 @login_manager.user_loader
@@ -100,6 +100,9 @@ def signup():
 				new_user = User(email=email, username=username, password=password, firstName=firstname, lastName=lastname)
 				db.session.add(new_user)
 				db.session.commit()
+				session['email'] = email
+				session['password'] = password
+				login_user(user)
 				flash(f"You have successfully made an account under the email {email}!", category="success")
 				return redirect(url_for('home'))
 			else:
