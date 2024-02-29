@@ -50,6 +50,7 @@
                             <form action="/booknew" method="post">
                                 Description: {{ slot.description }}<br>
                                 Provider: {{ slot.provider }}<br>
+                                Client: {{ slot.client }}<br>
                                 Start: {{ slot.starttime }}<br>
                                 End: {{ slot.endtime }}<br>
                                 <input type="hidden" name="slot_id" value="{{ slot.id }}">
