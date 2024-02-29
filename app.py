@@ -81,6 +81,9 @@ def signup():
 		# Need to validate 2 things here:
 		# The user doesn't currently exist
 		# The user's passwords match
+		firstname = request.form['firstname']
+		lastname = request.form['lastname']
+		username = request.form['username']
 		email = request.form['email']
 		password = request.form['password']
 		confirm = request.form['confirm']
@@ -89,7 +92,7 @@ def signup():
 			user = User.query.filter_by(email = email).all()
 			if not user:  # Check if user is an empty list
 				# we know they're new & can add them
-				new_user = User(email=email, username=email, password=password)
+				new_user = User(email=email, username=username, password=password, firstname=firstname, lastname=lastname)
 				db.session.add(new_user)
 				db.session.commit()
 				flash(f"You have successfully made an account under the email {email}!", category="success")

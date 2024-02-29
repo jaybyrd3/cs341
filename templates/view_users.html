@@ -33,7 +33,7 @@
 
     <!-- [START] FLASH MESSAGING FOR VIEW_USERS -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
+        {% if messages %}
             <ul class=flashes></ul>
                 {% for category, message in messages %}
                     <li class = "flash {{ category }}">{{ message }}</li>
