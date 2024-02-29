@@ -63,6 +63,14 @@ def makeslot():
 		return redirect(url_for('home')) 
 	else:
 		return render_template('makeslot.html')
+      
+@app.route('/booknew', methods=['GET', 'POST'])
+def booknew():
+    open_slots = Slot.query.filter_by(client=None).all()
+    if open_slots:
+          return render_template('booknew.html', open_slots=open_slots)
+    else:
+          return render_template('booknew.html', open_slots=None)
 		
 
 @app.route('/viewappointments', methods=['GET', 'POST'])
