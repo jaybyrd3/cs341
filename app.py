@@ -1,5 +1,5 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
-from flask_login import LoginManager, login_required
+from flask_login import LoginManager, login_required, login_user
 from db_config import db, User, Slot
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
@@ -25,6 +25,10 @@ app.secret_key = 'SECRET_KEY'
 login_manager = LoginManager(app)
 # login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 #initialize secret key (we'll change this later)
 
@@ -58,6 +62,7 @@ def login():
 		else:
 			session['email'] = email
 			session['password'] = password
+			login_user(user)
 			flash(f"Congrats - you are now signed in as {email}!", category="success")
 			# this may have to be '/' instead of 'index'
 			return redirect(url_for('home'))
