@@ -49,6 +49,23 @@ with app.app_context():
 def home():
     return render_template('index.html')
 
+@app.route('/makeslot', methods=['GET', 'POST'])
+def makeslot():
+	if request.method == 'POST':
+		start_time = request.form['start_time']
+		end_time = request.form['end_time']
+		client = request.form['client']
+		provider = request.form['provider']
+		slot_description = request.form['slot_description']
+		new_slot = Slot(start_time=start_time, end_time=end_time, client=client, provider=provider, slot_description=slot_description)
+		db.session.add(new_slot)
+		db.session.commit()
+		return redirect(url_for('home')) 
+	else:
+		return render_template('makeslot.html')
+		
+    
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	if request.method == 'POST':

@@ -29,11 +29,14 @@ class User(UserMixin, db.Model):
 class Slot(db.Model):
     __tablename__ = 'slot'
     id = db.Column(db.Integer, primary_key=True)
-    time = db.Column(db.DateTime, unique=True, nullable=True)
+    starttime = db.Column(db.DateTime, unique=False, nullable=True)
+    endtime = db.Column(db.DateTime, unique=False, nullable=True)
     # if user_id == null, then appt slot is open
     client = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
+    provider = db.Column(db.Test, db.ForeignKey('user.email'), nullable=True)
     # slot will always have a provider
     # provider_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    description = db.Column(db.String(512), unique=False, nullable=True)
     
     def __repr__(self):
 	    return f'<Slot {self.time}>'
