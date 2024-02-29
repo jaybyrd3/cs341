@@ -1,4 +1,4 @@
-from flask import Flask, request, session, render_template, redirect, url_for, flash
+from flask import Flask, request, session, render_template, redirect, url_for #flash
 #from flask_login import LoginManager
 from db_config import db, User
 from datetime import date, timedelta
@@ -51,12 +51,12 @@ def login():
 		password = request.form['password']
 		user = User.query.filter_by(email=email).filter_by(password=password).all()
 		if not user:
-			flash(f"Email/password is incorrect, or user does not exist.", category="error")
+			#flash(f"Email/password is incorrect, or user does not exist.", category="error")
 			return redirect(url_for('login'))
 		else:
 			session['email'] = email
 			session['password'] = password
-			flash(f"Congrats - you are now signed in as {email}!", category="success")
+			#flash(f"Congrats - you are now signed in as {email}!", category="success")
 			# this may have to be '/' instead of 'index'
 			return redirect(url_for('home'))
 	else:
@@ -70,7 +70,7 @@ def logout():
 	# remove username & password from session & redirect to index
 	session.pop('email', None)
 	session.pop('password', None)
-	flash(f"You are now logged out.", category="success")
+	#flash(f"You are now logged out.", category="success")
 	return redirect(url_for('home'))
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -90,14 +90,14 @@ def signup():
 				new_user = User(email=email, username=email, password=password)
 				db.session.add(new_user)
 				db.session.commit()
-				flash(f"You have successfully made an account under the email {email}!", category="success")
+				#flash(f"You have successfully made an account under the email {email}!", category="success")
 				return redirect(url_for('home'))
 			else:
 				# we know the user already exists
-				flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
+				#flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
 				return redirect(url_for('signup'))
 		else:
-			flash(f"Your entered passwords do not match.", category="error")
+			#flash(f"Your entered passwords do not match.", category="error")
 			return redirect(url_for('signup'))
 	return render_template('signup.html')
 
