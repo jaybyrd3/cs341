@@ -17,8 +17,8 @@ class User(db.Model):
     lastName = db.Column(db.String(80), unique=False, nullable=True)
     jobTitle = db.Column(db.String(80), unique=False, nullable=True)
     qualifications = db.Column(db.String(80), unique=False, nullable=False)
-    appointments = db.relationship('Slot', backref='user', lazy=True, foreign_keys=['user_id']) # is a 1-to-many relationship by default
-    slots = db.relationship('Slot', backref='user', lazy=True, foreign_keys=['provider_id'])
+    appointments = db.relationship('Slot', backref='user', lazy=True, foreign_keys=['Slot.user_id']) # is a 1-to-many relationship by default
+    slots = db.relationship('Slot', backref='user', lazy=True, foreign_keys=['Slot.provider_id'])
 
     def __repr__(self):
         return f'<User {self.username}>'
