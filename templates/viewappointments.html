@@ -4,12 +4,42 @@
         <title>View Appointments!</title>
     </head>
     <body>
-        <h1>Appointments for {{ user.username }}</h1>
+        {% if current_user.is_authenticated %}
+        <h1>Appointments for {{ current_user.username }}!</h1>
+        {% else %}
+        <h1>Appointments</h1>
+        {% endif %}
 
-        {% if appointments %}
+        {% if pslots %}
+            <h3>Provider Slots:</h3>
             <ul>
-                {% for appointment in appointments %}
-                    <li>{{ appointment }}</li>
+                {% for pslot in pslots %}
+                    <li>{{ pslot.description }}</li>
+                    <li>Provider</li>
+                    <li>{{ pslot.provider }}</li>
+                    <li>Client</li>
+                    <li>{{ pslot.client }}</li>
+                    <li>Start</li>
+                    <li>{{ pslot.starttime }}</li>
+                    <li>End</li>
+                    <li>{{ pslot.endtime }}</li>
+                {% endfor %}
+            </ul><br>
+
+        {% elif cslots %}
+            <h3>Client Slots:</h3><br>
+            <ul>
+                <li>Description</li>
+                {% for cslot in cslots %}
+                    <li>{{ cslot.description }}</li>
+                    <li>Provider</li>
+                    <li>{{ cslot.provider }}</li>
+                    <li>Client</li>
+                    <li>{{ cslot.client }}</li>
+                    <li>Start</li>
+                    <li>{{ cslot.starttime }}</li>
+                    <li>End</li>
+                    <li>{{ cslot.endtime }}</li>
                 {% endfor %}
             </ul>
         {% else %}

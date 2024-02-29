@@ -64,7 +64,19 @@ def makeslot():
 	else:
 		return render_template('makeslot.html')
 		
-    
+
+@app.route('/viewappointments', methods=['GET', 'POST'])
+@login_required
+def viewappointments():
+    current_email = session['email']
+    if current_email:
+        pslots = Slot.query.filter_by(provider=current_email).all()
+        cslots = Slot.query.filter_by(client=current_email).all()
+
+        return render_template('viewappointments.html', pslots=pslots, cslots=cslots)
+    else:
+        return render_template('viewappointments.html', pslots=None, cslots=None)
+         
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
