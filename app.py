@@ -42,7 +42,7 @@ def load_user(id):
 
 with app.app_context():
     # comment this out to keep data
-    db.drop_all()
+    # db.drop_all()
     db.create_all()
 
 # Add your Flask routes here
@@ -79,7 +79,7 @@ def booknew():
             flash('This slot is no longer available.', 'error')
             return redirect(url_for('booknew'))
     
-    open_slots = Slot.query.filter_by(or_(Slot.client == None, Slot.client == "")).all()
+    open_slots = Slot.query.filter(or_(Slot.client == None, Slot.client == "")).all()
     print(open_slots)
     return render_template('booknew.html', open_slots=open_slots)
 # def booknew():
