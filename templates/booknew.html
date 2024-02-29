@@ -39,8 +39,26 @@
             {% else %}
             <h1>Browse Appointments:</h1>
             {% endif %}
-    
             {% if open_slots %}
+                <h3>Available Slots:</h3>
+                <ul>
+                    {% for slot in open_slots %}
+                        <li>
+                            <form action="/booknew" method="post">
+                                Description: {{ slot.description }}<br>
+                                Provider: {{ slot.provider }}<br>
+                                Start: {{ slot.starttime }}<br>
+                                End: {{ slot.endtime }}<br>
+                                <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                <button type="submit">Book This Slot</button>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul><br>
+            {% else %}
+                <p>No appointments available.</p>
+            {% endif %}
+<!--             {% if open_slots %}
                 <h3>Provider Slots:</h3>
                 <ul>
                     {% for pslot in open_slots %}
@@ -58,7 +76,7 @@
                 </ul><br>
             {% else %}
                 <p>No appointments available.</p>
-            {% endif %}
+            {% endif %} -->
         </div>
 
     </body>
