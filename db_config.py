@@ -4,11 +4,12 @@
 # see: https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/
 
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
 # Define your models here
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=False, nullable=True)
