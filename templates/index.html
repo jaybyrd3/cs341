@@ -48,7 +48,11 @@
         <!-- [END] FLASH MESSAGING FOR INDEX -->
         
         <div class="container maincontent rounded-3 my-5">
-            <h1>Home</h1>
+	    {% if current_user.is_authenticated %}
+        	<h1>Hello, {{ current_user.username }}!</h1>
+    	    {% else %}
+        	<h1>Hello</h1>
+            {% endif %}
             <p>Welcome to this extremely epic homepage!</p>
             <p> <!--Placeholder text for testing scrolling effects [START]-->
                 Bacon ipsum dolor amet alcatra pork swine chuck flank leberkas pork belly fatback. 
