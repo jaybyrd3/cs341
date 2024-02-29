@@ -53,6 +53,7 @@ def home():
 @app.route('/skynet')
 def wipe():
 	db.drop_all()
+	db.create_all()
 	return "ITS ALL GONE!!!"
 
 @app.route('/makeslot', methods=['GET', 'POST'])
