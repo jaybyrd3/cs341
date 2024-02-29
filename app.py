@@ -77,8 +77,8 @@ def booknew():
     if request.method == 'POST':
         slot_id = request.form.get('slot_id')
         slot = Slot.query.get(slot_id)
-        if slot and not slot.client:
-            slot.client = current_user.email  # Or however you identify the client
+        if slot: #and not slot.client
+            slot.client = session['email']  # Or however you identify the client
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
             return redirect(url_for('viewappointments'))
