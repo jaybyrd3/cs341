@@ -1,5 +1,5 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
-#from flask_login import LoginManager
+from flask_login import LoginManager, login_required
 from db_config import db, User, Slot
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
@@ -22,9 +22,9 @@ db.init_app(app)
 # NOTE: login manager documentation here: 
 # https://flask-login.readthedocs.io/en/latest/
 app.secret_key = 'SECRET_KEY'
-#login_manager = LoginManager()
-#login_manager.init_app(app)
-#login_manager.login_view = 'login'
+login_manager = LoginManager(app)
+# login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 #initialize secret key (we'll change this later)
 
@@ -138,6 +138,7 @@ def calendar():
     return render_template('calendar.html', days=days)
 
 @app.route('/account', methods=['GET', 'POST'])
+@login_required
 def account():
     if request.method == 'POST':
         username = request.form['username']
