@@ -137,9 +137,9 @@ def account():
     if request.method == 'POST':
         username = request.form['username']
         email = request.form['email']
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        jobtitle = request.form['jobtitle']
+        firstName = request.form['firstname']
+        lastName = request.form['lastname']
+        jobTitle = request.form['jobtitle']
         qualifications = request.form['qualifications']
 
         # Validate that username and email are provided
@@ -150,9 +150,9 @@ def account():
             if existing_user:
                 # Update the fields for the existing user
                 existing_user.email = email
-                existing_user.firstname = firstname
-                existing_user.lastname = lastname
-                existing_user.jobtitle = jobtitle
+                existing_user.firstName = firstName
+                existing_user.lastName = lastName
+                existing_user.jobTitle = jobTitle
                 existing_user.qualifications = qualifications
 
                 # Commit the changes to the database
@@ -161,7 +161,7 @@ def account():
                 # Handle the case where the user doesn't exist (optional)
                 print("User not found in the database.")
             
-            return redirect(url_for('view_users'))
+            return redirect(url_for('home'))
 
     return render_template('account.html')
 
