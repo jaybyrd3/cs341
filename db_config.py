@@ -39,4 +39,4 @@ class Slot(db.Model):
     description = db.Column(db.String(512), unique=False, nullable=True)
     
     def __repr__(self):
-	    return f'<Slot {self.time}>'
+	    return f'<Slot {self.description}>'
