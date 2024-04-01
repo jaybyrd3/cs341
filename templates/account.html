@@ -39,34 +39,58 @@
         <div class="container maincontent rounded-3 my-5">
             <div class="container">
                 <!--Need to make this <h1> the name of current user-->
-                <h1>YOUR NAME HERE</h1>
+                {% if current_user.is_authenticated %}
+        	        <h2>Hello, {{ current_user.username }}!</h2>
+    	        {% else %}
+        	        <h2>Hello</h2>
+                {% endif %}
+                <!--<h1>YOUR NAME HERE</h1>-->
                 <form method="POST">
                     <div class="container">
                         <!--Generic user info-->
-                        <label for="firstname">First:</label>
-                        <input type="text" id="firstname" name="firstname" value="{{ first_name }}">
-                        <label for="lastname">Last:</label>
-                        <input type="text" id="lastname" name="lastname" value="{{ last_name }}">
-                        <br>
-                        <label for="username">Username:</label>
-                        <input type="text" id="username" name="username" value="{{ user_name }}">
-                        <br>
-                        <label for="email">Email:</label>
-                        <input type="email" id="email" name="email" value="{{ e_mail }}">
+                        <div class="form-group row">
+                            <label for="firstname" class="col-sm-2 col-form-label">First</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="firstname" name="firstname" value="{{ first_name }}">
+                            </div>
+                            <label for="lastname" class="col-sm-1 col-form-label">Last</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="lastname" name="lastname" value="{{ last_name }}">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="username" class="col-sm-2 col-form-label">Username</label>
+                            <div class="col-sm-9">
+                              <input type="email" class="form-control" id="username" value="{{ user_name }}" name="username">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                            <div class="col-sm-9">
+                              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ e_mail }}" name="email">
+                            </div>
+                        </div>
                     </div>
                     <br><br>
                     <div class="container">
                         <!--Service provider info-->
-                        <h3>Want to provide services? ENTER INFO BELOW!</h3>                
-                        <label for="jobtitle">Job Title:</label>
-                        <input type="text" id="jobtitle" name="jobtitle" value="{{ job_title }}">
-                        <br>
-                        <label for="qualifications">Describe your qualifications:</label>
-                        <input type="text" id="qualifications" name="qualifications" value="{{ qualifications_ }}">
+                        <h3>Add credentials to become a Service Provider</h3>  
+                        <div class="form-group row">
+                            <label for="jobtitle" class="col-sm-2 col-form-label">Job Title</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="jobtitle" name="jobtitle" value="{{ job_title }}">
+                            </div>
+                        </div>   
+                        <div class="form-group row">
+                            <label for="qualifications" class="col-sm-2 col-form-label">Describe your qualifications</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="qualifications" name="qualifications" value="{{ qualifications_ }}">
+                            </div>
+                        </div>          
                     </div>
                     <div class="container">
                         <!--Submit Button-->
-                        <input type="submit" value="Update User">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
                     </div>
                 </form>
             </div>

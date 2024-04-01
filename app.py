@@ -246,7 +246,7 @@ def account():
         first_name = current_user.firstName
         last_name = current_user.lastName
         user_name = current_user.username
-        e_mail = current_user.email
+        e_mail = current_email
         job_title = current_user.jobTitle
         qualifications_ = current_user.qualifications
         return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
