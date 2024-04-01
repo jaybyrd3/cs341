@@ -57,6 +57,7 @@ def wipe():
 	return "ITS ALL GONE!!!"
 
 @app.route('/makeslot', methods=['GET', 'POST'])
+@login_required
 def makeslot():
 	if request.method == 'POST':
 		starttime = request.form['starttime']
@@ -73,6 +74,7 @@ def makeslot():
 		return render_template('makeslot.html')
       
 @app.route('/booknew', methods=['GET', 'POST'])
+@login_required
 def booknew():
     if request.method == 'POST':
         slot_id = request.form.get('slot_id')
@@ -100,7 +102,7 @@ def booknew():
 @app.route('/viewappointments', methods=['GET', 'POST'])
 @login_required
 def viewappointments():
-    current_email = session['email']
+    current_email = session.get('email')
     if current_email:
         pslots = Slot.query.filter_by(provider=current_email).all()
         cslots = Slot.query.filter_by(client=current_email).all()
@@ -134,6 +136,7 @@ def login():
 # performing an action & flashing a message
 #	>> i.e. will be page-independent & only accessed from header
 @app.route('/logout')
+@login_required
 def logout():
 	# remove username & password from session & redirect to index
 	session.pop('email', None)
@@ -237,7 +240,7 @@ def account():
                 print("User not found in the database.")
             
             return redirect(url_for('home'))
-    current_email = session['email']
+    current_email = session.get('email')
     if current_email:  
         current_user = User.query.filter_by(email=current_email).first()
         first_name = current_user.firstName
