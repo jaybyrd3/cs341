@@ -10,3 +10,12 @@
 body {
     background-color: #C0BEC4 !important;
 }
+
+.dropdown-menu.dropdown-menu-right {
+    left: auto;
+    right: 0;
+}
+
+#navbar.nav.nav-tabs.our-nav {
+    padding-left: 10px !important;
+}
