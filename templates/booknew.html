@@ -120,9 +120,9 @@
                         <button formaction="/booknew/fitness" type="submit" class="list-group-item list-group-item-action">Fitness</button>
                     </div>
                 </form>
-
             </div>
 
+            <br>
 
             {% if open_slots %}
                 <h3>Available Slots:</h3>
@@ -143,8 +143,7 @@
                         </li>
                     {% endfor %}
                 </ul><br>
-            {% else %}
-                <p>No appointments available.</p>
+                <!--<p>No appointments available.</p>-->
             {% endif %}
 <!--             {% if open_slots %}
                 <h3>Provider Slots:</h3>

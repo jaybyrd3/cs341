@@ -81,7 +81,7 @@ def booknew():
         slot_id = request.form.get('slot_id')
         slot = Slot.query.get(slot_id)
         if slot: #and not slot.client
-            slot.client = session['email']  # Or however you identify the client
+            slot.client = session.get('email')  # Or however you identify the client
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
             return redirect(url_for('viewappointments'))
@@ -99,9 +99,9 @@ def booknew():
 def booknewcat(category):
     if request.method == 'POST':
          if category == 'all':
-               open_slots = Slot.query.all()
+               open_slots = Slot.query.filter_by(client='None').all()
          else:
-              open_slots = Slot.query.filter_by(category=category).all() 
+              open_slots = Slot.query.filter_by(category=category).filter_by(client='None').all() 
          return render_template('booknew.html', open_slots=open_slots)
     else:
           return "You sent a request to " + str(category)
