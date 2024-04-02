@@ -63,29 +63,66 @@
         </script>
 
         <div class="container maincontent rounded-3 my-5">
+            <h3>Fill out the form to list a new Appointment</h3><br>
             <form method="POST">
+                <!-- Label and input for provider -->
+                <div class="mb-3 row">
+                    <label for="provider" class="col-sm-2 col-form-label">Provider Email</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" value="{{ current_user.email }}" id="provider" name="provider" readonly>
+                    </div>
+                </div>
+
+                <!-- Category -->
+                <div class="mb-3 row">
+                    <label for="category" class="col-sm-2 col-form-label">Category<span class="text-danger">*</span></label>
+                    <div class="col-sm-3">
+                        <select class="form-select" id="category">
+                            <option value="medical">Medical</option>
+                            <option value="beauty" selected>Beauty</option>
+                            <option value="fitness">Fitness</option>
+                          </select>
+                    </div>
+                </div>
+
                 <!-- Label and input for Appointment Description -->
-                <label for="description">Description:</label>
-                <input type="text" id="slot_description" name="description" required><br>
+                <div class="mb-3 row">
+                    <label for="description" class="col-sm-2 col-form-label">Description<span class="text-danger">*</span></label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" id="slot_description" name="description" required>
+                    </div>
+                </div>
+
 
                 <!-- Label and input for start time (accepts date) -->
-                <label for="starttime">Start Time:</label>
-                <input type="datetime-local" id="starttime" name="starttime" required><br>
+                <div class="mb-3 row">
+                    <label for="starttime" class="col-sm-2 col-form-label">Start Time<span class="text-danger">*</span></label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="datetime-local" id="starttime" name="starttime" required>
+                    </div>
+                </div>
+
             
                 <!-- Label and input for end time (accepts date) -->
-                <label for="endtime">End Time:</label>
-                <input type="datetime-local" id="endtime" name="endtime" required><br>
-            
-                <!-- Label and input for provider -->
-                <label for="provider">Provider:</label>
-                <input type="text" id="provider" name="provider" required><br>
+                <div class="mb-3 row">
+                    <label for="endtime" class="col-sm-2 col-form-label">End Time<span class="text-danger">*</span></label>
+                    <div class="col-sm-3">
+                        <input class="form-control" type="datetime-local" id="endtime" name="endtime" required>
+                    </div>
+                </div>
+
             
                 <!-- Label and input for client -->
-                <label for="client">Client:</label>
-                <input type="text" id="client" name="client"><br>
+                <div class="mb-3 row">
+                    <label for="client" class="col-sm-2 col-form-label">Client Email</label>
+                    <div class="col-sm-5">
+                        <input class="form-control" type="text" id="client" name="client">
+                    </div>
+                </div>
+
             
                 <!-- Submit button -->
-                <input type="submit" value="Make Slot">
+                <input type="submit" class="btn btn-secondary mb-3" value="Make Slot">
             </form>
         </div>
     </body>

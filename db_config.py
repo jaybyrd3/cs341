@@ -32,11 +32,12 @@ class Slot(db.Model):
     starttime = db.Column(db.DateTime, unique=False, nullable=True)
     endtime = db.Column(db.DateTime, unique=False, nullable=True)
     # if user_id == null, then appt slot is open
-    client = db.Column(db.Text, unique=False, default=None, nullable=True)
+    client = db.Column(db.Text, unique=False, default='None', nullable=True)
     provider = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
     # slot will always have a provider
     # provider_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     description = db.Column(db.String(512), unique=False, nullable=True)
+    category = db.Column(db.String(50), unique=False, nullable=True) # atm,: Medical|Beauty|Fitness
     
     def __repr__(self):
 	    return f'<Slot {self.description}>'

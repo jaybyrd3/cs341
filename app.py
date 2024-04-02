@@ -76,17 +76,17 @@ def makeslot():
 @app.route('/booknew', methods=['GET', 'POST'])
 @login_required
 def booknew():
-    # if request.method == 'POST':
-    #     slot_id = request.form.get('slot_id')
-    #     slot = Slot.query.get(slot_id)
-    #     if slot: #and not slot.client
-    #         slot.client = session['email']  # Or however you identify the client
-    #         db.session.commit()
-    #         flash('Appointment booked successfully!', 'success')
-    #         return redirect(url_for('viewappointments'))
-    #     else:
-    #         flash('This slot is no longer available.', 'error')
-    #         return redirect(url_for('booknew'))
+    if request.method == 'POST':
+        slot_id = request.form.get('slot_id')
+        slot = Slot.query.get(slot_id)
+        if slot: #and not slot.client
+            slot.client = session['email']  # Or however you identify the client
+            db.session.commit()
+            flash('Appointment booked successfully!', 'success')
+            return redirect(url_for('viewappointments'))
+        else:
+            flash('This slot is no longer available.', 'error')
+            return redirect(url_for('booknew'))
     
     # open_slots = Slot.query.filter_by(client='None').all()
     # print(open_slots) #?? wat for
@@ -96,7 +96,14 @@ def booknew():
 @app.route('/booknew/<category>', methods=['GET', 'POST'])
 @login_required
 def booknewcat(category):
-    return "You sent a request to " + str(category)
+    if request.method == 'POST':
+         if category == 'all':
+               open_slots = Slot.query.all()
+         else:
+              open_slots = Slot.query.filter_by(category=category).all() 
+         return render_template('booknew.html', open_slots=open_slots)
+    else:
+          return "You sent a request to " + str(category)
 # def booknew():
 #     open_slots = Slot.query.filter_by(client=None).all()
 #     if open_slots:
