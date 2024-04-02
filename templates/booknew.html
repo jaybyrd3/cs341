@@ -3,12 +3,18 @@
     <head>
         <title>View Appointments!</title>
         <link rel="stylesheet" href="../static/index.css">
+
+        <!--Bootstrap-->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+        <!--Fontawesome-->
         <script src="https://kit.fontawesome.com/1f10d8fda7.js" crossorigin="anonymous"></script>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"></script>
     </head>
     <body>
+
+
         <ul class="nav nav-pills our-nav" id="navbar" style="padding-top: 10px;">
             <li class="navbar-brand" href="/" >
                 <img src="{{ url_for('static', filename='dummylogo.png') }}" alt="" width="40" height="40" style="border-radius:50%">
@@ -44,6 +50,7 @@
         </ul>
 
         <script>
+            /* Admin Dropdown functions */
             document.getElementById('admin').addEventListener('click', function() {
                 var adminMenu = document.getElementById('adminMenu');
                 if (adminMenu.classList.contains('show')) {
@@ -52,6 +59,7 @@
                     adminMenu.classList.add('show');
                 }
             });
+            /* Log... Dropdown functions */
             document.getElementById('log').addEventListener('click', function() {
                 var logMenu = document.getElementById('logMenu');
                 if (logMenu.classList.contains('show')) {
@@ -68,6 +76,54 @@
             {% else %}
             <h1>Browse Appointments:</h1>
             {% endif %}
+
+            <!--
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Appt Type
+                </button>
+                <ul class="dropdown-menu">
+                    <li><h6 class="dropdown-header">Select an Appointment Category</h6></li>
+                    <li><a class="dropdown-item" href="#">Medical</a></li>
+                    <li><a class="dropdown-item" href="#">Beauty</a></li>
+                    <li><a class="dropdown-item" href="#">Fitness</a></li>
+                </ul>
+            </div>
+            -->
+
+
+            <div class="container">
+                <!--
+                <ul class="list-group col-sm-6">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Medical
+                      <span class="badge text-bg-primary rounded-pill">14</span> 
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Beauty
+                      <span class="badge text-bg-primary rounded-pill">2</span> 
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      Fitness
+                      <span class="badge text-bg-primary rounded-pill">1</span> 
+                    </li>
+                </ul>
+                -->
+
+                <form method="post">
+                    <div class="list-group list-group-flush col-sm-6">
+                        <button formaction="/booknew/all" type="submit" class="list-group-item list-group-item-action" aria-current="true">
+                            Select an Appointment Category
+                        </button>
+                        <button formaction="/booknew/medical" type="submit" class="list-group-item list-group-item-action">Medical</button>
+                        <button formaction="/booknew/beauty" type="submit" class="list-group-item list-group-item-action">Beauty</button>
+                        <button formaction="/booknew/fitness" type="submit" class="list-group-item list-group-item-action">Fitness</button>
+                    </div>
+                </form>
+
+            </div>
+
+
             {% if open_slots %}
                 <h3>Available Slots:</h3>
                 <ul>

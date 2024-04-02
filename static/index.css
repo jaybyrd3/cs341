@@ -26,3 +26,7 @@ body {
     margin-bottom: 5px;
     padding-left: 10px !important;
 }
+
+a {
+    text-decoration: wavy;
+}
