@@ -96,8 +96,7 @@ def booknew():
 @app.route('/booknew/<category>', methods=['GET', 'POST'])
 @login_required
 def booknewcat(category):
-      if request.method == 'GET':
-            return "You sent a request to " + str(category)
+    return "You sent a request to " + str(category)
 # def booknew():
 #     open_slots = Slot.query.filter_by(client=None).all()
 #     if open_slots:
