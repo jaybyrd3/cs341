@@ -59,19 +59,20 @@ def wipe():
 @app.route('/makeslot', methods=['GET', 'POST'])
 @login_required
 def makeslot():
-	if request.method == 'POST':
-		starttime = request.form['starttime']
-		endtime = request.form['endtime']
-		client = request.form['client']
-		print(f"make slot client {client}")
-		provider = request.form['provider']
-		description = request.form['description']
-		new_slot = Slot(starttime=starttime, endtime=endtime, client=client, provider=provider, description=description)
-		db.session.add(new_slot)
-		db.session.commit()
-		return redirect(url_for('home')) 
-	else:
-		return render_template('makeslot.html')
+     if request.method == 'POST':
+        starttime = request.form['starttime']
+        endtime = request.form['endtime']
+        client = request.form['client']
+        print(f"make slot client {client}")
+        provider = request.form['provider']
+        description = request.form['description']
+        category = request.form['category']
+        new_slot = Slot(starttime=starttime, endtime=endtime, client=client, provider=provider, description=description, category=category)
+        db.session.add(new_slot)
+        db.session.commit()
+        return redirect(url_for('home')) 
+     else:
+          return render_template('makeslot.html')
       
 @app.route('/booknew', methods=['GET', 'POST'])
 @login_required
