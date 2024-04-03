@@ -264,7 +264,10 @@ def viewappointments():
                         extract('year', Slot.endtime) == year_numeric
                     )
                 )
-
+         if cslots:
+            cslots = cslots.all()
+         if pslots:
+            pslots = pslots.all()
          return render_template('viewappointments.html', pslots=pslots, cslots=cslots)
     else:
          return render_template('viewappointments.html', pslots=None, cslots=None)
