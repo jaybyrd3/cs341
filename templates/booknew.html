@@ -163,7 +163,7 @@
 
                 {% if cansearch %}
                 <h4>Search by...</h4>
-                <form method="GET">
+                <form id="myForm" method="GET">
                     <div class="row g-3 align-items-center">
                         <div class="col-sm-1">
                           <label for="keyword" class="col-form-label">Keyword</label>
@@ -222,6 +222,7 @@
                     formAction += '&keyword=' + encodeURIComponent(keyword) + '&month=' + encodeURIComponent(month) + '&year=' + encodeURIComponent(year);
 
                     console.log(formAction)
+
                     // Set form action
                     document.getElementById('myForm').setAttribute('action', formAction);
 
