@@ -197,13 +197,71 @@ def cancel_appointment():
 @login_required
 def viewappointments():
     current_email = session.get('email')
-    if current_email:
-        pslots = Slot.query.filter_by(provider=current_email).all()
-        cslots = Slot.query.filter_by(client=current_email).all()
 
-        return render_template('viewappointments.html', pslots=pslots, cslots=cslots)
+    if request.method == 'GET' and current_email:
+         keyword = request.args.get('keyword', '')
+         month = request.args.get('month', '')
+         year = request.args.get('year', '')
+
+         if keyword:
+             keyword = keyword.lower()
+
+        # Validate month
+         if month:
+             try:
+                month_numeric = int(month)
+                if not 1 <= month_numeric <= 12:
+                    raise ValueError("Month must be between 1 and 12")
+             except ValueError:
+                return 'Invalid month', 400
+
+        # Validate year
+         if year:
+             try:
+                year_numeric = int(year)
+                if not 2024 <= year_numeric <= 2026:
+                    raise ValueError("Year must be between 2024 and 2026")
+             except ValueError:
+                return 'Invalid year', 400
+        
+         pslots = Slot.query.filter(Slot.provider == current_email) #.filter_by(provider=current_email).all()
+         cslots = Slot.query.filter(Slot.client == current_email)
+
+         if keyword:
+             cslots = cslots.filter(Slot.description.ilike(f'%{keyword}%'))
+             pslots = pslots.filter(Slot.description.ilike(f'%{keyword}%'))
+
+         if month:
+              cslots = cslots.filter(
+                  or_(
+                      extract('month', Slot.starttime) == month_numeric,
+                      extract('month', Slot.endtime) == month_numeric
+                  )
+              )
+              pslots = pslots.filter(
+                  or_(
+                      extract('month', Slot.starttime) == month_numeric,
+                      extract('month', Slot.endtime) == month_numeric
+                  )
+              )
+
+         if year:
+              cslots = cslots.filter(
+                  or_(
+                      extract('year', Slot.starttime) == year_numeric,
+                      extract('year', Slot.endtime) == year_numeric
+                  )
+              )
+              pslots = pslots.filter(
+                  or_(
+                      extract('year', Slot.starttime) == year_numeric,
+                      extract('year', Slot.endtime) == year_numeric
+                  )
+              )
+
+         return render_template('viewappointments.html', pslots=pslots, cslots=cslots)
     else:
-        return render_template('viewappointments.html', pslots=None, cslots=None)
+         return render_template('viewappointments.html', pslots=None, cslots=None)
          
 
 @app.route('/login', methods=['GET', 'POST'])
