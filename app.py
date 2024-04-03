@@ -149,12 +149,13 @@ def booknewcat(category):
          open_slots_query = (
             Slot.query.filter(Slot.category == category, Slot.client == 'None')
             .filter(
-                ~func.any_(Slot.starttime >= tup[0] and Slot.starttime <= tup[1] for tup in occupied_ranges)
-            )
+                ~func.any_(Slot.starttime >= list(tup)[0] and Slot.starttime <= list(tup)[1] for tup in occupied_ranges)
+            ) 
             .filter(
-                ~func.any_(Slot.endtime >= tup[0] and Slot.endtime <= tup[1] for tup in occupied_ranges)
-            )
+                ~func.any_(Slot.endtime >= list(tup)[0] and Slot.endtime <= list(tup)[1] for tup in occupied_ranges)
+            ) 
         )
+
 
 
          if keyword:
