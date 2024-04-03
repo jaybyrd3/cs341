@@ -140,46 +140,41 @@ def booknewcat(category):
              except ValueError:
                 return 'Invalid year', 400
               
-         query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
+         
+        # Construct a list of time ranges occupied by closed slots
+         occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
+
+        # Filter out potential slots that do not overlap with any closed slot
+         open_slots_query = (
+            Slot.query.filter(Slot.category == category, Slot.client == 'None')
+            .filter(~Slot.starttime.overlap(Slot.endtime, *occupied_ranges))
+        )
 
          if keyword:
-             query = query.filter(Slot.description.ilike(f'%{keyword}%'))
+            open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
 
          if month:
-              query = query.filter(
-                  or_(
-                      extract('month', Slot.starttime) == month_numeric,
-                      extract('month', Slot.endtime) == month_numeric
-                  )
-              )
+            open_slots_query = open_slots_query.filter(
+                or_(
+                    extract('month', Slot.starttime) == month_numeric,
+                    extract('month', Slot.endtime) == month_numeric
+                )
+            )
 
          if year:
-              query = query.filter(
-                  or_(
-                      extract('year', Slot.starttime) == year_numeric,
-                      extract('year', Slot.endtime) == year_numeric
-                  )
-              )
-              
+            open_slots_query = open_slots_query.filter(
+                or_(
+                    extract('year', Slot.starttime) == year_numeric,
+                    extract('year', Slot.endtime) == year_numeric
+                )
+            )
+
+         open_slots = open_slots_query.all()
+
          if category == 'all':
-              maybe_open_slots = query.all()
+              open_slots = open_slots_query.all()
          else:
-              maybe_open_slots = query.filter_by(category=category).all()
-         
-         closed_slots = Slot.query.filter_by(client=session.get('email')).all()
-         open_slots = []
-
-         # only add appt in maybe_open_slots to open_slots if it doesn't conflict with any appt in closed_slots
-         for mSlot in maybe_open_slots:
-             isConflict = False
-             for cSlot in closed_slots:
-                 if mSlot.starttime > cSlot.starttime and mSlot.starttime < cSlot.endtime:
-                     isConflict = True
-                 elif mSlot.endtime > cSlot.starttime and mSlot.endtime < cSlot.endtime:
-                     isConflict = True
-             if not isConflict:
-                 open_slots.append(mSlot)
-
+              open_slots = open_slots_query.filter_by(category=category).all()
          return render_template('booknew.html', open_slots=open_slots, cansearch=True)
     else:
           return "You sent a POST request to " + str(category) + ". Why, though?"
