@@ -160,7 +160,7 @@ def booknewcat(category):
                       extract('year', Slot.endtime) == year_numeric
                   )
               )
-
+              
          if category == 'all':
               maybe_open_slots = query.all()
          else:
