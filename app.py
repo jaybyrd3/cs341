@@ -138,7 +138,7 @@ def cancel_appointment():
     current_email = session.get('email')
     if slot and (slot.client == current_email or slot.provider == current_email):
         # Update the slot to indicate cancellation
-        slot.client = None  # or another appropriate action
+        slot.client = "None"  # or another appropriate action
         db.session.commit()
         flash('Appointment canceled successfully.', 'success')
     else:
