@@ -1,7 +1,7 @@
-from flask import Flask, request, session, render_template, redirect, url_for, flash
+from flask import Flask, request, session, render_template, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
 from db_config import db, User, Slot
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from logging import FileHandler, WARNING
 from sqlalchemy import or_
 import os
@@ -286,6 +286,52 @@ def account():
         return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
     else:
         return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?")
+
+# loads in demo 1 data after a db change
+@app.route('/demo1', methods=['GET'])
+def demo1():
+    # Predefined users and their qualifications
+    users_with_qualifications = [
+        {"name": "Abby Andersen", "qualification": "Graduated from The Salon Professional Academy, 2015", "role": "provider", "category": "beauty"},
+        {"name": "Katie Johnson", "qualification": "Skin-care certified nurse training, 2021", "role": "provider", "category": "beauty"},
+        {"name": "Jane Doe", "role": "client"}
+    ]
+
+    # Predefined slots
+    slots_details = [
+        {"provider_email": "abbyanderson@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty"},
+        {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty"}
+    ]
+
+    # Insert users into the database
+    for user in users_with_qualifications:
+        if user["role"] == "provider":
+            new_user = User(username=user["name"], email=user["name"].replace(" ", "").lower() + "@test.com", qualifications=user["qualification"])
+            new_user.set_password("123")  # Set a default password
+            db.session.add(new_user)
+        elif user["role"] == "client":
+            new_user = User(username=user["name"], email=user["name"].replace(" ", "").lower() + "@test.com")
+            new_user.set_password("123")  # Set a default password
+            db.session.add(new_user)
+
+    # Commit users to save changes
+    db.session.commit()
+
+    # Insert slots into the database
+    for slot in slots_details:
+        provider_user = User.query.filter_by(email=slot["provider_email"]).first()
+        if provider_user:
+            new_slot = Slot(starttime=datetime.strptime(slot["date_time"], "%Y-%m-%d %H:%M:%S"),
+                            endtime=datetime.strptime(slot["date_time"], "%Y-%m-%d %H:%M:%S") + timedelta(hours=1),  # Assuming 1 hour duration
+                            provider=provider_user.email,
+                            description=slot["description"],
+                            category=slot["category"])
+            db.session.add(new_slot)
+
+    # Commit slots to save changes
+    db.session.commit()
+
+    return jsonify({"message": "Demo 1 data preloaded successfully!"})
 
 # [START] HELPER FUNCTIONS
 
