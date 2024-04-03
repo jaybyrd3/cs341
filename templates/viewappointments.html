@@ -68,40 +68,61 @@
             {% else %}
             <h1>Appointments</h1>
             {% endif %}
+
+            {% if cslots %}
+            <h3>Client Appointments</h3><br>
+            <ul style="list-style: none;">
+                {% for slot in cslots %}
+                    <li>
+                        <form>
+                            <div class="container">
+                                <div class="card col-sm-5">
+                                    <div class="card-header">
+                                        {{ slot.description }}
+                                    </div>
+                                    <div class="card-body">
+                                        <h5>Provided by {{ slot.provider }}</h5>
+                                        <p>Client: {{ slot.client }}</p>
+                                        <p>Time: {{ slot.starttime }} - {{ slot.endtime }}</p>
+                                        <p>[{{ slot.category }}]</p>
+                                        <button type="submit" class="btn btn-secondary">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul><br>
+            {% else %}
+                <p>No Client Appointments</p>
+            {% endif %}
     
             {% if pslots %}
-                <h3>Provider Slots:</h3>
-                <ul>
-                    {% for pslot in pslots %}
+                <h3>Provider Listings</h3>
+                <ul style="list-style: none;">
+                    {% for slot in pslots %}
                         <li>
-                        -----------------------------------------<br>
-                        Description: {{ pslot.description }}<br>
-                        Provider: {{ pslot.provider }}<br>
-                        Client: {{ pslot.client }}<br>
-                        Start {{ pslot.starttime }}<br>
-                        End {{ pslot.endtime }}<br>
-                        -----------------------------------------<br>
-                        </li>
-                    {% endfor %}
-                </ul><br>
-    
-            {% elif cslots %}
-                <h3>Client Slots:</h3><br>
-                <ul>
-                    {% for cslot in cslots %}
-                        <li>
-                        -----------------------------------------<br>
-                        Description: {{ cslot.description }}<br>
-                        Provider: {{ cslot.provider }}<br>
-                        Client: {{ cslot.client }}<br>
-                        Start {{ cslot.starttime }}<br>
-                        End {{ cslot.endtime }}<br>
-                        -----------------------------------------<br>
+                            <form>
+                                <div class="container">
+                                    <div class="card col-sm-5">
+                                        <div class="card-header">
+                                            {{ slot.description }}
+                                        </div>
+                                        <div class="card-body">
+                                            <h5>Provided by {{ slot.provider }}</h5>
+                                            <p>Client: {{ slot.client }}</p>
+                                            <p>Time: {{ slot.starttime }} - {{ slot.endtime }}</p>
+                                            <p>[{{ slot.category }}]</p>
+                                            <button type="submit" class="btn btn-secondary">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
                         </li>
                     {% endfor %}
                 </ul>
             {% else %}
-                <p>No appointments available.</p>
+                <p>No Provider Appointments</p>
             {% endif %}
         </div>
 
