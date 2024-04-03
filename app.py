@@ -145,17 +145,19 @@ def login():
 		# We need to see if they exist
 		email = request.form['email']
 		password = request.form['password']
-		user = User.query.filter_by(email=email).filter_by(password=password).first()
-		if not user:
-			flash(f"Email/password is incorrect, or user does not exist.", category="error")
-			return redirect(url_for('login'))
-		else:
+		# changed to support hashing
+		user = User.query.filter_by(email=email).first()
+		if user and user.check_password(password):
 			session['email'] = email
 			session['password'] = password
 			login_user(user)
 			flash(f"Congrats - you are now signed in as {email}!", category="success")
 			# this may have to be '/' instead of 'index'
 			return redirect(url_for('home'))
+		else:
+			
+			flash(f"Email/password is incorrect, or user does not exist.", category="error")
+			return redirect(url_for('login'))
 	else:
 		return render_template('login.html')
 
@@ -193,7 +195,9 @@ def signup():
 				return redirect(url_for('signup'))
 			else:
                  # we know they're new & can add them
-				new_user = User(email=email, username=username, password=password, firstName=firstname, lastName=lastname)
+				new_user = User(email=email, username=username, firstName=firstname, lastName=lastname)
+				# hash password with built in hash function
+				new_user.set_password(password)
 				db.session.add(new_user)
 				db.session.commit()
 				session['email'] = email
