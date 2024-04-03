@@ -14,13 +14,13 @@
                 <img src="{{ url_for('static', filename='dummylogo.png') }}" alt="" width="40" height="40" style="border-radius:50%">
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" href="/">Home</a>
+                <a class="nav-link active text-white" href="/">Home</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="/booknew">Book New</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active text-white" href="/viewappointments">View Appointments</a>
+                <a class="nav-link text-white" href="/viewappointments">View Appointments</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" href="/account">My Account</a>
@@ -42,7 +42,7 @@
                 </div>
             </li>
         </ul>
-
+    
         <script>
             document.getElementById('admin').addEventListener('click', function() {
                 var adminMenu = document.getElementById('adminMenu');

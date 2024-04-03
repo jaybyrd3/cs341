@@ -13,44 +13,64 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"></script>
     </head>
     <body>
-
-
         <ul class="nav nav-pills our-nav" id="navbar" style="padding-top: 10px;">
             <li class="navbar-brand" href="/" >
                 <img src="{{ url_for('static', filename='dummylogo.png') }}" alt="" width="40" height="40" style="border-radius:50%">
             </li>
             <li class="nav-item">
-                <a class="nav-link text-white" href="/">Home</a>
+                <a class="nav-link active text-white" href="/">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link active text-white" href="/booknew">Book New</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="/viewappointments">View Appointments</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="/account">My Account</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a id="admin" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
-                <div id="adminMenu" class="dropdown-menu">
-                    <a class="dropdown-item" href="/add">Add New User</a>
-                    <a class="dropdown-item" href="/users">View All Users</a>
-                    <a class="dropdown-item" href="/makeslot">Make Slot</a>
-                </div>
-            </li>
+            {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/booknew">Book New</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/viewappointments">View Appointments</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/account">My Account</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="admin" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+                    <div id="adminMenu" class="dropdown-menu">
+                        <a class="dropdown-item" href="/add">Add New User</a>
+                        <a class="dropdown-item" href="/users">View All Users</a>
+                        <a class="dropdown-item" href="/makeslot">Make Slot</a>
+                    </div>
+                </li>
+            {% endif %}
             <li class="nav-item dropdown" style="margin-left: auto;">
                 <a id="log" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Log...</a>
                 <div id="logMenu" class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="/login">Login</a>
-                    <a class="dropdown-item" href="/logout">Logout</a>
-                    <a class="dropdown-item" href="/signup">Sign Up</a>
+                    {% if current_user.is_authenticated %}
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    {% else %}
+                        <a class="dropdown-item" href="/login">Login</a>
+                        <a class="dropdown-item" href="/signup">Sign Up</a>
+                    {% endif %}
                 </div>
             </li>
         </ul>
 
         <script>
-            /* Admin Dropdown functions */
+            document.getElementById('navbar').addEventListener('click', function(event) {
+                if (event.target.id === 'admin') { 
+                    var adminMenu = document.getElementById('adminMenu');
+                    if (adminMenu.classList.contains('show')) {
+                        adminMenu.classList.remove('show');
+                    } else {
+                        adminMenu.classList.add('show');
+                    }
+                } else if (event.target.id === 'log') {
+                    var logMenu = document.getElementById('logMenu');
+                    if (logMenu.classList.contains('show')) {
+                        logMenu.classList.remove('show');
+                    } else {
+                        logMenu.classList.add('show');
+                    }
+                }
+            });
+            /*
             document.getElementById('admin').addEventListener('click', function() {
                 var adminMenu = document.getElementById('adminMenu');
                 if (adminMenu.classList.contains('show')) {
@@ -59,7 +79,6 @@
                     adminMenu.classList.add('show');
                 }
             });
-            /* Log... Dropdown functions */
             document.getElementById('log').addEventListener('click', function() {
                 var logMenu = document.getElementById('logMenu');
                 if (logMenu.classList.contains('show')) {
@@ -68,6 +87,7 @@
                     logMenu.classList.add('show');
                 }
             });
+            */
         </script>
 
         <div class="container maincontent rounded-3 my-5">
