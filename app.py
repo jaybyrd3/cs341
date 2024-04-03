@@ -140,7 +140,8 @@ def booknewcat(category):
              except ValueError:
                 return 'Invalid year', 400
               
-         
+        # Query the DB for all already-scheduled slots
+         closed_slots = Slot.query.filter_by(client=session.get('email')).all()
         # Construct a list of time ranges occupied by closed slots
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
 
@@ -169,7 +170,7 @@ def booknewcat(category):
                 )
             )
 
-         open_slots = open_slots_query.all()
+         #open_slots = open_slots_query.all()
 
          if category == 'all':
               open_slots = open_slots_query.all()
