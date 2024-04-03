@@ -194,6 +194,7 @@ def signup():
 	return render_template('signup.html')
 
 @app.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_user():
     if request.method == 'POST':
         username = request.form['username']
@@ -206,6 +207,7 @@ def add_user():
     return render_template('add_user.html')
 
 @app.route('/users')
+@login_required
 def view_users():
     users = User.query.all()
     return render_template('view_users.html', users=users)
