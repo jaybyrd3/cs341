@@ -228,36 +228,42 @@ def viewappointments():
          cslots = Slot.query.filter(Slot.client == current_email)
 
          if keyword:
-             cslots = cslots.filter(Slot.description.ilike(f'%{keyword}%'))
-             pslots = pslots.filter(Slot.description.ilike(f'%{keyword}%'))
+             if cslots:
+                 cslots = cslots.filter(Slot.description.ilike(f'%{keyword}%'))
+             if pslots:
+                 pslots = pslots.filter(Slot.description.ilike(f'%{keyword}%'))
 
          if month:
-              cslots = cslots.filter(
-                  or_(
-                      extract('month', Slot.starttime) == month_numeric,
-                      extract('month', Slot.endtime) == month_numeric
-                  )
-              )
-              pslots = pslots.filter(
-                  or_(
-                      extract('month', Slot.starttime) == month_numeric,
-                      extract('month', Slot.endtime) == month_numeric
-                  )
-              )
+              if cslots:
+                cslots = cslots.filter(
+                    or_(
+                        extract('month', Slot.starttime) == month_numeric,
+                        extract('month', Slot.endtime) == month_numeric
+                    )
+                )
+              if pslots:
+                pslots = pslots.filter(
+                    or_(
+                        extract('month', Slot.starttime) == month_numeric,
+                        extract('month', Slot.endtime) == month_numeric
+                    )
+                )
 
          if year:
-              cslots = cslots.filter(
-                  or_(
-                      extract('year', Slot.starttime) == year_numeric,
-                      extract('year', Slot.endtime) == year_numeric
-                  )
-              )
-              pslots = pslots.filter(
-                  or_(
-                      extract('year', Slot.starttime) == year_numeric,
-                      extract('year', Slot.endtime) == year_numeric
-                  )
-              )
+              if cslots:
+                cslots = cslots.filter(
+                    or_(
+                        extract('year', Slot.starttime) == year_numeric,
+                        extract('year', Slot.endtime) == year_numeric
+                    )
+                )
+              if pslots:
+                pslots = pslots.filter(
+                    or_(
+                        extract('year', Slot.starttime) == year_numeric,
+                        extract('year', Slot.endtime) == year_numeric
+                    )
+                )
 
          return render_template('viewappointments.html', pslots=pslots, cslots=cslots)
     else:
