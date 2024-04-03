@@ -120,37 +120,46 @@ def booknewcat(category):
          year = request.args.get('year', '')
 
          if keyword:
-              keyword = keyword.lower()
+             keyword = keyword.lower()
 
+        # Validate month
          if month:
-              try:
-                   datetime.strptime(month, '%B')
-              except ValueError:
-                   return 'Invalid month', 400
-              
+             try:
+                month_numeric = int(month)
+                if not 1 <= month_numeric <= 12:
+                    raise ValueError("Month must be between 1 and 12")
+             except ValueError:
+                return 'Invalid month', 400
+
+        # Validate year
          if year:
-              try:
-                   year = int(year)
-                   if year < 1900 or year > 2100: 
-                        return 'Invalid year', 400
-              except ValueError:
-                   return 'Invalid year', 400
+             try:
+                year_numeric = int(year)
+                if not 2024 <= year_numeric <= 2026:
+                    raise ValueError("Year must be between 2024 and 2026")
+             except ValueError:
+                return 'Invalid year', 400
               
          query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
 
          if keyword:
-              query = query.filter(Slot.description.ilike(f'%{keyword}%'))
+             query = query.filter(Slot.description.ilike(f'%{keyword}%'))
 
          if month:
               query = query.filter(
                   or_(
-                      extract('month', Slot.starttime) == int(month),
-                      extract('month', Slot.endtime) == int(month) 
+                      extract('month', Slot.starttime) == month_numeric,
+                      extract('month', Slot.endtime) == month_numeric
                   )
               )
 
          if year:
-              query = query.filter(and_(Slot.starttime.year == year, Slot.endtime.year == year))
+              query = query.filter(
+                  or_(
+                      extract('year', Slot.starttime) == year_numeric,
+                      extract('year', Slot.endtime) == year_numeric
+                  )
+              )
 
          if category == 'all':
                open_slots = query.all()
