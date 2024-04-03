@@ -223,9 +223,14 @@ def viewappointments():
                     raise ValueError("Year must be between 2024 and 2026")
              except ValueError:
                 return 'Invalid year', 400
-        
-         pslots = Slot.query.filter(Slot.provider == current_email) #.filter_by(provider=current_email).all()
-         cslots = Slot.query.filter(Slot.client == current_email)
+         
+         user = User.query.filter_by(email=session.get('email')).first()
+         if not user.is_admin:
+             pslots = Slot.query.all()
+             cslots = Slot.query.all()
+         else:
+            pslots = Slot.query.filter(Slot.provider == current_email) #.filter_by(provider=current_email).all()
+            cslots = Slot.query.filter(Slot.client == current_email)
 
          if keyword:
              if cslots:
