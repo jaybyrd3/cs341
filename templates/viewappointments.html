@@ -23,7 +23,8 @@
                 <li class="nav-item">
                     <a class="nav-link text-white" href="/viewappointments">View Appointments</a>
                 </li>
-                {% if current_user.jobTitle is not none and current_user.qualifications is not none %}
+                {% if current_user.jobTitle is not none and current_user.qualifications is not none
+                    and current_user.jobTitle != "" and current_user.qualifications != "" %}
                     <li class="nav-item">
                         <a class="nav-link text-white" href="/makeslot">Make Slot</a>
                     </li>
