@@ -316,10 +316,7 @@ def demo1():
             "firstName": "Admin",
             "lastName": "Admin",
             "email": "admin@test.com",
-            "qualification": "I am admin",
-            "role": "provider",
-            "category": "",
-            "jobTitle": "admin"
+            "role": "admin"
         },
         {
             "firstName": "Abby",
@@ -372,6 +369,16 @@ def demo1():
                 lastName=user["lastName"]
             )
             new_user.set_password("123")  # Set a default password
+            db.session.add(new_user)
+	elif user["role"] == "admin":
+	    new_user = User(
+                username="admin", 
+                email=user["email"], 
+                firstName="admin", 
+                lastName="admin",
+		is_admin=True
+            )
+	    new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
 
     db.session.commit()
