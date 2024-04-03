@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user
 from db_config import db, User, Slot
 from datetime import date, timedelta, datetime
 from logging import FileHandler, WARNING
-from sqlalchemy import or_, and_, extract
+from sqlalchemy import or_, and_, extract, func
 import os
 
 app = Flask(__name__)
@@ -148,9 +148,14 @@ def booknewcat(category):
         # Filter out potential slots that do not overlap with any closed slot
          open_slots_query = (
             Slot.query.filter(Slot.category == category, Slot.client == 'None')
-            .filter(~Slot.starttime.in_(occupied_ranges))  # Change here
-            .filter(~Slot.endtime.in_(occupied_ranges))   # Change here
+            .filter(
+                ~func.any_(Slot.starttime >= tup[0] and Slot.starttime <= tup[1] for tup in occupied_ranges)
+            )
+            .filter(
+                ~func.any_(Slot.endtime >= tup[0] and Slot.endtime <= tup[1] for tup in occupied_ranges)
+            )
         )
+
 
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
