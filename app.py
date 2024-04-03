@@ -1,5 +1,5 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash
-from flask_login import LoginManager, login_required, login_user
+from flask_login import LoginManager, login_required, login_user, logout_user
 from db_config import db, User, Slot
 from datetime import date, timedelta
 from logging import FileHandler, WARNING
@@ -155,6 +155,7 @@ def logout():
 	# remove username & password from session & redirect to index
 	session.pop('email', None)
 	session.pop('password', None)
+	logout_user() # logs out user & cleans up cookies
 	flash(f"You are now logged out.", category="success")
 	return redirect(url_for('home'))
 
