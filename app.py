@@ -479,7 +479,7 @@ def demo1():
     # Commit slots to save changes
     db.session.commit()
 
-    flash(f"Demo 1 data preloaded successfully!", category="error")
+    flash(f"Demo 1 data preloaded successfully!", category="success")
     return redirect(url_for('home'))
     #return jsonify({"message": "Demo 1 data preloaded successfully!"})
 
