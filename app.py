@@ -114,14 +114,15 @@ def booknew():
 @app.route('/booknew/<category>', methods=['GET', 'POST'])
 @login_required
 def booknewcat(category):
-    if request.method == 'POST':
+    if request.method == 'GET':
          if category == 'all':
                open_slots = Slot.query.filter_by(client='None').all()
          else:
               open_slots = Slot.query.filter_by(category=category).filter_by(client='None').all() 
-         return render_template('booknew.html', open_slots=open_slots)
+         return render_template('booknew.html', open_slots=open_slots, cansearch=True)
     else:
-          return "You sent a request to " + str(category)
+          return "You sent a POST request to " + str(category) + ". Why, though?"
+    
 # def booknew():
 #     open_slots = Slot.query.filter_by(client=None).all()
 #     if open_slots:

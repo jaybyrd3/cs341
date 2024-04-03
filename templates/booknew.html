@@ -149,7 +149,7 @@
                 </ul>
                 -->
 
-                <form method="post">
+                <form method="get">
                     <div class="list-group col-sm-6">
                         <button formaction="/booknew/all" type="submit" class="list-group-item list-group-item-action" aria-current="true">
                             Select an Appointment Category
@@ -159,9 +159,79 @@
                         <button formaction="/booknew/fitness" type="submit" class="list-group-item list-group-item-action">Fitness</button>
                     </div>
                 </form>
+                <br>
+
+                {% if cansearch %}
+                <h4>Search by...</h4>
+                <form method="get">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-sm-1">
+                          <label for="keyword" class="col-form-label">Keyword</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <input type="text" id="keyword" class="form-control" aria-describedby="keywordnote" name="keyword" value="">
+                        </div>
+                        <div class="col-auto">
+                          <span id="keywordnote" class="form-text">
+                            We don't accept typos.
+                          </span>
+                        </div>
+                    </div>
+                    <div class="row g-3 align-items-center">
+                        <div class="col-sm-1">
+                          <label for="month" class="col-form-label">Month</label>
+                        </div>
+                        <div class="col-sm-2">
+                          <input type="text" id="month" class="form-control" name="month" value="">
+                        </div>
+                        <div class="col-sm-1">
+                            <label for="year" class="col-form-label">Year</label>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" id="year" class="form-control" name="year" value="">
+                        </div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-secondary" onclick="setFormAction()">Search!</button>
+                        </div>
+                    </div>
+                </form>
+                {% endif %}
             </div>
 
+            <script>
+                /* setting up query parameters for searching */
+                function setFormAction() {
+                    // Get values from input text boxes
+                    var keyword = document.getElementById('keyword').value;
+                    var month = document.getElementById('month').value;
+                    var year = document.getElementById('year').value;
+
+                    // Get the current pathname of the URL
+                    var pathname = window.location.pathname;
+
+                    // Split the pathname by '/' and get the last part
+                    var parts = pathname.split('/');
+                    var lastPart = parts[parts.length - 1];
+
+                    // Start form action
+                    var formAction = '/booknew' + lastPart + '?';
+
+                    // Append new parameters
+                    formAction += '&keyword=' + encodeURIComponent(keyword) + '&month=' + encodeURIComponent(month) + '&year=' + encodeURIComponent(year);
+
+                    console.log(formAction)
+                    // Set form action
+                    document.getElementById('myForm').setAttribute('action', formAction);
+
+                    // Submit form
+                    document.getElementById('myForm').submit();
+                }
+            </script>
+
             <br>
+
 
             {% if open_slots %}
                 <h3>Available Slots:</h3>
