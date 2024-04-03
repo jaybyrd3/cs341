@@ -194,25 +194,29 @@ def viewappointments():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-	if request.method == 'POST':
-		# We need to see if they exist
-		email = request.form['email']
-		password = request.form['password']
-		# changed to support hashing
-		user = User.query.filter_by(email=email).first()
-		if user and user.check_password(password):
-			session['email'] = email
-			session['password'] = password
-			login_user(user)
-			flash(f"Congrats - you are now signed in as {email}!", category="success")
-			# this may have to be '/' instead of 'index'
-			return redirect(url_for('home'))
-		else:
-			
-			flash(f"Email/password is incorrect, or user does not exist.", category="error")
-			return redirect(url_for('login'))
-	else:
-		return render_template('login.html')
+    if session.get("email") is not None:
+        flash(f"You are already logged in.", category="error")
+        return redirect(url_for('home'))
+    else:
+        if request.method == 'POST':
+            # We need to see if they exist
+            email = request.form['email']
+            password = request.form['password']
+            # changed to support hashing
+            user = User.query.filter_by(email=email).first()
+            if user and user.check_password(password):
+                session['email'] = email
+                session['password'] = password
+                login_user(user)
+                flash(f"Congrats - you are now signed in as {email}!", category="success")
+                # this may have to be '/' instead of 'index'
+                return redirect(url_for('home'))
+            else:
+                
+                flash(f"Email/password is incorrect, or user does not exist.", category="error")
+                return redirect(url_for('login'))
+        else:
+            return render_template('login.html')
 
 # NOTE: I don't believe we need a "logout.html", as we're just 
 # performing an action & flashing a message
@@ -229,39 +233,43 @@ def logout():
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-	if request.method == 'POST':
-		# Need to validate 2 things here:
-		# The user doesn't currently exist
-		# The user's passwords match
-		firstname = request.form['firstname']
-		lastname = request.form['lastname']
-		username = request.form['username']
-		email = request.form['email']
-		password = request.form['password']
-		confirm = request.form['confirm']
-		if password == confirm and email and password and confirm:
-			# query db to see if user exists
-			user = User.query.filter_by(email = email).first()
-			if user:  # Check if user is an empty list
-				# we know the user already exists
-				flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
-				return redirect(url_for('signup'))
-			else:
-                 # we know they're new & can add them
-				new_user = User(email=email, username=username, firstName=firstname, lastName=lastname)
-				# hash password with built in hash function
-				new_user.set_password(password)
-				db.session.add(new_user)
-				db.session.commit()
-				session['email'] = email
-				session['password'] = password
-				login_user(new_user)
-				flash(f"You have successfully made an account under the email {email}!", category="success")
-				return redirect(url_for('home')) 
-		else:
-			flash(f"Your entered passwords do not match.", category="error")
-			return redirect(url_for('signup'))
-	return render_template('signup.html')
+    if session.get("email") is not None:
+        flash(f"You are already logged in.", category="error")
+        return redirect(url_for('home'))
+    else:
+        if request.method == 'POST':
+            # Need to validate 2 things here:
+            # The user doesn't currently exist
+            # The user's passwords match
+            firstname = request.form['firstname']
+            lastname = request.form['lastname']
+            username = request.form['username']
+            email = request.form['email']
+            password = request.form['password']
+            confirm = request.form['confirm']
+            if password == confirm and email and password and confirm:
+                # query db to see if user exists
+                user = User.query.filter_by(email = email).first()
+                if user:  # Check if user is an empty list
+                    # we know the user already exists
+                    flash(f"There is already an account registered under the email {email}. Please log in to continue.", category="error")
+                    return redirect(url_for('signup'))
+                else:
+                    # we know they're new & can add them
+                    new_user = User(email=email, username=username, firstName=firstname, lastName=lastname)
+                    # hash password with built in hash function
+                    new_user.set_password(password)
+                    db.session.add(new_user)
+                    db.session.commit()
+                    session['email'] = email
+                    session['password'] = password
+                    login_user(new_user)
+                    flash(f"You have successfully made an account under the email {email}!", category="success")
+                    return redirect(url_for('home')) 
+            else:
+                flash(f"Your entered passwords do not match.", category="error")
+                return redirect(url_for('signup'))
+        return render_template('signup.html')
 
 @app.route('/add', methods=['GET', 'POST'])
 @login_required
