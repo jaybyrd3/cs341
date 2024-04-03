@@ -162,9 +162,24 @@ def booknewcat(category):
               )
 
          if category == 'all':
-               open_slots = query.all()
+              maybe_open_slots = query.all()
          else:
-              open_slots = query.filter_by(category=category).all() 
+              maybe_open_slots = query.filter_by(category=category).all()
+         
+         closed_slots = Slot.query.filter_by(client=session.get('email')).all()
+         open_slots = []
+
+         # only add appt in maybe_open_slots to open_slots if it doesn't conflict with any appt in closed_slots
+         for mSlot in maybe_open_slots:
+             isConflict = False
+             for cSlot in closed_slots:
+                 if mSlot.starttime > cSlot.starttime and mSlot.starttime < cSlot.endtime:
+                     isConflict = True
+                 elif mSlot.endtime > cSlot.starttime and mSlot.endtime < cSlot.endtime:
+                     isConflict = True
+             if not isConflict:
+                 open_slots.append(mSlot)
+
          return render_template('booknew.html', open_slots=open_slots, cansearch=True)
     else:
           return "You sent a POST request to " + str(category) + ". Why, though?"
