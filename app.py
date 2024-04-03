@@ -329,6 +329,15 @@ def account():
 @app.route('/demo1', methods=['GET'])
 def demo1():
     users_with_qualifications = [
+	{
+            "firstName": "Admin",
+            "lastName": "Admin",
+            "email": "admin@test.com",
+            "qualification": "I am admin",
+            "role": "provider",
+            "category": "",
+            "jobTitle": "admin"
+        },
         {
             "firstName": "Abby",
             "lastName": "Andersen",
