@@ -135,7 +135,8 @@ def booknewcat(category):
 def cancel_appointment():
     slot_id = request.form.get('slot_id')
     slot = Slot.query.get(slot_id)
-    if slot and (slot.client == current_user.email or slot.provider == current_user.email):
+    current_email = session.get('email')
+    if slot and (slot.client == current_email or slot.provider == current_email):
         # Update the slot to indicate cancellation
         slot.client = None  # or another appropriate action
         db.session.commit()
