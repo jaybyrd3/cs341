@@ -317,8 +317,8 @@ def demo1():
         }
     ]
     slots_details = [
-        {"provider_email": "abbyandersen@example.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty"},
-        {"provider_email": "katiejohnson@example.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty"}
+        {"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty"},
+        {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty"}
     ]
 	
     # Insert users into the database
