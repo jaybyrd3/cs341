@@ -5,6 +5,7 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -15,13 +16,19 @@ class User(UserMixin, db.Model):
     is_active = db.Column(db.Boolean, default=True)
     username = db.Column(db.String(80), unique=False, nullable=True)
     email = db.Column(db.String(120), unique=True, nullable=True)
-    password = db.Column(db.String(80), unique=False, nullable=True)
+    password_hash = db.Column(db.String(128), unique=False, nullable=True)
     firstName = db.Column(db.String(80), unique=False, nullable=True)
     lastName = db.Column(db.String(80), unique=False, nullable=True)
     jobTitle = db.Column(db.String(80), unique=False, nullable=True)
     qualifications = db.Column(db.String(80), unique=False, nullable=True)
     # appointments = db.relationship('Slot', backref='user', lazy=True, foreign_keys=[Slot.user_id]) # is a 1-to-many relationship by default
     slots = db.relationship('Slot', backref='slot', lazy=True)
+
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f'<User {self.username}>'
