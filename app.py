@@ -115,22 +115,9 @@ def booknew():
 @login_required
 def booknewcat(category):
     if request.method == 'GET':
-         
-         if 'keyword' in request.args:
-              keyword = request.args.get('keyword')
-              input_month = request.args.get('month')
-              year = request.args.get('year')
-
-              # Define a list of month names
-              months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-              # Convert each month in the list to lowercase
-              months_lower = [month.lower() for month in months]
-              
-              # Compare the lowercase input_month with lowercase months
-              if input_month.lower() in months_lower:
-                   print(f"{input_month.capitalize()} is a valid month.")
-              else:
-                   print(f"{input_month.capitalize()} is not a valid month.")
+         keyword = request.args.get('keyword', '')
+         month = request.args.get('month', '')
+         year = request.args.get('year', '')
 
          if category == 'all':
                open_slots = Slot.query.filter_by(client='None').all()
@@ -387,15 +374,15 @@ def demo1():
             )
             new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
-	elif user["role"] == "admin":
-	    new_user = User(
-                username="admin", 
-                email=user["email"], 
-                firstName="admin", 
-                lastName="admin",
-		is_admin=True
+        elif user["role"] == "admin":
+            new_user = User(
+                    username="admin", 
+                    email=user["email"], 
+                    firstName="admin", 
+                    lastName="admin",
+                    is_admin=True
             )
-	    new_user.set_password("123")  # Set a default password
+            new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
 
     db.session.commit()
