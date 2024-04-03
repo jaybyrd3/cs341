@@ -93,7 +93,7 @@ def booknew():
     if request.method == 'POST':
         slot_id = request.form.get('slot_id')
         slot = Slot.query.get(slot_id)
-	    # debug stuff
+	# debug stuff
         print(f"slot_id {slot_id} slot {slot}")
         if slot: #and not slot.client
             slot.client = session.get('email')  # Or however you identify the client
