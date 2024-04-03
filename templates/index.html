@@ -36,25 +36,38 @@
                     </div>
                 </li>
             {% endif %}
-            {% if current_user.is_authenticated %}
             <li class="nav-item dropdown" style="margin-left: auto;">
                 <a id="log" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Log...</a>
                 <div id="logMenu" class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="/logout">Logout</a>
+                    {% if current_user.is_authenticated %}
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    {% else %}
+                        <a class="dropdown-item" href="/login">Login</a>
+                        <a class="dropdown-item" href="/signup">Sign Up</a>
+                    {% endif %}
                 </div>
             </li>
-            {% else %}
-            <li class="nav-item dropdown" style="margin-left: auto;">
-                <a id="log" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Log...</a>
-                <div id="logMenu" class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="/login">Login</a>
-                    <a class="dropdown-item" href="/signup">Sign Up</a>
-                </div>
-            </li>
-            {% endif %}
         </ul>
 
         <script>
+            document.getElementById('navbar').addEventListener('click', function(event) {
+                if (event.target.id === 'admin') { 
+                    var adminMenu = document.getElementById('adminMenu');
+                    if (adminMenu.classList.contains('show')) {
+                        adminMenu.classList.remove('show');
+                    } else {
+                        adminMenu.classList.add('show');
+                    }
+                } else if (event.target.id === 'log') {
+                    var logMenu = document.getElementById('logMenu');
+                    if (logMenu.classList.contains('show')) {
+                        logMenu.classList.remove('show');
+                    } else {
+                        logMenu.classList.add('show');
+                    }
+                }
+            });
+            /*
             document.getElementById('admin').addEventListener('click', function() {
                 var adminMenu = document.getElementById('adminMenu');
                 if (adminMenu.classList.contains('show')) {
@@ -71,6 +84,7 @@
                     logMenu.classList.add('show');
                 }
             });
+            */
         </script>
 <!--
         <div class="collapse" id="navbarToggleExternalContent">
