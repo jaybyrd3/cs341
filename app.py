@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user
 from db_config import db, User, Slot
 from datetime import date, timedelta, datetime
 from logging import FileHandler, WARNING
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, extract
 import os
 
 app = Flask(__name__)
@@ -142,7 +142,12 @@ def booknewcat(category):
               query = query.filter(Slot.description.ilike(f'%{keyword}%'))
 
          if month:
-              query = query.filter(and_(Slot.starttime.strftime('%B') == month, Slot.endtime.strftime('%B') == month))
+              query = query.filter(
+                  or_(
+                      extract('month', Slot.starttime) == int(month),
+                      extract('month', Slot.endtime) == int(month) 
+                  )
+              )
 
          if year:
               query = query.filter(and_(Slot.starttime.year == year, Slot.endtime.year == year))
