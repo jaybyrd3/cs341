@@ -146,8 +146,9 @@ def booknewcat(category):
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
 
         # Filter out potential slots that do not overlap with any closed slot
-         open_slots_query = Slot.query.all()
+         open_slots_query = Slot.query
          '''
+         (
             Slot.query.filter(Slot.category == category, Slot.client == 'None')
             .filter(
                 ~func.any_(Slot.starttime >= list(tup)[0] and Slot.starttime <= list(tup)[1] for tup in occupied_ranges)
