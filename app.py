@@ -366,43 +366,70 @@ def account():
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])
 def demo1():
-    users_with_qualifications = [
-	{
-            "firstName": "Admin",
-            "lastName": "Admin",
-            "email": "admin@test.com",
-            "role": "admin"
-        },
-        {
-            "firstName": "Abby",
-            "lastName": "Andersen",
-            "email": "abbyandersen@test.com",
-            "qualification": "Graduated from The Salon Professional Academy, 2015",
-            "role": "provider",
-            "category": "beauty",
-            "jobTitle": "Hair Specialist"
-        },
-        {
-            "firstName": "Katie",
-            "lastName": "Johnson",
-            "email": "katiejohnson@test.com",
-            "qualification": "Skin-care certified nurse training, 2021",
-            "role": "provider",
-            "category": "beauty",
-            "jobTitle": "Skin-care Nurse"
-        },
-        {
-            "firstName": "Jane",
-            "lastName": "Doe",
-            "email": "janedoe@test.com",
-            "role": "client"
-        }
-    ]
-    slots_details = [
-        {"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty", "client": "janedoe@test.com"},
-        {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty", "client": None}
-    ]
-	
+    admin = User.query.filter_by(email="admin@test.com").first()
+    abby = User.query.filter_by(email="abbyandersen@test.com").first()
+    katie = User.query.filter_by(email="katiejohnson@test.com").first()
+    jane = User.query.filter_by(email="janedoe@test.com").first()
+    users_with_qualifications = []
+    if not admin:
+        users_with_qualifications.append
+        (
+            {
+                "firstName": "Admin",
+                "lastName": "Admin",
+                "email": "admin@test.com",
+                "role": "admin"
+            }
+        )
+    if not abby:
+        users_with_qualifications.append
+        (
+            {
+                "firstName": "Abby",
+                "lastName": "Andersen",
+                "email": "abbyandersen@test.com",
+                "qualification": "Graduated from The Salon Professional Academy, 2015",
+                "role": "provider",
+                "category": "beauty",
+                "jobTitle": "Hair Specialist"
+            }
+        )
+    if not katie:
+        users_with_qualifications.append
+        (
+            {
+                "firstName": "Katie",
+                "lastName": "Johnson",
+                "email": "katiejohnson@test.com",
+                "qualification": "Skin-care certified nurse training, 2021",
+                "role": "provider",
+                "category": "beauty",
+                "jobTitle": "Skin-care Nurse"
+            }
+        )
+    if not jane:
+        users_with_qualifications.append
+        (
+            {
+                "firstName": "Jane",
+                "lastName": "Doe",
+                "email": "janedoe@test.com",
+                "role": "client"
+            }
+        )
+    abbyslot = Slot.query.filter_by(provider="abbyandersen@test.com").first()
+    katieslot = Slot.query.filter_by(provider="katiejohnson@test.com").first()
+    slots_details = []
+    if not abbyslot:
+        slots_details.append
+        (
+            {"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty", "client": "janedoe@test.com"}
+        )
+    if not katieslot:
+        slots_details.append
+        (
+            {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty", "client": None}
+        )
     # Insert users into the database
     for user in users_with_qualifications:
         if user["role"] == "provider":
@@ -452,7 +479,9 @@ def demo1():
     # Commit slots to save changes
     db.session.commit()
 
-    return jsonify({"message": "Demo 1 data preloaded successfully!"})
+    flash(f"Demo 1 data preloaded successfully!", category="error")
+    return redirect(url_for('home'))
+    #return jsonify({"message": "Demo 1 data preloaded successfully!"})
 
 # [START] HELPER FUNCTIONS
 
