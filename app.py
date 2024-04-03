@@ -128,8 +128,23 @@ def booknewcat(category):
 #           return render_template('booknew.html', open_slots=open_slots)
 #     else:
 #           return render_template('booknew.html', open_slots=None)
-		
 
+
+@app.route('/cancel_appointment', methods=['POST'])
+@login_required
+def cancel_appointment():
+    slot_id = request.form.get('slot_id')
+    slot = Slot.query.get(slot_id)
+    if slot and (slot.client == current_user.email or slot.provider == current_user.email):
+        # Update the slot to indicate cancellation
+        slot.client = None  # or another appropriate action
+        db.session.commit()
+        flash('Appointment canceled successfully.', 'success')
+    else:
+        flash('Appointment could not be found or you do not have permission to cancel it.', 'error')
+    return redirect(url_for('viewappointments'))
+
+		
 @app.route('/viewappointments', methods=['GET', 'POST'])
 @login_required
 def viewappointments():
