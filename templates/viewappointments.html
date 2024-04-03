@@ -180,15 +180,8 @@
                     var month = document.getElementById('month').value;
                     var year = document.getElementById('year').value;
 
-                    // Get the current pathname of the URL
-                    var pathname = window.location.pathname;
-
-                    // Split the pathname by '/' and get the last part
-                    var parts = pathname.split('/');
-                    var lastPart = parts[parts.length - 1];
-
                     // Start form action
-                    var formAction = '/viewappointments/' + lastPart + '?';
+                    var formAction = '/viewappointments/' + '?';
 
                     // Append new parameters
                     formAction += '&keyword=' + encodeURIComponent(keyword) + '&month=' + encodeURIComponent(month) + '&year=' + encodeURIComponent(year);
