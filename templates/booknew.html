@@ -178,6 +178,7 @@
                                             <h5>Provided by {{ slot.provider }}</h5>
                                             <p>Time: {{ slot.starttime }} - {{ slot.endtime }}</p>
                                             <p>[{{ slot.category }}]</p>
+                                            <input type="hidden" name="slot_id" value="{{ slot.id }}">
                                             <button type="submit" class="btn btn-secondary">Book It!</button>
                                         </div>
                                     </div>
