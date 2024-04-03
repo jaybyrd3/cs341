@@ -148,7 +148,8 @@ def booknewcat(category):
         # Filter out potential slots that do not overlap with any closed slot
          open_slots_query = (
          Slot.query.filter(Slot.category == category, Slot.client == 'None')
-         .filter(Slot.starttime.notin_(occupied_ranges), Slot.endtime.notin_(occupied_ranges))
+         .filter(~Slot.starttime.in_(occupied_ranges))
+         .filter(~Slot.endtime.in_(occupied_ranges))
         )
 
          if keyword:
