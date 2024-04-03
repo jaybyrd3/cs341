@@ -225,7 +225,7 @@ def viewappointments():
                 return 'Invalid year', 400
          
          user = User.query.filter_by(email=session.get('email')).first()
-         if not user.is_admin:
+         if user.is_admin:
              pslots = Slot.query.all()
              cslots = Slot.query.all()
          else:
