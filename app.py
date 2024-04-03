@@ -93,8 +93,11 @@ def booknew():
     if request.method == 'POST':
         slot_id = request.form.get('slot_id')
         slot = Slot.query.get(slot_id)
+	    # debug stuff
+        print(f"slot_id {slot_id} slot {slot}")
         if slot: #and not slot.client
             slot.client = session.get('email')  # Or however you identify the client
+	    print(f"slot.client {session.get('email')}")
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
             return redirect(url_for('viewappointments'))
@@ -332,7 +335,7 @@ def demo1():
                 qualifications=user["qualification"],
                 jobTitle=user["jobTitle"]
             )
-            new_user.set_password("defaultpassword")  # Set a default password
+            new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
         elif user["role"] == "client":
             new_user = User(
@@ -341,7 +344,7 @@ def demo1():
                 firstName=user["firstName"], 
                 lastName=user["lastName"]
             )
-            new_user.set_password("defaultpassword")  # Set a default password
+            new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
 
     db.session.commit()
