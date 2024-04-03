@@ -266,21 +266,31 @@ def signup():
 @app.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_user():
-    if request.method == 'POST':
-        username = request.form['username']
-        email = request.form['email']
-        if username and email:
-            new_user = User(username=username, email=email)
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect(url_for('view_users'))
-    return render_template('add_user.html')
+    user = User.query.filter_by(email=session.get('email')).first()
+    if not user.is_admin:
+        flash(f"Sorry - you need to be an admin to access that page!", category="error")
+        return redirect(url_for('home'))
+    else:
+        if request.method == 'POST':
+            username = request.form['username']
+            email = request.form['email']
+            if username and email:
+                new_user = User(username=username, email=email)
+                db.session.add(new_user)
+                db.session.commit()
+                return redirect(url_for('view_users'))
+        return render_template('add_user.html')
 
 @app.route('/users')
 @login_required
 def view_users():
-    users = User.query.all()
-    return render_template('view_users.html', users=users)
+    user = User.query.filter_by(email=session.get('email')).first()
+    if not user.is_admin:
+        flash(f"Sorry - you need to be an admin to access that page!", category="error")
+        return redirect(url_for('home'))
+    else:
+        users = User.query.all()
+        return render_template('view_users.html', users=users)
 
 @app.route('/calendar')
 def calendar():
