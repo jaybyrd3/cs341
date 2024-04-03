@@ -85,6 +85,19 @@
             });
             */
         </script>
+
+            <!-- [START] FLASH MESSAGING FOR ACCOUNT -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul class=flashes>
+                        {% for category, message in messages %}
+                            <li class = "flash {{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            <!-- [END] FLASH MESSAGING FOR ACCOUNT -->
+
         <div class="container maincontent rounded-3 my-5">
             <div class="container">
                 <!--Need to make this <h1> the name of current user-->

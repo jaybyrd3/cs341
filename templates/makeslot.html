@@ -86,6 +86,19 @@
             */
         </script>
 
+        <!-- [START] FLASH MESSAGING FOR MAKESLOT -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for category, message in messages %}
+                        <li class = "flash {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <!-- [END] FLASH MESSAGING FOR MAKESLOT -->
+            
+
         <div class="container maincontent rounded-3 my-5">
             <h3>Fill out the form to list a new Appointment</h3><br>
             <form method="POST">

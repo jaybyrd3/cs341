@@ -90,6 +90,18 @@
             */
         </script>
 
+        <!-- [START] FLASH MESSAGING FOR BOOKNEW -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for category, message in messages %}
+                        <li class = "flash {{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <!-- [END] FLASH MESSAGING FOR BOOKNEW -->
+
         <div class="container maincontent rounded-3 my-5">
             {% if current_user.is_authenticated %}
             <h1>Browse Appointments: {{ current_user.username }}!</h1>
