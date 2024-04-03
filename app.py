@@ -59,20 +59,31 @@ def wipe():
 @app.route('/makeslot', methods=['GET', 'POST'])
 @login_required
 def makeslot():
-     if request.method == 'POST':
+    user = User.query.filter_by(User.email == session.get('email'))
+    if not user:
+        flash(f"Sorry - you need to be logged in & registered as a provider to make a slot!", category="error")
+        return redirect(url_for('login'))
+    elif not session.get('jobTitle') or not session.get('qualifications'):
+        flash(f"Sorry - you need to be registered as a provider to make a slot! Please enter in your job title & qualifications to continue.", category="error")
+        return redirect(url_for('account'))
+    elif request.method == 'POST':
         starttime = request.form['starttime']
         endtime = request.form['endtime']
         client = request.form['client']
-        print(f"make slot client {client}")
         provider = request.form['provider']
         description = request.form['description']
         category = request.form['category']
-        new_slot = Slot(starttime=starttime, endtime=endtime, client=client, provider=provider, description=description, category=category)
-        db.session.add(new_slot)
-        db.session.commit()
-        return redirect(url_for('home')) 
-     else:
-          return render_template('makeslot.html')
+        
+        if starttime and endtime and client and provider and description and category:
+            new_slot = Slot(starttime=starttime, endtime=endtime, client=client, provider=provider, description=description, category=category)
+            db.session.add(new_slot)
+            db.session.commit()
+            return redirect(url_for('home'))
+        else:
+            flash(f"Please fill in all the required fields.", category="error")
+            return redirect(url_for('makeslot'))
+    else:
+        return render_template('makeslot.html')
       
 @app.route('/booknew', methods=['GET', 'POST'])
 @login_required
