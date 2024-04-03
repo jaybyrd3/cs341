@@ -118,7 +118,7 @@
             <ul style="list-style: none;">
                 {% for slot in cslots %}
                     <li>
-                        <form>
+                        <form action="/cancel_appointment" method="post">
                             <div class="container">
                                 <div class="card col-sm-5">
                                     <div class="card-header">
@@ -129,6 +129,7 @@
                                         <p>Client: {{ slot.client }}</p>
                                         <p>Time: {{ slot.starttime }} - {{ slot.endtime }}</p>
                                         <p>[{{ slot.category }}]</p>
+                                        <input type="hidden" name="slot_id" value="{{ slot.id }}">
                                         <button type="submit" class="btn btn-secondary">Cancel</button>
                                     </div>
                                 </div>
