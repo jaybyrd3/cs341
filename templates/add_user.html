@@ -24,15 +24,21 @@
             <li class="nav-item">
                 <a class="nav-link text-white" href="/viewappointments">View Appointments</a>
             </li>
+            {% if current_user.jobTitle is not none and current_user.qualifications is not none %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/makeslot">Make Slot</a>
+                </li>
+            {% endif %}
             <li class="nav-item">
                 <a class="nav-link text-white" href="/account">My Account</a>
             </li>
+        
             <li class="nav-item dropdown">
                 <a id="admin" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
                 <div id="adminMenu" class="dropdown-menu">
                     <a class="dropdown-item" href="/add">Add New User</a>
                     <a class="dropdown-item" href="/users">View All Users</a>
-                    <a class="dropdown-item" href="/makeslot">Make Slot</a>
+                    <!--<a class="dropdown-item" href="/makeslot">Make Slot</a> Commenting this out, as functionality & associated logic has been moved to provider-->
                 </div>
             </li>
         {% endif %}
