@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user
 from db_config import db, User, Slot
 from datetime import date, timedelta, datetime
 from logging import FileHandler, WARNING
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 import os
 
 app = Flask(__name__)
@@ -119,10 +119,38 @@ def booknewcat(category):
          month = request.args.get('month', '')
          year = request.args.get('year', '')
 
+         if keyword:
+              keyword = keyword.lower()
+
+         if month:
+              try:
+                   datetime.strptime(month, '%B')
+              except ValueError:
+                   return 'Invalid month', 400
+              
+         if year:
+              try:
+                   year = int(year)
+                   if year < 1900 or year > 2100: 
+                        return 'Invalid year', 400
+              except ValueError:
+                   return 'Invalid year', 400
+              
+         query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
+
+         if keyword:
+              query = query.filter(Slot.description.ilike(f'%{keyword}%'))
+
+         if month:
+              query = query.filter(and_(Slot.starttime.strftime('%B') == month, Slot.endtime.strftime('%B') == month))
+
+         if year:
+              query = query.filter(and_(Slot.starttime.year == year, Slot.endtime.year == year))
+
          if category == 'all':
-               open_slots = Slot.query.filter_by(client='None').all()
+               open_slots = query.all()
          else:
-              open_slots = Slot.query.filter_by(category=category).filter_by(client='None').all() 
+              open_slots = query.filter_by(category=category).all() 
          return render_template('booknew.html', open_slots=open_slots, cansearch=True)
     else:
           return "You sent a POST request to " + str(category) + ". Why, though?"
