@@ -290,33 +290,61 @@ def account():
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])
 def demo1():
-    # Predefined users and their qualifications
     users_with_qualifications = [
-        {"name": "Abby Andersen", "qualification": "Graduated from The Salon Professional Academy, 2015", "role": "provider", "category": "beauty"},
-        {"name": "Katie Johnson", "qualification": "Skin-care certified nurse training, 2021", "role": "provider", "category": "beauty"},
-        {"name": "Jane Doe", "role": "client"}
+        {
+            "firstName": "Abby",
+            "lastName": "Andersen",
+            "email": "abbyandersen@test.com",
+            "qualification": "Graduated from The Salon Professional Academy, 2015",
+            "role": "provider",
+            "category": "beauty",
+            "jobTitle": "Hair Specialist"
+        },
+        {
+            "firstName": "Katie",
+            "lastName": "Johnson",
+            "email": "katiejohnson@test.com",
+            "qualification": "Skin-care certified nurse training, 2021",
+            "role": "provider",
+            "category": "beauty",
+            "jobTitle": "Skin-care Nurse"
+        },
+        {
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "email": "janedoe@test.com",
+            "role": "client"
+        }
     ]
-
-    # Predefined slots
     slots_details = [
-        {"provider_email": "abbyanderson@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty"},
-        {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty"}
+        {"provider_email": "abbyandersen@example.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty"},
+        {"provider_email": "katiejohnson@example.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty"}
     ]
-
+	
     # Insert users into the database
     for user in users_with_qualifications:
         if user["role"] == "provider":
-            new_user = User(username=user["name"], email=user["name"].replace(" ", "").lower() + "@test.com", qualifications=user["qualification"])
-            new_user.set_password("123")  # Set a default password
+            new_user = User(
+                username=f"{user['firstName']} {user['lastName']}", 
+                email=user["email"], 
+                firstName=user["firstName"], 
+                lastName=user["lastName"],
+                qualifications=user["qualification"],
+                jobTitle=user["jobTitle"]
+            )
+            new_user.set_password("defaultpassword")  # Set a default password
             db.session.add(new_user)
         elif user["role"] == "client":
-            new_user = User(username=user["name"], email=user["name"].replace(" ", "").lower() + "@test.com")
-            new_user.set_password("123")  # Set a default password
+            new_user = User(
+                username=f"{user['firstName']} {user['lastName']}", 
+                email=user["email"], 
+                firstName=user["firstName"], 
+                lastName=user["lastName"]
+            )
+            new_user.set_password("defaultpassword")  # Set a default password
             db.session.add(new_user)
 
-    # Commit users to save changes
     db.session.commit()
-
     # Insert slots into the database
     for slot in slots_details:
         provider_user = User.query.filter_by(email=slot["provider_email"]).first()
