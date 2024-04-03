@@ -321,8 +321,8 @@ def demo1():
         }
     ]
     slots_details = [
-        {"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty"},
-        {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty"}
+        {"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty", "client": "janedoe@test.com"},
+        {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty", "client": None}
     ]
 	
     # Insert users into the database
@@ -357,7 +357,8 @@ def demo1():
                             endtime=datetime.strptime(slot["date_time"], "%Y-%m-%d %H:%M:%S") + timedelta(hours=1),  # Assuming 1 hour duration
                             provider=provider_user.email,
                             description=slot["description"],
-                            category=slot["category"])
+                            category=slot["category"],
+			    client=slot["client"])
             db.session.add(new_slot)
 
     # Commit slots to save changes
