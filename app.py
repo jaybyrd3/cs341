@@ -59,7 +59,7 @@ def wipe():
 @app.route('/makeslot', methods=['GET', 'POST'])
 @login_required
 def makeslot():
-    user = User.query.filter_by(User.email == session.get('email'))
+    user = User.query.filter_by(email=session.get('email'))
     if not user:
         flash(f"Sorry - you need to be logged in & registered as a provider to make a slot!", category="error")
         return redirect(url_for('login'))
