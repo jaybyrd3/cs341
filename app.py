@@ -151,7 +151,7 @@ def booknewcat(category):
          if not occupied_ranges:
             # Adjust the query here to handle the scenario where there are no closed slots
             subquery = Slot.query.filter(Slot.id == None)  # Placeholder to avoid errors
-            Slot.query.filter(Slot.category == category, Slot.client == 'None')
+            open_slots_query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
          else:
             #DEBUG
             subquery = (
