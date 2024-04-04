@@ -4,6 +4,7 @@ from db_config import db, User, Slot
 from datetime import date, timedelta, datetime
 from logging import FileHandler, WARNING
 from sqlalchemy import or_, and_, extract, func, select
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 import os
 
 app = Flask(__name__)
@@ -149,8 +150,8 @@ def booknewcat(category):
          subquery = (
             select(Slot.id)
             .where(
-                func.any_(Slot.starttime.cast('timestamp with time zone') >= closed_slot.starttime)
-                and func.any_(Slot.starttime.cast('timestamp with time zone') <= closed_slot.endtime)
+                func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) >= closed_slot.starttime)
+                and func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) <= closed_slot.endtime)
             )
         )
          query = Slot.query.filter(~Slot.id.in_(subquery))
@@ -166,8 +167,8 @@ def booknewcat(category):
                 ~Slot.id.in_(
                     select(Slot.id)
                     .where(
-                        func.any_(Slot.starttime.cast('timestamp with time zone') >= tup[0] for tup in occupied_ranges)
-                        and func.any_(Slot.starttime.cast('timestamp with time zone') <= tup[1] for tup in occupied_ranges)
+                        func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges)
+                        and func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges)
                     )
                 )
             )
@@ -175,8 +176,8 @@ def booknewcat(category):
                 ~Slot.id.in_(
                     select(Slot.id)
                     .where(
-                        func.any_(Slot.endtime.cast('timestamp with time zone') >= tup[0] for tup in occupied_ranges)
-                        and func.any_(Slot.endtime.cast('timestamp with time zone') <= tup[1] for tup in occupied_ranges)
+                        func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges)
+                        and func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges)
                     )
                 )
             )
