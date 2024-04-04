@@ -187,8 +187,10 @@ def booknewcat(category):
                     ~Slot.id.in_(
                         select(Slot.id)
                         .where(
-                            func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges))
-                            and func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges))
+                            func.coalesce(Slot.endtime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges)
+                            and func.coalesce(Slot.endtime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges)
+                            #func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges))
+                            #and func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges))
                         )
                     )
                 )
