@@ -148,7 +148,7 @@ def booknewcat(category):
 
         # Construct a list of time ranges occupied by closed slots
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots if s.starttime is not None and s.endtime is not None]
-         if not occupied_ranges:
+         if not occupied_ranges or len(occupied_ranges) == 0:
             # Adjust the query here to handle the scenario where there are no closed slots
             # subquery = Slot.query.filter(Slot.id == None)  # Placeholder to avoid errors
             open_slots_query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
