@@ -153,16 +153,12 @@ def booknewcat(category):
                     select(Slot.id)
                     .where(
                         func.any_(
-                                print("Comparing:", Slot.starttime, "to", tup[0])
-                                or Slot.starttime >= tup[0] 
-                                for tup in occupied_ranges
+                            Slot.starttime >= tup[0] for tup in occupied_ranges
                         )
                         and func.any_(
-                                print("Comparing:", Slot.starttime, "to", tup[1])
-                                or Slot.starttime <= tup[1] 
-                                for tup in occupied_ranges
+                            Slot.starttime <= tup[1] for tup in occupied_ranges
                         )
-                    ).execution_options(autocommit=True)
+                    ).execution_options(autocommit=True)  # Add debugging prints outside
                 )
             )
             .filter(
@@ -170,23 +166,23 @@ def booknewcat(category):
                     select(Slot.id)
                     .where(
                         func.any_(
-                                print("Comparing:", Slot.endtime, "to", tup[0])
-                                or Slot.endtime >= tup[0] 
-                                for tup in occupied_ranges
+                            Slot.endtime >= tup[0] for tup in occupied_ranges
                         )
                         and func.any_(
-                                print("Comparing:", Slot.endtime, "to", tup[1])
-                                or Slot.endtime <= tup[1] 
-                                for tup in occupied_ranges
+                            Slot.endtime <= tup[1] for tup in occupied_ranges
                         )
-                    ).execution_options(autocommit=True)
+                    ).execution_options(autocommit=True)  # Add debugging prints outside
                 )
             )
         )
 
-        # Debug print statements
-         print(list(tup)[0] for tup in occupied_ranges)
-         print(list(tup)[1] for tup in occupied_ranges)
+        # Debugging prints
+         for tup in occupied_ranges:
+            print("Comparisons for range:", tup) 
+            print(" starttime >= ", tup[0], ":", func.any_(Slot.starttime >= tup[0]))  # Individual comparisons
+            print(" starttime <= ", tup[1], ":", func.any_(Slot.starttime <= tup[1]))
+            print(" endtime >= ", tup[0], ":", func.any_(Slot.endtime >= tup[0]))
+            print(" endtime <= ", tup[1], ":", func.any_(Slot.endtime <= tup[1]))
 
 
 
