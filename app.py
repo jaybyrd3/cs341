@@ -142,7 +142,9 @@ def booknewcat(category):
                     raise ValueError("Year must be between 2024 and 2026")
              except ValueError:
                 return 'Invalid year', 400
-              
+        
+         open_slots_query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
+         '''
         # Query the DB for all already-scheduled slots
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
 
@@ -198,7 +200,7 @@ def booknewcat(category):
             print(open_slots_query.statement.compile(compile_kwargs={"literal_binds": True}))
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
-
+         '''
          if month:
             open_slots_query = open_slots_query.filter(
                 or_(
