@@ -16,6 +16,8 @@ if database_url.startswith("postgres://"):
 
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#DEBUG
+app.config['SQLALCHEMY_ECHO'] = True
 
 # Initialize the db with the app
 db.init_app(app)
