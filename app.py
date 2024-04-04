@@ -1,9 +1,9 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
 from db_config import db, User, Slot
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta, datetime, timezone
 from logging import FileHandler, WARNING
-from sqlalchemy import or_, and_, extract, func, select
+from sqlalchemy import or_, and_, extract, func, select, types
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 import os
 
@@ -547,60 +547,64 @@ def account():
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])
 def demo1():
+    abc = User.query.filter_by(email="abc@xyz.com").first()
     admin = User.query.filter_by(email="admin@test.com").first()
     abby = User.query.filter_by(email="abbyandersen@test.com").first()
     katie = User.query.filter_by(email="katiejohnson@test.com").first()
     jane = User.query.filter_by(email="janedoe@test.com").first()
     users_with_qualifications = []
+    if not abc:
+        users_with_qualifications.append
+        (
+            User (
+                username = "abc",
+                email = "abc@xyz.com",
+                is_admin = True
+            )
+        )
     if not admin:
         print("----->DEBUG: Admin not found; adding to list")
         users_with_qualifications.append
         (
-            {
-                "firstName": "Admin",
-                "lastName": "Admin",
-                "email": "admin@test.com",
-                "role": "admin"
-            }
+            User (
+                username = "admin",
+                email = "admin@test.com",
+                is_admin = True
+            )
         )
     if not abby:
-        users_with_qualifications.append
         print("----->DEBUG: Abby not found; adding to list")
+        users_with_qualifications.append
         (
-            {
-                "firstName": "Abby",
-                "lastName": "Andersen",
-                "email": "abbyandersen@test.com",
-                "qualification": "Graduated from The Salon Professional Academy, 2015",
-                "role": "provider",
-                "category": "beauty",
-                "jobTitle": "Hair Specialist"
-            }
+            User (
+                firstName = "Abby",
+                lastName = "Andersen",
+                email = "abbyandersen@test.com",
+                qualifications = "Graduated from The Salon Professional Academy, 2015",
+                jobTitle = "Hair Specialist"
+            )
         )
     if not katie:
-        users_with_qualifications.append
         print("----->DEBUG: Katie not found; adding to list")
+        users_with_qualifications.append
         (
-            {
-                "firstName": "Katie",
-                "lastName": "Johnson",
-                "email": "katiejohnson@test.com",
-                "qualification": "Skin-care certified nurse training, 2021",
-                "role": "provider",
-                "category": "beauty",
-                "jobTitle": "Skin-care Nurse"
-            }
+            User (
+                firstName = "Katie",
+                lastName = "Johnson",
+                email = "katiejohnson@test.com",
+                qualifications = "Skin-care certified nurse training, 2021",
+                jobTitle = "Skin Care Nurse"
+            )
         )
     if not jane:
-        users_with_qualifications.append
         print("----->DEBUG: Jane not found; adding to list")
+        users_with_qualifications.append
         (
-            {
-                "firstName": "Jane",
-                "lastName": "Doe",
-                "email": "janedoe@test.com",
-                "role": "client"
-            }
+            User (
+                firstName = "Jane",
+                lastName = "Doe",
+                email = "janedoe@test.com"
+            )
         )
     abbyslot = Slot.query.filter_by(provider="abbyandersen@test.com").first()
     katieslot = Slot.query.filter_by(provider="katiejohnson@test.com").first()
@@ -609,68 +613,40 @@ def demo1():
         print("----->DEBUG: AbbySlot not found; adding to list")
         slots_details.append
         (
-            {"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty", "client": "janedoe@test.com"}
+            Slot (
+                provider = "abbyandersen@test.com",
+                client = "janedoe@test.com",
+                description = "Hair Highlights",
+                category = "beauty",
+                starttime = "2024-03-04 15:00:00 UTC",
+                endtime = "2024-03-04 16:00:00 UTC"
+            )
+            #{"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty", "client": "janedoe@test.com"}
         )
     if not katieslot:
         print("----->DEBUG: KatieSlot not found; adding to list")
         slots_details.append
         (
-            {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty", "client": None}
+            Slot (
+                provider = "katiejohnson@test.com",
+                client = None,
+                description = "Face Moisture Treatment",
+                category = "beauty",
+                starttime = "2024-03-04 15:00:00 UTC",
+                endtime = "2024-03-04 16:00:00 UTC"
+            )
+            #{"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty", "client": None}
         )
+        
     # Insert users into the database
     for user in users_with_qualifications:
-        if user["role"] == "provider":
-            new_user = User(
-                username=f"{user['firstName']} {user['lastName']}", 
-                email=user["email"], 
-                firstName=user["firstName"], 
-                lastName=user["lastName"],
-                qualifications=user["qualification"],
-                jobTitle=user["jobTitle"]
-            )
-            new_user.set_password("123")  # Set a default password
-            db.session.add(new_user)
-            print("----->DEBUG: Added ", new_user.email, " as provider.")
-            
-        elif user["role"] == "client":
-            new_user = User(
-                username=f"{user['firstName']} {user['lastName']}", 
-                email=user["email"], 
-                firstName=user["firstName"], 
-                lastName=user["lastName"]
-            )
-            new_user.set_password("123")  # Set a default password
-            db.session.add(new_user)
-            print("----->DEBUG: Added ", new_user.email, " as client.")
-        elif user["role"] == "admin":
-            new_user = User(
-                    username="admin", 
-                    email=user["email"], 
-                    firstName="admin", 
-                    lastName="admin",
-                    is_admin=True
-            )
-            new_user.set_password("123")  # Set a default password
-            db.session.add(new_user)
-            print("----->DEBUG: Added ", new_user.email, " as admin.")
-
+        user.set_password("123")  # Set a default password
+        db.session.add(user)
+        print("----->DEBUG: Added ", user.email)
     db.session.commit()
-    print("----->DEBUG: Committed demo1 adds to DB. Current user list: ")
-    for user in User.query.all():
-        print("\t", user.email)
     # Insert slots into the database
-    for slot in slots_details:
-        provider_user = User.query.filter_by(email=slot["provider_email"]).first()
-        if provider_user:
-            new_slot = Slot(starttime=datetime.strptime(slot["date_time"], "%Y-%m-%d %H:%M:%S"),
-                            endtime=datetime.strptime(slot["date_time"], "%Y-%m-%d %H:%M:%S") + timedelta(hours=1),  # Assuming 1 hour duration
-                            provider=provider_user.email,
-                            description=slot["description"],
-                            category=slot["category"],
-			    client=slot["client"])
-            db.session.add(new_slot)
-
-    # Commit slots to save changes
+    for slot in slots_details: 
+        db.session.add(slot)
     db.session.commit()
 
     flash(f"Demo 1 data preloaded successfully!", category="success")
