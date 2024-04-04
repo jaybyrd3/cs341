@@ -144,7 +144,7 @@ def booknewcat(category):
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
         # Construct a list of time ranges occupied by closed slots
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
-
+         print("Right before open_slots_query:")
         # Filter out potential slots that do not overlap with any closed slot
          open_slots_query = (
             Slot.query.filter(Slot.category == category, Slot.client == 'None')
@@ -168,13 +168,13 @@ def booknewcat(category):
             )
         )
 
-        # Debugging prints
-         for tup in occupied_ranges:
+         for tup in occupied_ranges: 
             print("Comparisons for range:", tup) 
-            print(" starttime >= ", tup[0], ":", func.any_(Slot.starttime >= tup[0]))  # Individual comparisons
+            print(" starttime >= ", tup[0], ":", func.any_(Slot.starttime >= tup[0]))  
             print(" starttime <= ", tup[1], ":", func.any_(Slot.starttime <= tup[1]))
             print(" endtime >= ", tup[0], ":", func.any_(Slot.endtime >= tup[0]))
             print(" endtime <= ", tup[1], ":", func.any_(Slot.endtime <= tup[1]))
+
 
 
 
