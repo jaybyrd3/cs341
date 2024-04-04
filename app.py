@@ -178,8 +178,8 @@ def booknewcat(category):
                     ~Slot.id.in_(
                         select(Slot.id)
                         .where(
-                            func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges)
-                            and func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges)
+                            func.coalesce(func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges))
+                            and func.coalesce(func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges))
                         )
                     )
                 )
@@ -187,8 +187,8 @@ def booknewcat(category):
                     ~Slot.id.in_(
                         select(Slot.id)
                         .where(
-                            func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges)
-                            and func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges)
+                            func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges))
+                            and func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges))
                         )
                     )
                 )
