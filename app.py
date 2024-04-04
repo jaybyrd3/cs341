@@ -152,18 +152,34 @@ def booknewcat(category):
                 ~Slot.id.in_(
                     select(Slot.id)
                     .where(
-                        func.any_(Slot.starttime >= tup[0] for tup in occupied_ranges)
-                        and func.any_(Slot.starttime <= tup[1] for tup in occupied_ranges)
-                    )
+                        func.any_(
+                                print("Comparing:", Slot.starttime, "to", tup[0])
+                                or Slot.starttime >= tup[0] 
+                                for tup in occupied_ranges
+                        )
+                        and func.any_(
+                                print("Comparing:", Slot.starttime, "to", tup[1])
+                                or Slot.starttime <= tup[1] 
+                                for tup in occupied_ranges
+                        )
+                    ).execution_options(autocommit=True)
                 )
             )
             .filter(
                 ~Slot.id.in_(
                     select(Slot.id)
                     .where(
-                        func.any_(Slot.endtime >= tup[0] for tup in occupied_ranges)
-                        and func.any_(Slot.endtime <= tup[1] for tup in occupied_ranges)
-                    )
+                        func.any_(
+                                print("Comparing:", Slot.endtime, "to", tup[0])
+                                or Slot.endtime >= tup[0] 
+                                for tup in occupied_ranges
+                        )
+                        and func.any_(
+                                print("Comparing:", Slot.endtime, "to", tup[1])
+                                or Slot.endtime <= tup[1] 
+                                for tup in occupied_ranges
+                        )
+                    ).execution_options(autocommit=True)
                 )
             )
         )
