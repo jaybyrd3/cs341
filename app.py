@@ -159,6 +159,8 @@ def booknewcat(category):
                 return 'Invalid year', 400
         
          open_slots_query = Slot.query.filter(Slot.client == 'None') # SS removed Slot.category == category
+
+
          '''
         # Query the DB for all already-scheduled slots
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
@@ -256,13 +258,24 @@ def cancel_appointment():
     slot_id = request.form.get('slot_id')
     slot = Slot.query.get(slot_id)
     current_email = session.get('email')
-    if slot and (slot.client == current_email or slot.provider == current_email):
-        # Update the slot to indicate cancellation
-        slot.client = "None"  # or another appropriate action
-        db.session.commit()
-        flash('Appointment canceled successfully.', 'success')
+    if slot:
+        user = User.query.filter_by(email=current_email).first()
+        if user and (slot.client == current_email or slot.provider == current_email or user.is_admin):
+            # Update the slot to indicate cancellation
+            if slot.provider == current_email:
+                # If provider, delete from db
+                db.session.delete(slot)
+                db.session.commit()
+                flash('Appointment DESTROYED successfully', 'success')
+            else:
+                slot.client = "None"  # or another appropriate action
+                b.session.commit()
+                flash('Appointment canceled successfully.', 'success')
+        else:
+            flash('You do not have permission to cancel this appointment', 'error')
     else:
-        flash('Appointment could not be found or you do not have permission to cancel it.', 'error')
+        flash('Appointment could not be found', 'error')
+        
     return redirect(url_for('viewappointments'))
 
 		
