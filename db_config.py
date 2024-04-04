@@ -5,6 +5,8 @@
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
+from datetime import datetime, timezone
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
@@ -37,8 +39,8 @@ class User(UserMixin, db.Model):
 class Slot(db.Model):
     __tablename__ = 'slot'
     id = db.Column(db.Integer, primary_key=True)
-    starttime = db.Column(db.DateTime, unique=False, nullable=True)
-    endtime = db.Column(db.DateTime, unique=False, nullable=True)
+    starttime = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc)) 
+    endtime = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
     # if user_id == null, then appt slot is open
     client = db.Column(db.Text, unique=False, default='None', nullable=True)
     provider = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
