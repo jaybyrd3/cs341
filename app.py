@@ -145,17 +145,9 @@ def booknewcat(category):
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
 
          #DEBUG
-         closed_slot = closed_slots[0]
          print("Are datetime objects localized? : ", closed_slot.starttime.tzinfo)
-         subquery = (
-            select(Slot.id)
-            .where(
-                func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) >= closed_slot.starttime)
-                and func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) <= closed_slot.endtime)
-            )
-        )
-         query = Slot.query.filter(~Slot.id.in_(subquery))
-         print(query.statement.compile(compile_kwargs={"literal_binds": True}))
+
+
         
 
         # Construct a list of time ranges occupied by closed slots
