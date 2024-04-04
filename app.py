@@ -154,7 +154,7 @@ def booknewcat(category):
             open_slots_query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
          else:
             #DEBUG
-            '''
+            
             subquery = (
                 select(Slot.id)
                 .where(
@@ -169,8 +169,9 @@ def booknewcat(category):
                 )
             )
             query = Slot.query.filter(~Slot.id.in_(subquery))
+            print("Sample query: ")
             print(query.statement.compile(compile_kwargs={"literal_binds": True}))
-            '''
+            
             # Filter out potential slots that do not overlap with any closed slot
             open_slots_query = (
                 Slot.query.filter(Slot.category == category, Slot.client == 'None')
@@ -193,6 +194,8 @@ def booknewcat(category):
                     )
                 )
             )
+            print("Open slots query: ")
+            print(open_slots_query.statement.compile(compile_kwargs={"literal_binds": True}))
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
 
