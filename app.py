@@ -143,7 +143,8 @@ def booknewcat(category):
         # Query the DB for all already-scheduled slots
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
          for slot in closed_slots:
-             print(slot)
+             print("Slot:")
+             print("\t", slot.starttime, " - ", slot.endtime)
         # Construct a list of time ranges occupied by closed slots
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
          for tup in occupied_ranges: 
