@@ -152,8 +152,8 @@ def booknewcat(category):
                 ~Slot.id.in_(
                     select(Slot.id)
                     .where(
-                        Slot.starttime >= func.any_(tup[0] for tup in occupied_ranges)
-                        and Slot.starttime <= func.any_(tup[1] for tup in occupied_ranges)
+                        func.any_(Slot.starttime >= tup[0] for tup in occupied_ranges)
+                        and func.any_(Slot.starttime <= tup[1] for tup in occupied_ranges)
                     )
                 )
             )
@@ -161,12 +161,13 @@ def booknewcat(category):
                 ~Slot.id.in_(
                     select(Slot.id)
                     .where(
-                        Slot.endtime >= func.any_(tup[0] for tup in occupied_ranges)
-                        and Slot.endtime <= func.any_(tup[1] for tup in occupied_ranges)
+                        func.any_(Slot.endtime >= tup[0] for tup in occupied_ranges)
+                        and func.any_(Slot.endtime <= tup[1] for tup in occupied_ranges)
                     )
                 )
             )
         )
+
         # Debug print statements
          print(list(tup)[0] for tup in occupied_ranges)
          print(list(tup)[1] for tup in occupied_ranges)
