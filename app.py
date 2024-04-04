@@ -101,17 +101,15 @@ def booknew():
         if slot: #and not slot.client
             client_email = session.get('email')
 
-            # Get time of slots
-            selected_start_time = slot.starttime.time()
-            selected_end_time = slot.endtime.time()
-            
-            # Check for conflicting slots with the same date and overlapping time
+            # Get start and end times of the selected slot
+            selected_start_time = slot.starttime
+            selected_end_time = slot.endtime
+
+            # Check for conflicting slots
             conflicts = Slot.query.filter(
                 (Slot.client == client_email) | (Slot.provider == client_email),
-                Slot.starttime.date() == slot.starttime.date(),
-                Slot.endtime.date() == slot.endtime.date(),
-                Slot.starttime < slot.endtime,
-                Slot.endtime > slot.starttime
+                Slot.starttime < selected_end_time,
+                Slot.endtime > selected_start_time
             ).all()
 
             # Check for conflicting slots
