@@ -144,12 +144,6 @@ def booknewcat(category):
         # Query the DB for all already-scheduled slots
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
 
-         #DEBUG
-         print("Are datetime objects localized? : ", closed_slot.starttime.tzinfo)
-
-
-        
-
         # Construct a list of time ranges occupied by closed slots
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
         # Filter out potential slots that do not overlap with any closed slot
