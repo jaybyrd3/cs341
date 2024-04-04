@@ -215,9 +215,12 @@ def booknewcat(category):
             )
             print("Open slots query: ")
             print(open_slots_query.statement.compile(compile_kwargs={"literal_binds": True}))
+
+         '''
+
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
-         '''
+            
          if month:
             open_slots_query = open_slots_query.filter(
                 or_(
@@ -275,7 +278,7 @@ def cancel_appointment():
             flash('You do not have permission to cancel this appointment', 'error')
     else:
         flash('Appointment could not be found', 'error')
-        
+
     return redirect(url_for('viewappointments'))
 
 		
