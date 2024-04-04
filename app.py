@@ -553,6 +553,7 @@ def demo1():
     jane = User.query.filter_by(email="janedoe@test.com").first()
     users_with_qualifications = []
     if not admin:
+        print("----->DEBUG: Admin not found; adding to list")
         users_with_qualifications.append
         (
             {
@@ -564,6 +565,7 @@ def demo1():
         )
     if not abby:
         users_with_qualifications.append
+        print("----->DEBUG: Abby not found; adding to list")
         (
             {
                 "firstName": "Abby",
@@ -577,6 +579,7 @@ def demo1():
         )
     if not katie:
         users_with_qualifications.append
+        print("----->DEBUG: Katie not found; adding to list")
         (
             {
                 "firstName": "Katie",
@@ -590,6 +593,7 @@ def demo1():
         )
     if not jane:
         users_with_qualifications.append
+        print("----->DEBUG: Jane not found; adding to list")
         (
             {
                 "firstName": "Jane",
@@ -602,11 +606,13 @@ def demo1():
     katieslot = Slot.query.filter_by(provider="katiejohnson@test.com").first()
     slots_details = []
     if not abbyslot:
+        print("----->DEBUG: AbbySlot not found; adding to list")
         slots_details.append
         (
             {"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty", "client": "janedoe@test.com"}
         )
     if not katieslot:
+        print("----->DEBUG: KatieSlot not found; adding to list")
         slots_details.append
         (
             {"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty", "client": None}
