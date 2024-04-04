@@ -630,6 +630,8 @@ def demo1():
             )
             new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
+            print("----->DEBUG: Added ", new_user.email, " as provider.")
+            
         elif user["role"] == "client":
             new_user = User(
                 username=f"{user['firstName']} {user['lastName']}", 
@@ -639,6 +641,7 @@ def demo1():
             )
             new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
+            print("----->DEBUG: Added ", new_user.email, " as client.")
         elif user["role"] == "admin":
             new_user = User(
                     username="admin", 
@@ -649,8 +652,12 @@ def demo1():
             )
             new_user.set_password("123")  # Set a default password
             db.session.add(new_user)
+            print("----->DEBUG: Added ", new_user.email, " as admin.")
 
     db.session.commit()
+    print("----->DEBUG: Committed demo1 adds to DB. Current user list: ")
+    for user in User.query.all():
+        print("\t", user.email)
     # Insert slots into the database
     for slot in slots_details:
         provider_user = User.query.filter_by(email=slot["provider_email"]).first()
