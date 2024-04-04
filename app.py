@@ -283,7 +283,7 @@ def cancel_appointment():
                 flash('Appointment DESTROYED successfully', 'success')
             else:
                 slot.client = "None"  # or another appropriate action
-                b.session.commit()
+                db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
         else:
             flash('You do not have permission to cancel this appointment', 'error')
