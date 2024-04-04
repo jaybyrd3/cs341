@@ -142,44 +142,24 @@ def booknewcat(category):
               
         # Query the DB for all already-scheduled slots
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
-         for slot in closed_slots:
-             print("Slot:")
-             print("\t", slot.starttime, " - ", slot.endtime)
+
+         #DEBUG
+         closed_slot = closed_slots[0]
+         print("Are datetime objects localized? : ", closed_slot.starttime.tzinfo)
+         subquery = (
+            select(Slot.id)
+            .where(
+                func.any_(Slot.starttime >= closed_slot.starttime)
+                and func.any_(Slot.starttime <= closed_slot.endtime)
+            )
+        )
+         query = Slot.query.filter(~Slot.id.in_(subquery))
+         print(query.statement.compile(compile_kwargs={"literal_binds": True}))
+        
+
         # Construct a list of time ranges occupied by closed slots
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
-         for tup in occupied_ranges: 
-            print("Comparisons for range:", tup) 
-            print(" starttime >= ", tup[0], ":", func.any_(Slot.starttime >= tup[0]))  
-            print(" starttime <= ", tup[1], ":", func.any_(Slot.starttime <= tup[1]))
-            print(" endtime >= ", tup[0], ":", func.any_(Slot.endtime >= tup[0]))
-            print(" endtime <= ", tup[1], ":", func.any_(Slot.endtime <= tup[1]))
         # Filter out potential slots that do not overlap with any closed slot
-         print("test query raw SQL: ")
-         print(
-            Slot.query.filter(Slot.id == 1).statement.compile(compile_kwargs={"literal_binds": True})
-         )
-         print("open_slots_query raw SQL:")
-         print((
-            Slot.query.filter(Slot.category == category, Slot.client == 'None')
-            .filter(
-                ~Slot.id.in_(
-                    select(Slot.id)
-                    .where(
-                        func.any_(Slot.starttime >= tup[0] for tup in occupied_ranges)
-                        and func.any_(Slot.starttime <= tup[1] for tup in occupied_ranges)
-                    )
-                )
-            )
-            .filter(
-                ~Slot.id.in_(
-                    select(Slot.id)
-                    .where(
-                        func.any_(Slot.endtime >= tup[0] for tup in occupied_ranges)
-                        and func.any_(Slot.endtime <= tup[1] for tup in occupied_ranges)
-                    )
-                )
-            )
-        ).statement.compile(compile_kwargs={"literal_binds": True}))
          open_slots_query = (
             Slot.query.filter(Slot.category == category, Slot.client == 'None')
             .filter(
@@ -201,14 +181,6 @@ def booknewcat(category):
                 )
             )
         )
-         
-
-
-
-
-
-
-
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
 
