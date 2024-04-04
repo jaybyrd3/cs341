@@ -151,6 +151,28 @@ def booknewcat(category):
             print(" endtime >= ", tup[0], ":", func.any_(Slot.endtime >= tup[0]))
             print(" endtime <= ", tup[1], ":", func.any_(Slot.endtime <= tup[1]))
         # Filter out potential slots that do not overlap with any closed slot
+         print("open_slots_query raw SQL:")
+         print((
+            Slot.query.filter(Slot.category == category, Slot.client == 'None')
+            .filter(
+                ~Slot.id.in_(
+                    select(Slot.id)
+                    .where(
+                        func.any_(Slot.starttime >= tup[0] for tup in occupied_ranges)
+                        and func.any_(Slot.starttime <= tup[1] for tup in occupied_ranges)
+                    )
+                )
+            )
+            .filter(
+                ~Slot.id.in_(
+                    select(Slot.id)
+                    .where(
+                        func.any_(Slot.endtime >= tup[0] for tup in occupied_ranges)
+                        and func.any_(Slot.endtime <= tup[1] for tup in occupied_ranges)
+                    )
+                )
+            )
+        ).statement.compile(compile_kwargs={"literal_binds": True}))
          open_slots_query = (
             Slot.query.filter(Slot.category == category, Slot.client == 'None')
             .filter(
@@ -172,7 +194,7 @@ def booknewcat(category):
                 )
             )
         )
-         print(open_slots_query.statement.compile(compile_kwargs={"literal_binds": True}))
+         
 
 
 
