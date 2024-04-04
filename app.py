@@ -150,10 +150,11 @@ def booknewcat(category):
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots if s.starttime is not None and s.endtime is not None]
          if not occupied_ranges:
             # Adjust the query here to handle the scenario where there are no closed slots
-            subquery = Slot.query.filter(Slot.id == None)  # Placeholder to avoid errors
+            # subquery = Slot.query.filter(Slot.id == None)  # Placeholder to avoid errors
             open_slots_query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
          else:
             #DEBUG
+            '''
             subquery = (
                 select(Slot.id)
                 .where(
@@ -169,7 +170,7 @@ def booknewcat(category):
             )
             query = Slot.query.filter(~Slot.id.in_(subquery))
             print(query.statement.compile(compile_kwargs={"literal_binds": True}))
-
+            '''
             # Filter out potential slots that do not overlap with any closed slot
             open_slots_query = (
                 Slot.query.filter(Slot.category == category, Slot.client == 'None')
