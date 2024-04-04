@@ -105,11 +105,13 @@ def booknew():
             selected_start_time = slot.starttime.time()
             selected_end_time = slot.endtime.time()
             
-            # Check for conflicting slots with the same time
+            # Check for conflicting slots with the same date and overlapping time
             conflicts = Slot.query.filter(
                 (Slot.client == client_email) | (Slot.provider == client_email),
-                func.time(Slot.starttime) < selected_end_time,
-                func.time(Slot.endtime) > selected_start_time
+                Slot.starttime.date() == slot.starttime.date(),
+                Slot.endtime.date() == slot.endtime.date(),
+                Slot.starttime < slot.endtime,
+                Slot.endtime > slot.starttime
             ).all()
 
             # Check for conflicting slots
