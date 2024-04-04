@@ -268,8 +268,9 @@
                                         </div>
                                         <div class="card-body">
                                             <h5>Provided by {{ slot.provider }}</h5>
-                                            <p>Getting Got: {{ slot.client }}</p>
-                                            <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
+                                            <!--<p>Getting Got: {{ slot.client }}</p>-->
+                                            <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
+                                            <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
                                             <p>[{{ slot.category }}]</p>
                                             <input type="hidden" name="slot_id" value="{{ slot.id }}">
                                             <button type="submit" class="btn btn-secondary">Book It!</button>

@@ -212,7 +212,8 @@
                                     <div class="card-body">
                                         <h5>Provided by {{ slot.provider }}</h5>
                                         <p>Client: {{ slot.client }}</p>
-                                        <p>Time: {{ slot.starttime }} - {{ slot.endtime }}</p>
+                                        <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
+                                        <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
                                         <p>[{{ slot.category }}]</p>
                                         <input type="hidden" name="slot_id" value="{{ slot.id }}">
                                         <button type="submit" class="btn btn-secondary">Cancel</button>
@@ -241,7 +242,8 @@
                                         <div class="card-body">
                                             <h5>Provided by {{ slot.provider }}</h5>
                                             <p>Client: {{ slot.client }}</p>
-                                            <p>Time: {{ slot.starttime }} - {{ slot.endtime }}</p>
+                                            <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
+                                            <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
                                             <p>[{{ slot.category }}]</p>
                                             <input type="hidden" name="slot_id" value="{{ slot.id }}">
                                             <button type="submit" class="btn btn-secondary">Cancel</button>
