@@ -100,15 +100,26 @@ def booknew():
         # print(f"slot_id {slot_id} slot {slot}")
         if slot: #and not slot.client
             client_email = session.get('email')
-             
-            # Check for conflicting slots
+
+            # Get time of slots
+            selected_start_time = slot.starttime.time()
+            selected_end_time = slot.endtime.time()
+            
+            # Check for conflicting slots with the same time
             conflicts = Slot.query.filter(
                 (Slot.client == client_email) | (Slot.provider == client_email),
-                or_(
-                    Slot.starttime < slot.endtime,
-                    Slot.endtime > slot.starttime
-                    )
-                    ).all()
+                func.time(Slot.starttime) < selected_end_time,
+                func.time(Slot.endtime) > selected_start_time
+            ).all()
+
+            # Check for conflicting slots
+            # conflicts = Slot.query.filter(
+            #     (Slot.client == client_email) | (Slot.provider == client_email),
+            #     or_(
+            #         Slot.starttime < slot.endtime,
+            #         Slot.endtime > slot.starttime
+            #         )
+            #         ).all()
             
             if conflicts:
                 flash('You already have a booking that conflicts with this slot.', 'error')
@@ -220,7 +231,7 @@ def booknewcat(category):
 
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
-            
+
          if month:
             open_slots_query = open_slots_query.filter(
                 or_(
