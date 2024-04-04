@@ -3,7 +3,7 @@ from flask_login import LoginManager, login_required, login_user, logout_user
 from db_config import db, User, Slot
 from datetime import date, timedelta, datetime
 from logging import FileHandler, WARNING
-from sqlalchemy import or_, and_, extract, func
+from sqlalchemy import or_, and_, extract, func, select
 import os
 
 app = Flask(__name__)
@@ -146,17 +146,27 @@ def booknewcat(category):
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots]
 
         # Filter out potential slots that do not overlap with any closed slot
-        # Filter out potential slots that do not overlap with any closed slot
-         open_slots_query = (Slot.query.filter(Slot.category == category, Slot.client == 'None'))
-         '''
+         open_slots_query = (
+            Slot.query.filter(Slot.category == category, Slot.client == 'None')
             .filter(
-                ~func.any_(Slot.starttime >= list(tup)[0] and Slot.starttime <= list(tup)[1] for tup in occupied_ranges)
-            ) 
+                ~Slot.id.in_(
+                    select(Slot.id)
+                    .where(
+                        Slot.starttime >= func.any_(tup[0] for tup in occupied_ranges)
+                        and Slot.starttime <= func.any_(tup[1] for tup in occupied_ranges)
+                    )
+                )
+            )
             .filter(
-                ~func.any_(Slot.endtime >= list(tup)[0] and Slot.endtime <= list(tup)[1] for tup in occupied_ranges)
-            ) 
-        '''
-         #)
+                ~Slot.id.in_(
+                    select(Slot.id)
+                    .where(
+                        Slot.endtime >= func.any_(tup[0] for tup in occupied_ranges)
+                        and Slot.endtime <= func.any_(tup[1] for tup in occupied_ranges)
+                    )
+                )
+            )
+        )
         # Debug print statements
          print(list(tup)[0] for tup in occupied_ranges)
          print(list(tup)[1] for tup in occupied_ranges)
