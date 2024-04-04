@@ -99,7 +99,22 @@ def booknew():
 	# debug stuff
         # print(f"slot_id {slot_id} slot {slot}")
         if slot: #and not slot.client
-            slot.client = session.get('email')  # Or however you identify the client
+            client_email = session.get('email')
+             
+            # Check for conflicting slots
+            conflicts = Slot.query.filter(
+                (Slot.client == client_email) | (Slot.provider == client_email),
+                or_(
+                    Slot.starttime < slot.endtime,
+                    Slot.endtime > slot.starttime
+                    )
+                    ).all()
+            
+            if conflicts:
+                flash('You already have a booking that conflicts with this slot.', 'error')
+                return redirect(url_for('booknew'))
+            
+            slot.client = client_email  # Or however you identify the client
 	    #debug stuff
     	    # print(f"slot.client {session.get('email')}")
             db.session.commit()
@@ -143,7 +158,7 @@ def booknewcat(category):
              except ValueError:
                 return 'Invalid year', 400
         
-         open_slots_query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
+         open_slots_query = Slot.query.filter(Slot.client == 'None') # SS removed Slot.category == category
          '''
         # Query the DB for all already-scheduled slots
          closed_slots = Slot.query.filter_by(client=session.get('email')).all()
