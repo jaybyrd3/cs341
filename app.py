@@ -172,6 +172,8 @@ def booknewcat(category):
                 )
             )
         )
+         print(open_slots_query.statement.compile(compile_kwargs={"literal_binds": True}))
+
 
 
 
