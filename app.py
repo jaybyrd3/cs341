@@ -146,7 +146,26 @@ def booknewcat(category):
 
         # Construct a list of time ranges occupied by closed slots
          occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots if s.starttime is not None and s.endtime is not None]
-         print("Occupied Ranges:", occupied_ranges) 
+         print("Occupied Ranges:", occupied_ranges)
+
+
+        #DEBUG
+         subquery = (
+            select(Slot.id)
+            .where(
+                func.any_(
+                    Slot.starttime.cast(TIMESTAMP(timezone=True)) >= tup[0]
+                    for tup in occupied_ranges
+                )
+                and func.any_(
+                    Slot.starttime.cast(TIMESTAMP(timezone=True)) <= tup[1]
+                    for tup in occupied_ranges
+                )
+            )
+        )
+         query = Slot.query.filter(~Slot.id.in_(subquery))
+         print(query.statement.compile(compile_kwargs={"literal_binds": True}))
+
         # Filter out potential slots that do not overlap with any closed slot
          open_slots_query = (
             Slot.query.filter(Slot.category == category, Slot.client == 'None')
