@@ -36,6 +36,9 @@ def load_user(id):
 
 #initialize secret key (we'll change this later)
 
+# initialize global notification count
+notificationCount = 0
+
 
 # NOTE ON SESSIONS: The "session" object comes as a global-variable import
 # with Flask & LoginManager. It automatically tracks who the current user is & their 
@@ -279,10 +282,18 @@ def cancel_appointment():
             if slot.provider == current_email:
                 # If provider, delete from db
                 db.session.delete(slot)
+                if slot.client != 'None':
+                    notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.provider.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.client, sender=slot.provider)
+                    db.session.add(notification)
+                    slot.client.notificationCount += 1
+                    notificationCount += 1
                 db.session.commit()
                 flash('Appointment DESTROYED successfully', 'success')
             else:
                 slot.client = "None"  # or another appropriate action
+                notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.client.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.provider, sender=slot.client)
+                db.session.add(notification)
+                slot.provider.notificationCount += 1
                 db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
         else:
@@ -292,6 +303,24 @@ def cancel_appointment():
 
     return redirect(url_for('viewappointments'))
 
+@app.route('/mark_as_seen', methods=['POST'])
+@login_required
+def mark_as_seen():
+    nID = request.form.get('notification_id')
+    notification = db.Notification.query.get(nID)
+    current_email = session.get('email')
+    if notification:
+        user = User.query.filter_by(email=current_email).first()
+        if user and (notification.client == current_email or notification.provider == current_email):
+            db.session.delete(notification)
+            user.notificationCount -= 1
+            db.session.commit()
+            flash('Notification dissmissed successfully!', 'success')
+        else:
+            flash('You do not have permission to dissmiss this notification', 'error')
+    else:
+        flash('Notification could not be found', 'error')
+    return redirect(url_for('account'))
 		
 @app.route('/viewappointments', methods=['GET', 'POST'])
 @login_required
@@ -540,9 +569,10 @@ def account():
         e_mail = current_email
         job_title = current_user.jobTitle
         qualifications_ = current_user.qualifications
-        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
+        notificationCount = current_user.notificationCount
+        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_, notificationCount=notificationCount)
     else:
-        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?")
+        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?", notificationCount=0)
 
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])
