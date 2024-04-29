@@ -282,18 +282,18 @@ def cancel_appointment():
             if slot.provider == current_email:
                 # If provider, delete from db
                 db.session.delete(slot)
-                if slot.client != 'None':
-                    notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.provider.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.client, sender=slot.provider)
-                    db.session.add(notification)
-                    slot.client.notificationCount += 1
-                    notificationCount += 1
+                #if slot.client != 'None':
+                    #notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.provider.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.client, sender=slot.provider)
+                    #db.session.add(notification)
+                    #slot.client.notificationCount += 1
+                    #notificationCount += 1
                 db.session.commit()
                 flash('Appointment DESTROYED successfully', 'success')
             else:
                 slot.client = "None"  # or another appropriate action
-                notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.client.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.provider, sender=slot.client)
-                db.session.add(notification)
-                slot.provider.notificationCount += 1
+                #notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.client.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.provider, sender=slot.client)
+                #db.session.add(notification)
+                #slot.provider.notificationCount += 1
                 db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
         else:
@@ -303,6 +303,7 @@ def cancel_appointment():
 
     return redirect(url_for('viewappointments'))
 
+'''
 @app.route('/mark_as_seen', methods=['POST'])
 @login_required
 def mark_as_seen():
@@ -321,7 +322,7 @@ def mark_as_seen():
     else:
         flash('Notification could not be found', 'error')
     return redirect(url_for('account'))
-		
+'''
 @app.route('/viewappointments', methods=['GET', 'POST'])
 @login_required
 def viewappointments():

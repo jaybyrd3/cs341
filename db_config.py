@@ -53,7 +53,7 @@ class Slot(db.Model):
     
     def __repr__(self):
 	    return f'<Slot {self.description}>'
-
+'''
 class Notification(db.Model):
     __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
@@ -65,4 +65,4 @@ class Notification(db.Model):
 
     def __repr__(self):
         return f'<Notification {self.message}>'
-     
+'''
