@@ -24,7 +24,7 @@ class User(UserMixin, db.Model):
     lastName = db.Column(db.String(80), unique=False, nullable=True)
     jobTitle = db.Column(db.String(80), unique=False, nullable=True)
     qualifications = db.Column(db.String(80), unique=False, nullable=True)
-    notificationCount = db.column(db.Integer, unique=False, nullable=True)
+    notificationCount = db.Column(db.Integer, unique=False, nullable=True)
     # appointments = db.relationship('Slot', backref='user', lazy=True, foreign_keys=[Slot.user_id]) # is a 1-to-many relationship by default
     slots = db.relationship('Slot', backref='slot', lazy=True)
     notifications = db.relationship('Notification', backref='notification', lazy=True)
