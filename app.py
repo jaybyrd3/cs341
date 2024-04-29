@@ -37,7 +37,7 @@ def load_user(id):
 #initialize secret key (we'll change this later)
 
 # initialize global notification count
-notificationCount = 0
+#notificationCount = 0
 
 
 # NOTE ON SESSIONS: The "session" object comes as a global-variable import
@@ -570,10 +570,12 @@ def account():
         e_mail = current_email
         job_title = current_user.jobTitle
         qualifications_ = current_user.qualifications
-        notificationCount = current_user.notificationCount
-        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_, notificationCount=notificationCount)
+        #notificationCount = current_user.notificationCount
+        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_#, notificationCount=notificationCount
+                               )
     else:
-        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?", notificationCount=0)
+        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?"#, notificationCount=0
+                               )
 
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])
