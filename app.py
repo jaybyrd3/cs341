@@ -296,7 +296,7 @@ def viewappointments():
     else:
          return render_template('viewappointments.html', pslots=None, cslots=None)
 
-@app.route('viewappointments/<account_email>')
+@app.route('/viewappointments/<account_email>')
 @login_required
 def viewappointments_admin(account_email):
     current_email = session.get('email')
