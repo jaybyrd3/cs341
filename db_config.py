@@ -24,10 +24,7 @@ class User(UserMixin, db.Model):
     lastName = db.Column(db.String(80), unique=False, nullable=True)
     jobTitle = db.Column(db.String(80), unique=False, nullable=True)
     qualifications = db.Column(db.String(80), unique=False, nullable=True)
-    #notificationCount = db.Column(db.Integer, unique=False, nullable=True)
-    # appointments = db.relationship('Slot', backref='user', lazy=True, foreign_keys=[Slot.user_id]) # is a 1-to-many relationship by default
     slots = db.relationship('Slot', backref='slot', lazy=True)
-    #notifications = db.relationship('Notification', backref='notification', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -47,22 +44,9 @@ class Slot(db.Model):
     client = db.Column(db.Text, unique=False, default='None', nullable=True)
     provider = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
     # slot will always have a provider
-    # provider_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     description = db.Column(db.String(512), unique=False, nullable=True)
     category = db.Column(db.String(50), unique=False, nullable=True) # atm,: Medical|Beauty|Fitness
     
     def __repr__(self):
 	    return f'<Slot {self.description}>'
-'''
-class Notification(db.Model):
-    __tablename__ = 'notification'
-    id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.Text, unique=False, default='N/A', nullable=True)
-    #seen = db.Column(db.Boolean, default=False)
-    type = db.Column(db.Text, unique=False, default='N/A', nullable=True)
-    sender = db.Column(db.Text, unique=False, default='None', nullable=True)
-    recipient = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
 
-    def __repr__(self):
-        return f'<Notification {self.message}>'
-'''

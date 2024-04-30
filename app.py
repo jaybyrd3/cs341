@@ -34,27 +34,24 @@ login_manager.login_view = 'login'
 def load_user(id):
     return User.query.get(id)
 
-#initialize secret key (we'll change this later)
-
-# initialize global notification count
-#notificationCount = 0
-
-
 # NOTE ON SESSIONS: The "session" object comes as a global-variable import
 # with Flask & LoginManager. It automatically tracks who the current user is & their 
 # information from one login to the next
 # SESSIONS DOCUMENTATION:
 # https://flask.palletsprojects.com/en/latest/quickstart/#sessions
 
+
 with app.app_context():
     # comment this out to keep data
     # db.drop_all()
     db.create_all()
 
+
 # Add your Flask routes here
 @app.route('/')
 def home():
     return render_template('index.html')
+
 
 @app.route('/skynet')
 def wipe():
@@ -62,15 +59,11 @@ def wipe():
 	db.create_all()
 	return "ITS ALL GONE!!!"
 
+
 @app.route('/makeslot', methods=['GET', 'POST'])
 @login_required
 def makeslot():
     user = User.query.filter_by(email=session.get('email')).first()
-    '''
-    if not user:
-        flash(f"Sorry - you need to be logged in & registered as a provider to make a slot!", category="error")
-        return redirect(url_for('login'))
-    '''
     if not user.jobTitle or not user.qualifications:
         flash(f"Sorry - you need to be registered as a provider to make a slot! Please enter in your job title & qualifications to continue.", category="error")
         return redirect(url_for('account'))
@@ -93,6 +86,7 @@ def makeslot():
     else:
         return render_template('makeslot.html')
       
+
 @app.route('/booknew', methods=['GET', 'POST'])
 @login_required
 def booknew():
@@ -114,22 +108,13 @@ def booknew():
                 Slot.starttime < selected_end_time,
                 Slot.endtime > selected_start_time
             ).all()
-
-            # Check for conflicting slots
-            # conflicts = Slot.query.filter(
-            #     (Slot.client == client_email) | (Slot.provider == client_email),
-            #     or_(
-            #         Slot.starttime < slot.endtime,
-            #         Slot.endtime > slot.starttime
-            #         )
-            #         ).all()
             
             if conflicts:
                 flash('You already have a booking that conflicts with this slot.', 'error')
                 return redirect(url_for('booknew'))
             
             slot.client = client_email  # Or however you identify the client
-	    #debug stuff
+	        #debug stuff
     	    # print(f"slot.client {session.get('email')}")
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
@@ -138,9 +123,7 @@ def booknew():
             flash('This slot is no longer available.', 'error')
             return redirect(url_for('booknew'))
     
-    # open_slots = Slot.query.filter_by(client='None').all()
-    # print(open_slots) #?? wat for
-    return render_template('booknew.html') #, open_slots=open_slots
+    return render_template('booknew.html')
 
 
 @app.route('/booknew/<category>', methods=['GET', 'POST'])
@@ -174,64 +157,6 @@ def booknewcat(category):
         
          open_slots_query = Slot.query.filter(Slot.client == 'None') # SS removed Slot.category == category
 
-
-         '''
-        # Query the DB for all already-scheduled slots
-         closed_slots = Slot.query.filter_by(client=session.get('email')).all()
-
-        # Construct a list of time ranges occupied by closed slots
-         occupied_ranges = [(s.starttime, s.endtime) for s in closed_slots if s.starttime is not None and s.endtime is not None]
-         if not occupied_ranges or len(occupied_ranges) == 0:
-            # Adjust the query here to handle the scenario where there are no closed slots
-            # subquery = Slot.query.filter(Slot.id == None)  # Placeholder to avoid errors
-            open_slots_query = Slot.query.filter(Slot.category == category, Slot.client == 'None')
-         else:
-            #DEBUG
-            
-            subquery = (
-                select(Slot.id)
-                .where(
-                    func.any_(
-                        Slot.starttime.cast(TIMESTAMP(timezone=True)) >= tup[0]
-                        for tup in occupied_ranges
-                    )
-                    and func.any_(
-                        Slot.starttime.cast(TIMESTAMP(timezone=True)) <= tup[1]
-                        for tup in occupied_ranges
-                    )
-                )
-            )
-            query = Slot.query.filter(~Slot.id.in_(subquery))
-            print("Sample query: ")
-            print(query.statement.compile(compile_kwargs={"literal_binds": True}))
-            
-            # Filter out potential slots that do not overlap with any closed slot
-            open_slots_query = (
-                Slot.query.filter(Slot.category == category, Slot.client == 'None')
-                .filter(
-                    ~Slot.id.in_(
-                        select(Slot.id)
-                        .where(
-                            func.coalesce(func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges))
-                            and func.coalesce(func.any_(Slot.starttime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges))
-                        )
-                    )
-                )
-                .filter(
-                    ~Slot.id.in_(
-                        select(Slot.id)
-                        .where(
-                            func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) >= tup[0] for tup in occupied_ranges))
-                            and func.coalesce(func.any_(Slot.endtime.cast(TIMESTAMP(timezone=True)) <= tup[1] for tup in occupied_ranges))
-                        )
-                    )
-                )
-            )
-            print("Open slots query: ")
-            print(open_slots_query.statement.compile(compile_kwargs={"literal_binds": True}))
-
-         '''
-
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
 
@@ -251,8 +176,6 @@ def booknewcat(category):
                 )
             )
 
-         #open_slots = open_slots_query.all()
-
          if category == 'all':
               open_slots = open_slots_query.all()
          else:
@@ -260,13 +183,6 @@ def booknewcat(category):
          return render_template('booknew.html', open_slots=open_slots, cansearch=True)
     else:
           return "You sent a POST request to " + str(category) + ". Why, though?"
-    
-# def booknew():
-#     open_slots = Slot.query.filter_by(client=None).all()
-#     if open_slots:
-#           return render_template('booknew.html', open_slots=open_slots)
-#     else:
-#           return render_template('booknew.html', open_slots=None)
 
 
 @app.route('/cancel_appointment', methods=['POST'])
@@ -282,18 +198,10 @@ def cancel_appointment():
             if slot.provider == current_email:
                 # If provider, delete from db
                 db.session.delete(slot)
-                #if slot.client != 'None':
-                    #notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.provider.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.client, sender=slot.provider)
-                    #db.session.add(notification)
-                    #slot.client.notificationCount += 1
-                    #notificationCount += 1
                 db.session.commit()
                 flash('Appointment DESTROYED successfully', 'success')
             else:
                 slot.client = "None"  # or another appropriate action
-                #notification = db.Notification(id=notificationCount, type='Cancellation', message=slot.client.email + " has cancelled your appointment at " + slot.starttime + " to " + slot.endtime, recipient=slot.provider, sender=slot.client)
-                #db.session.add(notification)
-                #slot.provider.notificationCount += 1
                 db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
         else:
@@ -303,26 +211,7 @@ def cancel_appointment():
 
     return redirect(url_for('viewappointments'))
 
-'''
-@app.route('/mark_as_seen', methods=['POST'])
-@login_required
-def mark_as_seen():
-    nID = request.form.get('notification_id')
-    notification = db.Notification.query.get(nID)
-    current_email = session.get('email')
-    if notification:
-        user = User.query.filter_by(email=current_email).first()
-        if user and (notification.client == current_email or notification.provider == current_email):
-            db.session.delete(notification)
-            user.notificationCount -= 1
-            db.session.commit()
-            flash('Notification dissmissed successfully!', 'success')
-        else:
-            flash('You do not have permission to dissmiss this notification', 'error')
-    else:
-        flash('Notification could not be found', 'error')
-    return redirect(url_for('account'))
-'''
+
 @app.route('/viewappointments', methods=['GET', 'POST'])
 @login_required
 def viewappointments():
@@ -434,6 +323,7 @@ def login():
         else:
             return render_template('login.html')
 
+
 # NOTE: I don't believe we need a "logout.html", as we're just 
 # performing an action & flashing a message
 #	>> i.e. will be page-independent & only accessed from header
@@ -446,6 +336,7 @@ def logout():
 	logout_user() # logs out user & cleans up cookies
 	flash(f"You are now logged out.", category="success")
 	return redirect(url_for('home'))
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -487,6 +378,7 @@ def signup():
                 return redirect(url_for('signup'))
         return render_template('signup.html')
 
+
 @app.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_user():
@@ -505,6 +397,7 @@ def add_user():
                 return redirect(url_for('view_users'))
         return render_template('add_user.html')
 
+
 @app.route('/users')
 @login_required
 def view_users():
@@ -516,19 +409,6 @@ def view_users():
         users = User.query.all()
         return render_template('view_users.html', users=users)
 
-@app.route('/calendar')
-def calendar():
-    # Example for February 2024; adjust accordingly
-    start_date = date(2024, 2, 1)
-    end_date = date(2024, 2, 28)
-    delta = timedelta(days=1)
-    days = []
-    
-    while start_date <= end_date:
-        days.append(start_date)
-        start_date += delta
-
-    return render_template('calendar.html', days=days)
 
 @app.route('/account', methods=['GET', 'POST'])
 @login_required
@@ -576,6 +456,7 @@ def account():
     else:
         return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?"#, notificationCount=0
                                )
+
 
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])
@@ -654,7 +535,6 @@ def demo1():
                 starttime = "2024-03-04 15:00:00 UTC",
                 endtime = "2024-03-04 16:00:00 UTC"
             )
-            #{"provider_email": "abbyandersen@test.com", "date_time": "2024-03-04 15:00:00", "description": "hair highlight", "category": "beauty", "client": "janedoe@test.com"}
         )
     if not katieslot:
         print("----->DEBUG: KatieSlot not found; adding to list")
@@ -668,7 +548,6 @@ def demo1():
                 starttime = "2024-03-04 15:00:00 UTC",
                 endtime = "2024-03-04 16:00:00 UTC"
             )
-            #{"provider_email": "katiejohnson@test.com", "date_time": "2024-03-04 15:00:00", "description": "face moisture treatment", "category": "beauty", "client": None}
         )
         
     # Insert users into the database
@@ -685,12 +564,6 @@ def demo1():
     flash(f"Demo 1 data preloaded successfully!", category="success")
     return redirect(url_for('home'))
     #return jsonify({"message": "Demo 1 data preloaded successfully!"})
-
-# [START] HELPER FUNCTIONS
-
-
-
-# [END] HELPER FUNCTIONS
 
 
 # run app
