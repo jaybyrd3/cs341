@@ -99,6 +99,9 @@
     	        {% else %}
         	        <h2>Hello</h2>
                 {% endif %}
+                {% if current_user.is_admin and current_user.email != e_mail %}
+                    <h2>Here is the account for {{ e_mail }}:</h2>
+                {% endif %}
                 <!--<h1>YOUR NAME HERE</h1>-->
                 <form method="POST">
                     <div class="container">
