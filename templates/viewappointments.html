@@ -91,6 +91,9 @@
             
 
         <div class="container maincontent rounded-3 my-5">
+            {% if current_user.is_authenticated and current_user.is_admin%}
+            <h1>Hello, admin!</h1>
+            {% endif %}
             {% if current_user.is_authenticated %}
             <h1>Appointments for {{ current_user.username }}!</h1>
             {% else %}

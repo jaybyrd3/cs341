@@ -295,7 +295,29 @@ def viewappointments():
          return render_template('viewappointments.html', pslots=pslots, cslots=cslots)
     else:
          return render_template('viewappointments.html', pslots=None, cslots=None)
-         
+
+@app.route('viewappointments/<account_email>')
+@login_required
+def viewappointments_admin(account_email):
+    current_email = session.get('email')
+    current_user = User.query.filter_by(email=current_email).first()
+    if current_user and current_user.is_admin:
+        requested_user = User.query.filter_by(email=account_email).first()
+        if not requested_user:
+            flash(f"Sorry - requested user not found!", category="error")
+            return redirect(url_for('home'))
+        else:
+            pslots = Slot.query.filter(Slot.provider == account_email) #.filter_by(provider=current_email).all()
+            cslots = Slot.query.filter(Slot.client == account_email)
+            return render_template('viewappointments.html', pslots=pslots, cslots=cslots, e_mail=account_email)
+    else:
+        if not current_user:
+            flash(f"Sorry - you need to be logged in as an admin to access that page!", category="error")
+            return redirect(url_for('home'))
+        else:
+            flash(f"Sorry - you need to be an admin to access that page!", category="error")
+            return redirect(url_for('home'))
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
