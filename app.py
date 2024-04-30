@@ -469,7 +469,7 @@ def admin_view(account_email):
         else:
             first_name = requested_user.firstName
             last_name = requested_user.lastName
-            user_name = requested_user.userName
+            user_name = requested_user.username
             e_mail = account_email
             job_title = requested_user.jobTitle
             qualifications_ = requested_user.qualifications
