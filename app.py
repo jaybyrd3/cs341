@@ -456,7 +456,7 @@ def account():
         return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?")
 
 
-@app.route('/account/<email>')
+@app.route('/account/<account_email>')
 @login_required
 def admin_view(account_email):
     current_email = session.get('email')
