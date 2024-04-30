@@ -451,11 +451,36 @@ def account():
         job_title = current_user.jobTitle
         qualifications_ = current_user.qualifications
         #notificationCount = current_user.notificationCount
-        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_#, notificationCount=notificationCount
-                               )
+        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
     else:
-        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?"#, notificationCount=0
-                               )
+        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?")
+
+
+@app.route('/account/<email>')
+@login_required
+def admin_view(account_email):
+    current_email = session.get('email')
+    current_user = User.query.filter_by(email=current_email).first()
+    if current_user and current_user.is_admin:
+        requested_user = User.query.filter_by(email=account_email).first()
+        if not requested_user:
+            flash(f"Sorry - requested user not found!", category="error")
+            return redirect(url_for('home'))
+        else:
+            first_name = requested_user.firstName
+            last_name = requested_user.lastName
+            user_name = requested_user.userName
+            e_mail = account_email
+            job_title = requested_user.jobTitle
+            qualifications_ = requested_user.qualifications
+            return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
+    else:
+        if not current_user:
+            flash(f"Sorry - you need to be logged in as an admin to access that page!", category="error")
+            return redirect(url_for('home'))
+        else:
+            flash(f"Sorry - you need to be an admin to access that page!", category="error")
+            return redirect(url_for('home'))
 
 
 # loads in demo 1 data after a db change

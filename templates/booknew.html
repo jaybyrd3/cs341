@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>View Appointments!</title>
+        <title>Book New Appointment</title>
         <link rel="stylesheet" href="../static/index.css">
 
         <!--Bootstrap-->
@@ -102,9 +102,7 @@
             <div class="container">
                 <form method="GET">
                     <div class="list-group col-sm-6">
-                        <button formaction="/booknew/all" type="submit" class="list-group-item list-group-item-action" aria-current="true">
-                            Select an Appointment Category | All
-                        </button>
+                        <button formaction="/booknew/all" type="submit" class="list-group-item list-group-item-action" aria-current="true">All</button>
                         <button formaction="/booknew/medical" type="submit" class="list-group-item list-group-item-action">Medical</button>
                         <button formaction="/booknew/beauty" type="submit" class="list-group-item list-group-item-action">Beauty</button>
                         <button formaction="/booknew/fitness" type="submit" class="list-group-item list-group-item-action">Fitness</button>
@@ -202,8 +200,7 @@
             </script>
 
             <br>
-
-
+            
             {% if open_slots %}
                 <h3>Available Slots:</h3>
                 <ul style="list-style: none;">
@@ -228,45 +225,10 @@
                                 </div>
                             </form>
                         </li>
-                    <!--
-                        <li>
-                            -----------------------------------------<br>
-                            <form action="/booknew" method="post">
-                                Description: {{ slot.description }}<br>
-                                Provider: {{ slot.provider }}<br>
-                                Client: {{ slot.client }}<br>
-                                Start: {{ slot.starttime }}<br>
-                                End: {{ slot.endtime }}<br>
-                                <input type="hidden" name="slot_id" value="{{ slot.id }}">
-                                <button type="submit">Book This Slot</button>
-                            </form>
-                            -----------------------------------------<br>
-                        </li>
-                    -->
                     {% endfor %}
                 </ul><br>
                 <!--<p>No appointments available.</p>-->
             {% endif %}
-<!--             {% if open_slots %}
-                <h3>Provider Slots:</h3>
-                <ul>
-                    {% for pslot in open_slots %}
-                        <li>Description</li>
-                        <li>{{ pslot.description }}</li>
-                        <li>Provider</li>
-                        <li>{{ pslot.provider }}</li>
-                        <li>Client</li>
-                        <li>{{ pslot.client }}</li>
-                        <li>Start</li>
-                        <li>{{ pslot.starttime }}</li>
-                        <li>End</li>
-                        <li>{{ pslot.endtime }}</li>
-                    {% endfor %}
-                </ul><br>
-            {% else %}
-                <p>No appointments available.</p>
-            {% endif %} -->
         </div>
-
     </body>
 </html>
