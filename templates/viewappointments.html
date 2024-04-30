@@ -95,7 +95,7 @@
             <h1>Hello, admin!</h1>
             {% endif %}
             {% if current_user.is_authenticated %}
-            <h1>Appointments for {{ current_user.username }}!</h1>
+            <h1>Appointments for {{ e_mail }}:</h1>
             {% else %}
             <h1>Appointments</h1>
             {% endif %}
