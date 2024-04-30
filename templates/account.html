@@ -77,24 +77,6 @@
                     }
                 }
             });
-            /*
-            document.getElementById('admin').addEventListener('click', function() {
-                var adminMenu = document.getElementById('adminMenu');
-                if (adminMenu.classList.contains('show')) {
-                    adminMenu.classList.remove('show');
-                } else {
-                    adminMenu.classList.add('show');
-                }
-            });
-            document.getElementById('log').addEventListener('click', function() {
-                var logMenu = document.getElementById('logMenu');
-                if (logMenu.classList.contains('show')) {
-                    logMenu.classList.remove('show');
-                } else {
-                    logMenu.classList.add('show');
-                }
-            });
-            */
         </script>
 
             <!-- [START] FLASH MESSAGING FOR ACCOUNT -->
@@ -166,29 +148,6 @@
                         <button type="submit" class="btn btn-secondary">Submit</button>
                     </div>
                     <div class="container">
-                        <!--Notifications section
-                        <h3>Notifications: {{current_user.notificationCount}}</h3>
-                        <ul>
-                            {{% for notification in notifications %}}
-                                <br>
-                                <form action="/mark_as_seen" method="post">
-                                    <div class="container">
-                                        <div class="card col-sm-5">
-                                            <div class="card-header">
-                                                {{ notification.type }}
-                                            </div>
-                                            <div class="card-body">
-                                                <h5>{{ notification.message }}</h5>
-                                                <p>Click below to dissmiss: </p>
-                                                <input type="hidden" name="notification_id" value="{{ notification.id }}">
-                                                <button type="submit" class="btn btn-secondary">Dissmiss</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            {{% endfor %}}
-                        </ul>
-                    -->
                     </div>
                 </form>
             </div>

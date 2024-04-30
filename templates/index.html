@@ -75,54 +75,8 @@
                     }
                 }
             });
-            /*
-            document.getElementById('admin').addEventListener('click', function() {
-                var adminMenu = document.getElementById('adminMenu');
-                if (adminMenu.classList.contains('show')) {
-                    adminMenu.classList.remove('show');
-                } else {
-                    adminMenu.classList.add('show');
-                }
-            });
-            document.getElementById('log').addEventListener('click', function() {
-                var logMenu = document.getElementById('logMenu');
-                if (logMenu.classList.contains('show')) {
-                    logMenu.classList.remove('show');
-                } else {
-                    logMenu.classList.add('show');
-                }
-            });
-            */
         </script>
-<!--
-        <div class="collapse" id="navbarToggleExternalContent">
-            <div class="our-nav p-4">
-                <div class=" our-nav">
-                    <a class="navbar-brand" href="/">
-                        <img src="{{ url_for('static', filename='dummylogo.png') }}" alt="" width="40" height="40" style="border-radius:50%">
-                        It's A Calendar
-                    </a>
-                </div>
-                <a href = "/" class = "nav-link text-white">Home</a>
-                <a href = "/add" class = "nav-link text-white">Add New User</a>
-                <a href = "/users" class = "nav-link text-white">View All Users</a>
-                <a href = "/login" class = "nav-link text-white">Login</a>
-                <a href = "/logout" class = "nav-link text-white">Logout</a>
-                <a href = "/signup" class = "nav-link text-white">Sign Up</a>
-                <a href = "/account" class = "nav-link text-white">Account</a>
-                <a href = "/makeslot" class = "nav-link text-white">Make Slot</a>
-                <a href = "/booknew" class = "nav-link text-white">Book New</a>
-                <a href = "/viewappointments" class = "nav-link text-white">View Appointments</a>
-            </div>
-        </div>
-        <nav class="navbar navbar-dark our-nav">
-            <div class="container-fluid">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-        </nav>
--->
+
         <!-- [START] FLASH MESSAGING FOR INDEX -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -161,9 +115,6 @@
                 <p>It's A Calendar .app</p>
                 <p> Please go to the drop-down menu at the top right and log in or sign up to continue!</p>
             {% endif %}
-            
-            
         </div>
-
     </body>
 </html>

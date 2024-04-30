@@ -79,24 +79,6 @@
                     }
                 }
             });
-            /*
-            document.getElementById('admin').addEventListener('click', function() {
-                var adminMenu = document.getElementById('adminMenu');
-                if (adminMenu.classList.contains('show')) {
-                    adminMenu.classList.remove('show');
-                } else {
-                    adminMenu.classList.add('show');
-                }
-            });
-            document.getElementById('log').addEventListener('click', function() {
-                var logMenu = document.getElementById('logMenu');
-                if (logMenu.classList.contains('show')) {
-                    logMenu.classList.remove('show');
-                } else {
-                    logMenu.classList.add('show');
-                }
-            });
-            */
         </script>
 
         <!-- [START] FLASH MESSAGING FOR BOOKNEW -->
@@ -113,44 +95,11 @@
 
         <div class="container maincontent rounded-3 my-5">
             {% if current_user.is_authenticated %}
-            <h1>Browse Appointments: {{ current_user.username }}!</h1>
+                <h1>Browse Appointments: {{ current_user.username }}!</h1>
             {% else %}
-            <h1>Browse Appointments:</h1>
+                <h1>Browse Appointments:</h1>
             {% endif %}
-
-            <!--
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Appt Type
-                </button>
-                <ul class="dropdown-menu">
-                    <li><h6 class="dropdown-header">Select an Appointment Category</h6></li>
-                    <li><a class="dropdown-item" href="#">Medical</a></li>
-                    <li><a class="dropdown-item" href="#">Beauty</a></li>
-                    <li><a class="dropdown-item" href="#">Fitness</a></li>
-                </ul>
-            </div>
-            -->
-
-
             <div class="container">
-                <!--
-                <ul class="list-group col-sm-6">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      Medical
-                      <span class="badge text-bg-primary rounded-pill">14</span> 
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      Beauty
-                      <span class="badge text-bg-primary rounded-pill">2</span> 
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                      Fitness
-                      <span class="badge text-bg-primary rounded-pill">1</span> 
-                    </li>
-                </ul>
-                -->
-
                 <form method="GET">
                     <div class="list-group col-sm-6">
                         <button formaction="/booknew/all" type="submit" class="list-group-item list-group-item-action" aria-current="true">
