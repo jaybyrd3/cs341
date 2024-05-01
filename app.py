@@ -118,6 +118,9 @@ def booknew():
             slot.client = client_email  # Or however you identify the client
 	        #debug stuff
     	    # print(f"slot.client {session.get('email')}")
+            # Notify provider
+            db.session.add(Notification(id=nID, sender=client_email, message=slot.client + " has scheduled an appointment with you during the " + slot.starttime + " to " + slot.endtime + " time slot."))
+            nID = nID + 1
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
             return redirect(url_for('viewappointments'))
@@ -198,12 +201,17 @@ def cancel_appointment():
         if user and (slot.client == current_email or slot.provider == current_email or user.is_admin):
             # Update the slot to indicate cancellation
             if slot.provider == current_email:
-                # If provider, delete from db
+                # If provider, delete from db & notify client
+                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime + " has been cancelled."))
+                nID = nID + 1
                 db.session.delete(slot)
                 db.session.commit()
                 flash('Appointment DESTROYED successfully', 'success')
             else:
                 slot.client = "None"  # or another appropriate action
+                # Notify provider
+                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime + " has been cancelled."))
+                nID = nID + 1
                 db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
         else:
@@ -369,6 +377,24 @@ def delete():
     user = User.query.filter_by(email=session.get('email')).first()
     user.is_active = False
     db.session.commit()
+    # now we need to notify all relevant parties
+    pslots = Slot.query.filter(Slot.provider == user.email) #.filter_by(provider=current_email).all()
+    cslots = Slot.query.filter(Slot.client == user.email)
+    if pslots:
+        for slot in pslots:
+            if slot.client:
+                notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime + " has been cancelled.")
+                nID = nID + 1
+                db.session.add(notif)
+                db.session.delete(slot)
+                db.session.commit()
+    if cslots:
+        for slot in cslots:
+            notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime + " has been cancelled.")
+            nID = nID + 1
+            db.session.add(notif)
+            db.session.delete(slot)
+            db.session.commit()
     flash(f"You have successfully deleted your account.", category="success")
     return redirect(url_for('home'))
 
@@ -386,6 +412,24 @@ def admin_delete(account_email):
         else:
             requested_user.is_active = False
             db.session.commit()
+            # now we need to notify all relevant parties
+            pslots = Slot.query.filter(Slot.provider == requested_user.email) #.filter_by(provider=current_email).all()
+            cslots = Slot.query.filter(Slot.client == requested_user.email)
+            if pslots:
+                for slot in pslots:
+                    if slot.client:
+                        notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime + " has been cancelled.")
+                        nID = nID + 1
+                        db.session.add(notif)
+                        db.session.delete(slot)
+                        db.session.commit()
+            if cslots:
+                for slot in cslots:
+                    notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime + " has been cancelled.")
+                    nID = nID + 1
+                    db.session.add(notif)
+                    db.session.delete(slot)
+                    db.session.commit()
             flash(f"You have successfully deleted " + requested_user.email + "'s account.", category="success")
             return redirect(url_for('home'))
     else:
