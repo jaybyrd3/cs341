@@ -857,7 +857,7 @@ def generate_report(users=None, start_date=None, end_date=None):
                         extract('month', Slot.endtime) == month_numeric
                     )
                 )
-                cancelled_query = cancelled_query.fiter(
+                cancelled_query = cancelled_query.filter(
                     or_(
                         extract('month', Slot.starttime) == month_numeric,
                         extract('month', Slot.endtime) == month_numeric
@@ -878,7 +878,7 @@ def generate_report(users=None, start_date=None, end_date=None):
                         extract('year', Slot.endtime) == year_numeric
                     )
                 )
-                cancelled_query = cancelled_query.fiter(
+                cancelled_query = cancelled_query.filter(
                     or_(
                         extract('month', Slot.starttime) == month_numeric,
                         extract('month', Slot.endtime) == month_numeric
