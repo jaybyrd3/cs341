@@ -162,7 +162,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Sender</th>
-                            <th scope="col">Time</th>
+                            <!--<th scope="col">Time</th>-->
                             <th scope="col">Text</th>
                             <th scope="col">Dismiss</th>
                         </tr>
@@ -172,7 +172,7 @@
                         {% if notifications_ %}
                             {% for notification in notifications_ %}
                                 <th scope="row">{{ notification.sender }}</th>
-                                <td>{{ notification.time_sent }}</td>
+                                <!--<td>{{ notification.time_sent }}</td>-->
                                 <td>{{ notification.message }}</td>
                                 <td>
                                     <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
