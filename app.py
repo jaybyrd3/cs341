@@ -842,7 +842,7 @@ def generate_report(users=None, start_date=None, end_date=None):
     month = request.args.get('month', '')
     year = request.args.get('year', '')
 
-    slots_query = Slot.query.all()
+    slots_query = Slot.query
 
     if month:
         try:
