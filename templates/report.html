@@ -1,0 +1,50 @@
+{% extends 'layout.html' %}
+{% block title %}Report{% endblock %}
+
+{% block content %}
+    <h1>Report</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Statistic</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Number of Slots</td>
+                <td>{{ report_data.number_of_slots }}</td>
+            </tr>
+            <tr>
+                <td>Number of Clients</td>
+                <td>{{ report_data.number_of_clients }}</td>
+            </tr>
+            <tr>
+                <td>Number of Providers</td>
+                <td>{{ report_data.number_of_providers }}</td>
+            </tr>
+            <tr>
+                <td>Number of Categories</td>
+                <td>{{ report_data.number_of_categories }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Provider Hours</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Provider</th>
+                <th>Hours</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for provider, hours in report_data.provider_hours.items() %}
+                <tr>
+                    <td>{{ provider }}</td>
+                    <td>{{ hours }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

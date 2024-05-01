@@ -1,218 +1,129 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>My Account</title>
-        <link rel="stylesheet" href="../static/index.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-        <script src="https://kit.fontawesome.com/1f10d8fda7.js" crossorigin="anonymous"></script>
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"></script>
-    </head>
-    <body>
-        <ul class="nav nav-pills our-nav" id="navbar" style="padding-top: 10px;">
-            <li class="navbar-brand" href="/" >
-                <img src="{{ url_for('static', filename='dummylogo.png') }}" alt="" width="40" height="40" style="border-radius:50%">
-            </li>
-            <li class="nav-item">
-                <a class="nav-link active text-white" href="/">Home</a>
-            </li>
-            {% if current_user.is_authenticated %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/booknew">Book New</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/viewappointments">View Appointments</a>
-                </li>
-                {% if current_user.jobTitle is not none and current_user.qualifications is not none
-                    and current_user.jobTitle != "" and current_user.qualifications != "" %}
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="/makeslot">Make Slot</a>
-                    </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="/account">My Account</a>
-                </li>
-            
-                {% if current_user.is_admin %}
-                <li class="nav-item dropdown">
-                    <a id="admin" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
-                    <div id="adminMenu" class="dropdown-menu">
-                        <a class="dropdown-item" href="/add">Add New User</a>
-                        <a class="dropdown-item" href="/users">View All Users</a>
-                        
+{% extends "layout.html" %}
+
+{% block title %}My Account{% endblock %}
+
+{% block content %}
+<div class="container maincontent rounded-3 my-5">
+    <div class="container">
+        <!--Need to make this <h1> the name of current user-->
+        {% if current_user.is_authenticated %}
+            <h2>Hello, {{ current_user.username }}!</h2>
+        {% else %}
+            <h2>Hello</h2>
+        {% endif %}
+        {% if current_user.is_admin and current_user.email != e_mail %}
+            <h2>Here is the account for {{ e_mail }}:</h2>
+        {% endif %}
+        <!--<h1>YOUR NAME HERE</h1>-->
+        <form method="POST">
+            <div class="container">
+                <!--Generic user info-->
+                <div class="form-group row">
+                    <label for="firstname" class="col-sm-2 col-form-label">First</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="firstname" name="firstname" value="{{ first_name }}">
                     </div>
-                </li>
+                    <label for="lastname" class="col-sm-1 col-form-label">Last</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{ last_name }}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="username" value="{{ user_name }}" name="username">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-9">
+                      <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ e_mail }}" name="email">
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <div class="container">
+                <!--Service provider info-->
+                <h3>Add credentials to become a Service Provider</h3>  
+                <div class="form-group row">
+                    <label for="jobtitle" class="col-sm-2 col-form-label">Job Title</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="jobtitle" name="jobtitle" value="{{ job_title }}">
+                    </div>
+                </div>   
+                <div class="form-group row">
+                    <label for="qualifications" class="col-sm-2 col-form-label">Describe your qualifications</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="qualifications" name="qualifications" value="{{ qualifications_ }}">
+                    </div>
+                </div>          
+            </div>
+            <div class="container">
+                <!--Submit Button-->
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </div>
+            <br>
+            <div class="container">
+            </div>
+        </form>
+        <br>
+         <!--<h2>Notifications</h2>
+       
+        <table class = "table">
+
+            <thead>
+                <tr>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Text</th>
+                    <th scope="col">Dismiss</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if notifications_ %}
+                    {% for notification in notifications_ %}
+                        <th scope="row">{{ notification.sender }}</th>
+                        <td>{{ notification.message }}</td>
+                        <td>
+                            <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
+                        </td>
+                    {% endfor %}
                 {% endif %}
-            {% endif %}
+            </tbody>
 
-
-            <li class="nav-item dropdown" style="margin-left: auto;">
-                <a id="log" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Log...</a>
-                <div id="logMenu" class="dropdown-menu dropdown-menu-right">
-                    {% if current_user.is_authenticated %}
-                        <a class="dropdown-item" href="/logout">Logout</a>
-                    {% else %}
-                        <a class="dropdown-item" href="/login">Login</a>
-                        <a class="dropdown-item" href="/signup">Sign Up</a>
+        </table>
+        <br>-->
+        <!--<h2>Other/Misc</h2>-->
+        <!--Deleting the account-->
+        <div class="accordion" id="accordionDelete">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    {% if current_user.is_authenticated and current_user.email == e_mail %}
+                        <strong>I want to delete my account...</strong>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
+                        <strong>I want to delete this account...</strong>
+                    {% endif %}
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionDelete">
+                <div class="accordion-body">
+                    {% if current_user.is_authenticated and current_user.email == e_mail %}
+                        If you wish to delete your account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
+                        <!--Delete Button-->
+                        <a href="/delete" class="btn btn-danger">Delete My Account</a>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
+                        If you wish to delete this account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
+                        <!--Delete Button-->
+                        <a href="/delete/{{ e_mail }}" class="btn btn-danger">Delete This Account</a>
                     {% endif %}
                 </div>
-            </li>
-        </ul>
-
-        <script>
-            document.getElementById('navbar').addEventListener('click', function(event) {
-                if (event.target.id === 'admin') { 
-                    var adminMenu = document.getElementById('adminMenu');
-                    if (adminMenu.classList.contains('show')) {
-                        adminMenu.classList.remove('show');
-                    } else {
-                        adminMenu.classList.add('show');
-                    }
-                } else if (event.target.id === 'log') {
-                    var logMenu = document.getElementById('logMenu');
-                    if (logMenu.classList.contains('show')) {
-                        logMenu.classList.remove('show');
-                    } else {
-                        logMenu.classList.add('show');
-                    }
-                }
-            });
-        </script>
-
-            <!-- [START] FLASH MESSAGING FOR ACCOUNT -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <ul class=flashes>
-                        {% for category, message in messages %}
-                            <li class = "flash {{ category }}">{{ message }}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
-            {% endwith %}
-            <!-- [END] FLASH MESSAGING FOR ACCOUNT -->
-
-        <div class="container maincontent rounded-3 my-5">
-            <div class="container">
-                <!--Need to make this <h1> the name of current user-->
-                {% if current_user.is_authenticated %}
-        	        <h2>Hello, {{ current_user.username }}!</h2>
-    	        {% else %}
-        	        <h2>Hello</h2>
-                {% endif %}
-                {% if current_user.is_admin and current_user.email != e_mail %}
-                    <h2>Here is the account for {{ e_mail }}:</h2>
-                {% endif %}
-                <!--<h1>YOUR NAME HERE</h1>-->
-                <form method="POST">
-                    <div class="container">
-                        <!--Generic user info-->
-                        <div class="form-group row">
-                            <label for="firstname" class="col-sm-2 col-form-label">First</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="firstname" name="firstname" value="{{ first_name }}">
-                            </div>
-                            <label for="lastname" class="col-sm-1 col-form-label">Last</label>
-                            <div class="col-sm-4">
-                                <input type="text" class="form-control" id="lastname" name="lastname" value="{{ last_name }}">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="username" class="col-sm-2 col-form-label">Username</label>
-                            <div class="col-sm-9">
-                              <input type="text" class="form-control" id="username" value="{{ user_name }}" name="username">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-9">
-                              <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ e_mail }}" name="email">
-                            </div>
-                        </div>
-                    </div>
-                    <br><br>
-                    <div class="container">
-                        <!--Service provider info-->
-                        <h3>Add credentials to become a Service Provider</h3>  
-                        <div class="form-group row">
-                            <label for="jobtitle" class="col-sm-2 col-form-label">Job Title</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="jobtitle" name="jobtitle" value="{{ job_title }}">
-                            </div>
-                        </div>   
-                        <div class="form-group row">
-                            <label for="qualifications" class="col-sm-2 col-form-label">Describe your qualifications</label>
-                            <div class="col-sm-9">
-                                <input type="text" class="form-control" id="qualifications" name="qualifications" value="{{ qualifications_ }}">
-                            </div>
-                        </div>          
-                    </div>
-                    <div class="container">
-                        <!--Submit Button-->
-                        <button type="submit" class="btn btn-secondary">Submit</button>
-                    </div>
-                    <br>
-                    <div class="container">
-                    </div>
-                </form>
-                <br>
-                 <!--<h2>Notifications</h2>
-               
-                <table class = "table">
-
-                    <thead>
-                        <tr>
-                            <th scope="col">Sender</th>
-                            <th scope="col">Text</th>
-                            <th scope="col">Dismiss</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {% if notifications_ %}
-                            {% for notification in notifications_ %}
-                                <th scope="row">{{ notification.sender }}</th>
-                                <td>{{ notification.message }}</td>
-                                <td>
-                                    <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
-                                </td>
-                            {% endfor %}
-                        {% endif %}
-                    </tbody>
-
-                </table>
-                <br>-->
-                <!--<h2>Other/Misc</h2>-->
-                <!--Deleting the account-->
-                <div class="accordion" id="accordionDelete">
-                    <div class="accordion-item">
-                      <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            {% if current_user.is_authenticated and current_user.email == e_mail %}
-                                <strong>I want to delete my account...</strong>
-                            {% endif %}
-                            {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
-                                <strong>I want to delete this account...</strong>
-                            {% endif %}
-                        </button>
-                      </h2>
-                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionDelete">
-                        <div class="accordion-body">
-                            {% if current_user.is_authenticated and current_user.email == e_mail %}
-                                If you wish to delete your account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
-                                <!--Delete Button-->
-                                <a href="/delete" class="btn btn-danger">Delete My Account</a>
-                            {% endif %}
-                            {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
-                                If you wish to delete this account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
-                                <!--Delete Button-->
-                                <a href="/delete/{{ e_mail }}" class="btn btn-danger">Delete This Account</a>
-                            {% endif %}
-                        </div>
-                      </div>
-                    </div>
-                </div>
-                <br>
+              </div>
             </div>
         </div>
-    </body>
-</html>
+        <br>
+    </div>
+</div>
+{% endblock %}

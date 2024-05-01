@@ -1,6 +1,6 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
-from db_config import db, User, Slot#, Notification
+from db_config import db, User, Slot, Notification, add_notification
 from datetime import date, timedelta, datetime, timezone
 from logging import FileHandler, WARNING
 from sqlalchemy import or_, and_, extract, func, select, types
@@ -125,6 +125,10 @@ def booknew():
             #nID += 1
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
+            provider = User.query.filter_by(email=slot.provider).first()
+            client = User.query.filter_by(email=client_email).first()
+            add_notification(provider.id, "Appointment Booked", "You have an appointment scheduled with " + client_email + " during the " + slot.starttime.strftime('%I:%M %p') + " to " + slot.endtime.strftime('%I:%M %p') + " time slot on " + slot.starttime.strftime('%B %d, %Y') + ".")
+            add_notification(client.id, "Appointment Booked", "You have an appointment scheduled with " + slot.provider + " during the " + slot.starttime.strftime('%I:%M %p') + " to " + slot.endtime.strftime('%I:%M %p') + " time slot on " + slot.starttime.strftime('%B %d, %Y') + ".")
             return redirect(url_for('viewappointments'))
         else:
             flash('This slot is no longer available.', 'error')
@@ -200,6 +204,8 @@ def cancel_appointment():
     slot = Slot.query.get(slot_id)
     current_email = session.get('email')
     if slot:
+        client = User.query.filter_by(email=slot.client).first()
+        provider = User.query.filter_by(email=slot.provider).first()
         user = User.query.filter_by(email=current_email).first()
         if user and (slot.client == current_email or slot.provider == current_email or user.is_admin):
             # Update the slot to indicate cancellation
@@ -210,6 +216,7 @@ def cancel_appointment():
                 db.session.delete(slot)
                 db.session.commit()
                 flash('Appointment DESTROYED successfully', 'success')
+                add_notification(client.id, "Appointment Cancelled", "Your appointment with " + provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
             else:
                 slot.client = "None"  # or another appropriate action
                 # Notify provider
@@ -217,6 +224,8 @@ def cancel_appointment():
                 #nID += 1
                 db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
+                provider = User.query.filter_by(email=slot.provider).first()
+                add_notification(provider.id, "Appointment Cancelled", "Your appointment with " + client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
         else:
             flash('You do not have permission to cancel this appointment', 'error')
     else:
@@ -755,6 +764,66 @@ def demo1():
     flash(f"Demo 1 data preloaded successfully!", category="success")
     return redirect(url_for('home'))
     #return jsonify({"message": "Demo 1 data preloaded successfully!"})
+
+#notification functions
+@app.route('/notifications/count')
+@login_required
+def notifications_count():
+    current_email = session.get('email')
+    current_user = User.query.filter_by(email=current_email).first()
+    count = Notification.query.filter_by(user_id=current_user.id, read=False).count()
+    return jsonify(count=count)
+
+
+@app.route('/notifications')
+@login_required
+def notifications():
+    current_email = session.get('email')
+    current_user = User.query.filter_by(email=current_email).first()
+    unread_notifications = Notification.query.filter_by(user_id=current_user.id, read=False).all()
+    return render_template('notifications.html', notifications=unread_notifications)
+
+
+@app.route('/dismiss_notification/<int:notification_id>', methods=['POST'])
+@login_required
+def dismiss_notification(notification_id):
+    current_email = session.get('email')
+    current_user = User.query.filter_by(email=current_email).first()
+    notification = Notification.query.get_or_404(notification_id)
+    if notification.user_id != current_user.id:
+        flash('You do not have permission to do that.', 'danger')
+        return redirect(url_for('notifications'))
+    
+    notification.read = True
+    db.session.commit()
+    flash('Notification dismissed.', 'success')
+    if notifications_count != 0:
+        return redirect(url_for('notifications'))
+    else:
+        return redirect(url_for('home'))
+
+#report functions
+@app.route('/report')
+@login_required
+def generate_report(users=None, start_date=None, end_date=None):
+    slots = Slot.query.all()
+    number_of_slots = len(slots)
+    number_of_clients = len(set([slot.client for slot in slots]))
+    number_of_providers = len(set([slot.provider for slot in slots]))
+    number_of_categories = len(set([slot.category for slot in slots]))
+    report_data = {
+        "number_of_slots": number_of_slots,
+        "number_of_clients": number_of_clients,
+        "number_of_providers": number_of_providers,
+        "number_of_categories": number_of_categories
+    }
+    provider_hours = {}
+    for slot in slots:
+        if slot.provider not in provider_hours:
+            provider_hours[slot.provider] = 0
+        provider_hours[slot.provider] += (slot.endtime - slot.starttime).seconds / 3600
+    report_data["provider_hours"] = provider_hours
+    return render_template('report.html', report_data=report_data)
 
 
 # run app

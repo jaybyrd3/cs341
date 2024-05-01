@@ -25,12 +25,16 @@ class User(UserMixin, db.Model):
     jobTitle = db.Column(db.String(80), unique=False, nullable=True)
     qualifications = db.Column(db.String(80), unique=False, nullable=True)
     slots = db.relationship('Slot', backref='slot', lazy=True)
+    notifications = db.relationship('Notification', backref='user', lazy=True)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def notifications_count(self):
+        return Notification.query.filter_by(user_id=self.id, read=False).count()
 
     def __repr__(self):
         return f'<User {self.username}>'
@@ -50,15 +54,20 @@ class Slot(db.Model):
     def __repr__(self):
 	    return f'<Slot {self.description}>'
     
-'''
+
 class Notification(db.Model):
     __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
-    message = db.Column(db.Text, unique=False, default='N/A', nullable=True)
-    recipient = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
-    sender = db.Column(db.Text, unique=False, default='N/A', nullable=True)
-    #time_sent = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
+    name = db.Column(db.String(128), nullable=False)
+    message = db.Column(db.String(256))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    read = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-         return f'<Notification {self.text}>'
-'''
+        return f'<Notification {self.name}: {self.message}>'
+    
+def add_notification(user_id, name, message):
+    notification = Notification(user_id=user_id, name=name, message=message)
+    db.session.add(notification)
+    db.session.commit()
