@@ -304,7 +304,7 @@ def viewappointments_admin(account_email):
     current_user = User.query.filter_by(email=current_email).first()
     if current_user and current_user.is_admin:
         requested_user = User.query.filter_by(email=account_email).first()
-        if not requested_user:
+        if not requested_user or not requested_user.is_active:
             flash(f"Sorry - requested user not found!", category="error")
             return redirect(url_for('home'))
         else:
@@ -520,7 +520,7 @@ def admin_view(account_email):
     current_user = User.query.filter_by(email=current_email).first()
     if current_user and current_user.is_admin:
         requested_user = User.query.filter_by(email=account_email).first()
-        if not requested_user:
+        if not requested_user or not requested_user.is_active:
             flash(f"Sorry - requested user not found!", category="error")
             return redirect(url_for('home'))
         else:
