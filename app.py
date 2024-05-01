@@ -843,6 +843,7 @@ def generate_report(users=None, start_date=None, end_date=None):
     year = request.args.get('year', '')
 
     slots_query = Slot.query
+    cancelled_query = CancelledSlot.query
 
     if month:
         try:
@@ -851,6 +852,12 @@ def generate_report(users=None, start_date=None, end_date=None):
                 raise ValueError("Month must be between 1 and 12")
             else:
                 slots_query = slots_query.filter(
+                    or_(
+                        extract('month', Slot.starttime) == month_numeric,
+                        extract('month', Slot.endtime) == month_numeric
+                    )
+                )
+                cancelled_query = cancelled_query.fiter(
                     or_(
                         extract('month', Slot.starttime) == month_numeric,
                         extract('month', Slot.endtime) == month_numeric
@@ -871,12 +878,18 @@ def generate_report(users=None, start_date=None, end_date=None):
                         extract('year', Slot.endtime) == year_numeric
                     )
                 )
+                cancelled_query = cancelled_query.fiter(
+                    or_(
+                        extract('month', Slot.starttime) == month_numeric,
+                        extract('month', Slot.endtime) == month_numeric
+                    )
+                )
         except ValueError:
             return 'Invalid year', 400
         
 
     slots = slots_query.all()
-    cancelled = CancelledSlot.query.all()
+    cancelled = cancelled_query.query.all()
     number_of_slots = len(slots)
     number_of_cancelled = len(cancelled)
     number_of_clients = len(set([slot.client for slot in slots]))
