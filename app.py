@@ -121,7 +121,7 @@ def booknew():
     	    # print(f"slot.client {session.get('email')}")
             # Notify provider
             global nID
-            db.session.add(Notification(id=nID, sender=client_email, message=slot.client + " has scheduled an appointment with you during the " + slot.starttime + " to " + slot.endtime + " time slot."))
+            db.session.add(Notification(id=nID, sender=client_email, message=slot.client + " has scheduled an appointment with you during the " + slot.starttime.strftime('%I:%M %p') + " to " + slot.endtime.strftime('%I:%M %p') + " time slot on " + slot.starttime.strftime('%B %d, %Y') + "."))
             nID += 1
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
@@ -205,7 +205,7 @@ def cancel_appointment():
             # Update the slot to indicate cancellation
             if slot.provider == current_email:
                 # If provider, delete from db & notify client
-                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime + " has been cancelled."))
+                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
                 nID += 1
                 db.session.delete(slot)
                 db.session.commit()
@@ -213,7 +213,7 @@ def cancel_appointment():
             else:
                 slot.client = "None"  # or another appropriate action
                 # Notify provider
-                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime + " has been cancelled."))
+                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
                 nID += 1
                 db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
@@ -387,14 +387,14 @@ def delete():
     if pslots:
         for slot in pslots:
             if slot.client:
-                notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime + " has been cancelled.")
+                notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                 nID += 1
                 db.session.add(notif)
                 db.session.delete(slot)
                 db.session.commit()
     if cslots:
         for slot in cslots:
-            notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime + " has been cancelled.")
+            notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
             nID += 1
             db.session.add(notif)
             db.session.delete(slot)
@@ -423,14 +423,14 @@ def admin_delete(account_email):
             if pslots:
                 for slot in pslots:
                     if slot.client:
-                        notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime + " has been cancelled.")
+                        notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                         nID += 1
                         db.session.add(notif)
                         db.session.delete(slot)
                         db.session.commit()
             if cslots:
                 for slot in cslots:
-                    notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime + " has been cancelled.")
+                    notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                     nID += 1
                     db.session.add(notif)
                     db.session.delete(slot)
