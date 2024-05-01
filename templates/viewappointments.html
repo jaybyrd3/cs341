@@ -91,14 +91,12 @@
             
 
         <div class="container maincontent rounded-3 my-5">
-            {% if current_user.is_authenticated and current_user.is_admin%}
+            {% if current_user.is_authenticated and current_user.is_admin %}
             <h1>Hello, admin!</h1>
             <h1>Appointments for {{ e_mail }}:</h1>
             {% endif %}
             {% if current_user.is_authenticated and not current_user.is_admin %}
             <h1>Appointments for {{ current_user.email }}:</h1>
-            {% else %}
-            <h1>Appointments</h1>
             {% endif %}
 
             {% if cslots or pslots  %}
