@@ -155,14 +155,13 @@
                     </div>
                 </form>
                 <br>
-                <h2>Notifications</h2>
-                <!--Notifications-->
+                 <!--<h2>Notifications</h2>
+               
                 <table class = "table">
 
                     <thead>
                         <tr>
                             <th scope="col">Sender</th>
-                            <!--<th scope="col">Time</th>-->
                             <th scope="col">Text</th>
                             <th scope="col">Dismiss</th>
                         </tr>
@@ -172,7 +171,6 @@
                         {% if notifications_ %}
                             {% for notification in notifications_ %}
                                 <th scope="row">{{ notification.sender }}</th>
-                                <!--<td>{{ notification.time_sent }}</td>-->
                                 <td>{{ notification.message }}</td>
                                 <td>
                                     <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
@@ -182,8 +180,8 @@
                     </tbody>
 
                 </table>
-                <br>
-                <h2>Other/Misc</h2>
+                <br>-->
+                <!--<h2>Other/Misc</h2>-->
                 <!--Deleting the account-->
                 <div class="accordion" id="accordionDelete">
                     <div class="accordion-item">

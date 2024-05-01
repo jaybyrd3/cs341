@@ -1,13 +1,13 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
-from db_config import db, User, Slot, Notification
+from db_config import db, User, Slot#, Notification
 from datetime import date, timedelta, datetime, timezone
 from logging import FileHandler, WARNING
 from sqlalchemy import or_, and_, extract, func, select, types
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 import os
 
-nID = 0
+#nID = 0
 
 app = Flask(__name__)
 
@@ -120,9 +120,9 @@ def booknew():
 	        #debug stuff
     	    # print(f"slot.client {session.get('email')}")
             # Notify provider
-            global nID
-            db.session.add(Notification(id=nID, sender=client_email, message=slot.client + " has scheduled an appointment with you during the " + slot.starttime.strftime('%I:%M %p') + " to " + slot.endtime.strftime('%I:%M %p') + " time slot on " + slot.starttime.strftime('%B %d, %Y') + "."))
-            nID += 1
+            #global nID
+            #db.session.add(Notification(id=nID, sender=client_email, message=slot.client + " has scheduled an appointment with you during the " + slot.starttime.strftime('%I:%M %p') + " to " + slot.endtime.strftime('%I:%M %p') + " time slot on " + slot.starttime.strftime('%B %d, %Y') + "."))
+            #nID += 1
             db.session.commit()
             flash('Appointment booked successfully!', 'success')
             return redirect(url_for('viewappointments'))
@@ -195,7 +195,7 @@ def booknewcat(category):
 @app.route('/cancel_appointment', methods=['POST'])
 @login_required
 def cancel_appointment():
-    global nID
+    #global nID
     slot_id = request.form.get('slot_id')
     slot = Slot.query.get(slot_id)
     current_email = session.get('email')
@@ -205,16 +205,16 @@ def cancel_appointment():
             # Update the slot to indicate cancellation
             if slot.provider == current_email:
                 # If provider, delete from db & notify client
-                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
-                nID += 1
+                #db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
+                #nID += 1
                 db.session.delete(slot)
                 db.session.commit()
                 flash('Appointment DESTROYED successfully', 'success')
             else:
                 slot.client = "None"  # or another appropriate action
                 # Notify provider
-                db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
-                nID += 1
+                #db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
+                #nID += 1
                 db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
         else:
@@ -377,7 +377,7 @@ def logout():
 @app.route('/delete')
 @login_required
 def delete():
-    global nID
+    #global nID
     user = User.query.filter_by(email=session.get('email')).first()
     user.is_active = False
     db.session.commit()
@@ -387,16 +387,16 @@ def delete():
     if pslots:
         for slot in pslots:
             if slot.client:
-                notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
-                nID += 1
-                db.session.add(notif)
+                #notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
+                #nID += 1
+                #db.session.add(notif)
                 db.session.delete(slot)
                 db.session.commit()
     if cslots:
         for slot in cslots:
-            notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
-            nID += 1
-            db.session.add(notif)
+            #notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
+            #nID += 1
+            #db.session.add(notif)
             db.session.delete(slot)
             db.session.commit()
     flash(f"You have successfully deleted your account.", category="success")
@@ -406,7 +406,7 @@ def delete():
 @app.route('/delete/<account_email>')
 @login_required
 def admin_delete(account_email):
-    global nID
+    #global nID
     current_email = session.get('email')
     current_user = User.query.filter_by(email=current_email).first()
     if current_user and current_user.is_admin:
@@ -423,16 +423,16 @@ def admin_delete(account_email):
             if pslots:
                 for slot in pslots:
                     if slot.client:
-                        notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
-                        nID += 1
-                        db.session.add(notif)
+                        #notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
+                        #nID += 1
+                       # db.session.add(notif)
                         db.session.delete(slot)
                         db.session.commit()
             if cslots:
                 for slot in cslots:
-                    notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
-                    nID += 1
-                    db.session.add(notif)
+                    #notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
+                    #nID += 1
+                    #db.session.add(notif)
                     db.session.delete(slot)
                     db.session.commit()
             flash(f"You have successfully deleted " + requested_user.email + "'s account.", category="success")
@@ -601,10 +601,10 @@ def account():
         e_mail = current_email
         job_title = current_user.jobTitle
         qualifications_ = current_user.qualifications
-        notifications_ = Notification.query.filter_by(recipient=current_email).all()
-        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_, notifications_=notifications_)
+        #notifications_ = Notification.query.filter_by(recipient=current_email).all()
+        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)#, notifications_=notifications_)
     else:
-        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?", notifications_=[]) # using "[]" here may make this break
+        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?")#, notifications_=[]) # using "[]" here may make this break
 
 
 @app.route('/account/<account_email>')
@@ -624,8 +624,8 @@ def admin_view(account_email):
             e_mail = account_email
             job_title = requested_user.jobTitle
             qualifications_ = requested_user.qualifications
-            notifications_ = Notification.query.filter_by(recipient=e_mail).all()
-            return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_, notifications_=notifications_)
+            #notifications_ = Notification.query.filter_by(recipient=e_mail).all()
+            return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)#, notifications_=notifications_)
     else:
         if not current_user:
             flash(f"Sorry - you need to be logged in as an admin to access that page!", category="error")
@@ -633,7 +633,7 @@ def admin_view(account_email):
         else:
             flash(f"Sorry - you need to be an admin to access that page!", category="error")
             return redirect(url_for('home'))
-
+'''
 @app.route('/account/dismiss/<nID>')
 @login_required
 def dismiss(nID):
@@ -648,7 +648,7 @@ def dismiss(nID):
     else:
         flash(f"Sorry - you need to be logged in to access that page!", category="error")
         return redirect(url_for('home'))
-
+'''
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])
 def demo1():
