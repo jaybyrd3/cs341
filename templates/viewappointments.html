@@ -95,35 +95,6 @@
 
     <br>
 
-    <!-- {% if cslots %}
-    <h3>Client Appointments</h3><br>
-    <ul style="list-style: none;">
-        {% for slot in cslots %}
-            <li>
-                <form action="/cancel_appointment" method="post">
-                    <div class="container">
-                        <div class="card col-sm-5">
-                            <div class="card-header">
-                                {{ slot.description }}
-                            </div>
-                            <div class="card-body">
-                                <h5>Provided by {{ slot.provider }}</h5>
-                                <p>Client: {{ slot.client }}</p>
-                                <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
-                                <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
-                                <p>[{{ slot.category }}]</p>
-                                <input type="hidden" name="slot_id" value="{{ slot.id }}">
-                                <button type="submit" class="btn btn-secondary">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </li>
-        {% endfor %}
-    </ul><br>
-    {% else %}
-        <p>No Client Appointments</p>
-    {% endif %} -->
     {% if cslots %}
     <h3>Available Slots:</h3>
     <div class="container">
@@ -189,34 +160,5 @@
         <p>No Provider Appointments</p>
     {% endif %}
     </div>
-    <!-- {% if pslots %}
-        <h3>Provider Listings</h3>
-        <ul style="list-style: none;">
-            {% for slot in pslots %}
-                <li>
-                    <form action="/cancel_appointment" method="post">
-                        <div class="container">
-                            <div class="card col-sm-5">
-                                <div class="card-header">
-                                    {{ slot.description }}
-                                </div>
-                                <div class="card-body">
-                                    <h5>Provided by {{ slot.provider }}</h5>
-                                    <p>Client: {{ slot.client }}</p>
-                                    <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
-                                    <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
-                                    <p>[{{ slot.category }}]</p>
-                                    <input type="hidden" name="slot_id" value="{{ slot.id }}">
-                                    <button type="submit" class="btn btn-secondary">Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>No Provider Appointments</p>
-    {% endif %} -->
 </div>
 {% endblock %}

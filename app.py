@@ -1,6 +1,6 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
-from db_config import db, User, Slot, Notification, add_notification
+from db_config import db, User, Slot, Notification, CancelledSlot, add_notification
 from datetime import date, timedelta, datetime, timezone
 from logging import FileHandler, WARNING
 from sqlalchemy import or_, and_, extract, func, select, types
@@ -223,8 +223,26 @@ def cancel_appointment():
         provider = User.query.filter_by(email=slot.provider).first()
         user = User.query.filter_by(email=current_email).first()
         if user and (slot.client == current_email or slot.provider == current_email or user.is_admin):
+
+            # Create a new cancelled slot with data from the original slot
+            cancelled_slot = CancelledSlot(
+                starttime=slot.starttime,
+                endtime=slot.endtime,
+                client=slot.client,
+                provider=slot.provider,
+                description=slot.description,
+                category=slot.category
+            )
+            db.session.add(cancelled_slot)  # Add the cancelled slot to the database
+
             # Update the slot to indicate cancellation
-            if slot.provider == current_email:
+            if user.is_admin:
+                db.session.delete(slot)
+                db.session.commit()
+                flash('Appointment DESTROYED successfully', 'success')
+                add_notification(client.id, "Appointment Cancelled", "Your appointment with " + provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
+                add_notification(provider.id, "Appointment Cancelled", "Your appointment with " + client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
+            elif slot.provider == current_email:
                 # If provider, delete from db & notify client
                 #db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
                 #nID += 1

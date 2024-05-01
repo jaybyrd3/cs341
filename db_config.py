@@ -54,6 +54,21 @@ class Slot(db.Model):
     def __repr__(self):
 	    return f'<Slot {self.description}>'
     
+class CancelledSlot(db.Model):
+    __tablename__ = 'cancelledslot'
+    id = db.Column(db.Integer, primary_key=True)
+    starttime = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc)) 
+    endtime = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
+    # if user_id == null, then appt slot is open
+    client = db.Column(db.Text, unique=False, default='None', nullable=True)
+    provider = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
+    # slot will always have a provider
+    description = db.Column(db.String(512), unique=False, nullable=True)
+    category = db.Column(db.String(50), unique=False, nullable=True) # atm,: Medical|Beauty|Fitness
+    
+    def __repr__(self):
+	    return f'<CancelledSlot {self.description}>'
+    
 
 class Notification(db.Model):
     __tablename__ = 'notification'
