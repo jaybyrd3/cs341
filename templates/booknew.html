@@ -110,8 +110,39 @@
     </script>
 
     <br>
-    
+
     {% if open_slots %}
+        <h3>Available Slots:</h3>
+        <div class="container">
+            <div class="row">
+                {% for slot in open_slots %}
+                    <div class="col-md-4 mb-4"> <!-- Each card takes up 4 columns in a 12-column grid, allowing 3 cards per row -->
+                        <form action="/booknew" method="post">
+                            <div class="card">
+                                <div class="card-header">
+                                    {{ slot.description }}
+                                </div>
+                                <div class="card-body">
+                                    <h5>Provided by {{ slot.provider }}</h5>
+                                    <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
+                                    <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
+                                    <p>[{{ slot.category }}]</p>
+                                    <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                    <button type="submit" class="btn btn-secondary">Book It!</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    {% if loop.index % 3 == 0 %} <!-- Clear fix for wrapping rows every three cards -->
+                        <div class="w-100"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    
+    <!-- {% if open_slots %}
         <h3>Available Slots:</h3>
         <ul style="list-style: none;">
             {% for slot in open_slots %}
@@ -123,9 +154,9 @@
                                     {{ slot.description }}
                                 </div>
                                 <div class="card-body">
-                                    <h5>Provided by {{ slot.provider }}</h5>
+                                    <h5>Provided by {{ slot.provider }}</h5> -->
                                     <!--<p>Getting Got: {{ slot.client }}</p>-->
-                                    <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
+                                    <!-- <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
                                     <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
                                     <p>[{{ slot.category }}]</p>
                                     <input type="hidden" name="slot_id" value="{{ slot.id }}">
@@ -136,8 +167,8 @@
                     </form>
                 </li>
             {% endfor %}
-        </ul><br>
+        </ul><br> -->
         <!--<p>No appointments available.</p>-->
-    {% endif %}
+    <!-- {% endif %} -->
 </div>
 {% endblock %}
