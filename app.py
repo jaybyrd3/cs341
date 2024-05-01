@@ -72,6 +72,21 @@ def makeslot():
     elif request.method == 'POST':
         starttime = request.form['starttime']
         endtime = request.form['endtime']
+
+        # Input Validation #
+        # Convert the ISO 8601 date strings to datetime objects
+        try:
+            _starttime = datetime.fromisoformat(starttime)
+            _endtime = datetime.fromisoformat(endtime)
+        except ValueError:
+            flash("Invalid date format.", category="error")
+            return redirect(url_for('makeslot'))
+
+        # Check if the start time is before the end time
+        if _starttime >= _endtime:
+            flash("Invalid slot window. Start must be chronologically before the end of slot.", category="error")
+            return redirect(url_for('makeslot'))
+
         client = request.form['client']
         provider = request.form['provider']
         description = request.form['description']
