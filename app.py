@@ -889,7 +889,7 @@ def generate_report(users=None, start_date=None, end_date=None):
         
 
     slots = slots_query.all()
-    cancelled = cancelled_query.query.all()
+    cancelled = cancelled_query.all()
     number_of_slots = len(slots)
     number_of_cancelled = len(cancelled)
     number_of_clients = len(set([slot.client for slot in slots]))
