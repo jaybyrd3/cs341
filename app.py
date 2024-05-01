@@ -840,12 +840,15 @@ def dismiss_notification(notification_id):
 @login_required
 def generate_report(users=None, start_date=None, end_date=None):
     slots = Slot.query.all()
+    cancelled = CancelledSlot.query.all()
     number_of_slots = len(slots)
+    number_of_cancelled = len(cancelled)
     number_of_clients = len(set([slot.client for slot in slots]))
     number_of_providers = len(set([slot.provider for slot in slots]))
     number_of_categories = len(set([slot.category for slot in slots]))
     report_data = {
         "number_of_slots": number_of_slots,
+        "number_of_cancelled": number_of_cancelled,
         "number_of_clients": number_of_clients,
         "number_of_providers": number_of_providers,
         "number_of_categories": number_of_categories
