@@ -880,8 +880,8 @@ def generate_report(users=None, start_date=None, end_date=None):
                 )
                 cancelled_query = cancelled_query.filter(
                     or_(
-                        extract('month', Slot.starttime) == month_numeric,
-                        extract('month', Slot.endtime) == month_numeric
+                        extract('year', Slot.starttime) == year_numeric,
+                        extract('year', Slot.endtime) == year_numeric
                     )
                 )
         except ValueError:
