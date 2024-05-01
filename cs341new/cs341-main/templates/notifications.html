@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2>Your Notifications</h2>
+<ul>
+    {% for notification in notifications %}
+    <li>
+        <strong>{{ notification.name }}</strong>: {{ notification.message }}
+        <form action="{{ url_for('dismiss_notification', notification_id=notification.id) }}" method="post">
+            <button type="submit" class="btn btn-sm btn-outline-secondary">Dismiss</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

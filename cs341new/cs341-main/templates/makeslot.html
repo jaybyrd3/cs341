@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block title %}Make Slot{% endblock %}
+
+{% block content %}
+<div class="container maincontent rounded-3 my-5">
+    <h3>Fill out the form to list a new Appointment</h3><br>
+    <form method="POST">
+        <!-- Label and input for provider -->
+        <div class="mb-3 row">
+            <label for="provider" class="col-sm-2 col-form-label">Provider Email</label>
+            <div class="col-sm-5">
+                <input class="form-control" type="text" value="{{ current_user.email }}" id="provider" name="provider" readonly>
+            </div>
+        </div>
+
+        <!-- Category -->
+        <div class="mb-3 row">
+            <label for="category" class="col-sm-2 col-form-label">Category<span class="text-danger">*</span></label>
+            <div class="col-sm-3">
+                <select class="form-select" id="category" name="category">
+                    <option value="medical">Medical</option>
+                    <option value="beauty" selected>Beauty</option>
+                    <option value="fitness">Fitness</option>
+                  </select>
+            </div>
+        </div>
+
+        <!-- Label and input for Appointment Description -->
+        <div class="mb-3 row">
+            <label for="description" class="col-sm-2 col-form-label">Description<span class="text-danger">*</span></label>
+            <div class="col-sm-5">
+                <input class="form-control" type="text" id="slot_description" name="description" required>
+            </div>
+        </div>
+
+
+        <!-- Label and input for start time (accepts date) -->
+        <div class="mb-3 row">
+            <label for="starttime" class="col-sm-2 col-form-label">Start Time<span class="text-danger">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" type="datetime-local" id="starttime" name="starttime" required>
+            </div>
+        </div>
+
+    
+        <!-- Label and input for end time (accepts date) -->
+        <div class="mb-3 row">
+            <label for="endtime" class="col-sm-2 col-form-label">End Time<span class="text-danger">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" type="datetime-local" id="endtime" name="endtime" required>
+            </div>
+        </div>
+
+    
+        <!-- Label and input for client -->
+        <div class="mb-3 row">
+            <label for="client" class="col-sm-2 col-form-label">Client Email</label>
+            <div class="col-sm-5">
+                <input class="form-control" type="text" id="client" name="client" value="None">
+            </div>
+        </div>
+
+    
+        <!-- Submit button -->
+        <input type="submit" class="btn btn-secondary mb-3" value="Make Slot">
+    </form>
+</div>
+{% endblock %}

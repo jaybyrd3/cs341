@@ -1,0 +1,129 @@
+{% extends "layout.html" %}
+
+{% block title %}My Account{% endblock %}
+
+{% block content %}
+<div class="container maincontent rounded-3 my-5">
+    <div class="container">
+        <!--Need to make this <h1> the name of current user-->
+        {% if current_user.is_authenticated %}
+            <h2>Hello, {{ current_user.username }}!</h2>
+        {% else %}
+            <h2>Hello</h2>
+        {% endif %}
+        {% if current_user.is_admin and current_user.email != e_mail %}
+            <h2>Here is the account for {{ e_mail }}:</h2>
+        {% endif %}
+        <!--<h1>YOUR NAME HERE</h1>-->
+        <form method="POST">
+            <div class="container">
+                <!--Generic user info-->
+                <div class="form-group row">
+                    <label for="firstname" class="col-sm-2 col-form-label">First</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="firstname" name="firstname" value="{{ first_name }}">
+                    </div>
+                    <label for="lastname" class="col-sm-1 col-form-label">Last</label>
+                    <div class="col-sm-4">
+                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{ last_name }}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-9">
+                      <input type="text" class="form-control" id="username" value="{{ user_name }}" name="username">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="staticEmail" class="col-sm-2 col-form-label">Email</label>
+                    <div class="col-sm-9">
+                      <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ e_mail }}" name="email">
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <div class="container">
+                <!--Service provider info-->
+                <h3>Add credentials to become a Service Provider</h3>  
+                <div class="form-group row">
+                    <label for="jobtitle" class="col-sm-2 col-form-label">Job Title</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="jobtitle" name="jobtitle" value="{{ job_title }}">
+                    </div>
+                </div>   
+                <div class="form-group row">
+                    <label for="qualifications" class="col-sm-2 col-form-label">Describe your qualifications</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="qualifications" name="qualifications" value="{{ qualifications_ }}">
+                    </div>
+                </div>          
+            </div>
+            <div class="container">
+                <!--Submit Button-->
+                <button type="submit" class="btn btn-secondary">Submit</button>
+            </div>
+            <br>
+            <div class="container">
+            </div>
+        </form>
+        <br>
+         <!--<h2>Notifications</h2>
+       
+        <table class = "table">
+
+            <thead>
+                <tr>
+                    <th scope="col">Sender</th>
+                    <th scope="col">Text</th>
+                    <th scope="col">Dismiss</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if notifications_ %}
+                    {% for notification in notifications_ %}
+                        <th scope="row">{{ notification.sender }}</th>
+                        <td>{{ notification.message }}</td>
+                        <td>
+                            <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
+                        </td>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+
+        </table>
+        <br>-->
+        <!--<h2>Other/Misc</h2>-->
+        <!--Deleting the account-->
+        <div class="accordion" id="accordionDelete">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                    {% if current_user.is_authenticated and current_user.email == e_mail %}
+                        <strong>I want to delete my account...</strong>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
+                        <strong>I want to delete this account...</strong>
+                    {% endif %}
+                </button>
+              </h2>
+              <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionDelete">
+                <div class="accordion-body">
+                    {% if current_user.is_authenticated and current_user.email == e_mail %}
+                        If you wish to delete your account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
+                        <!--Delete Button-->
+                        <a href="/delete" class="btn btn-danger">Delete My Account</a>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
+                        If you wish to delete this account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
+                        <!--Delete Button-->
+                        <a href="/delete/{{ e_mail }}" class="btn btn-danger">Delete This Account</a>
+                    {% endif %}
+                </div>
+              </div>
+            </div>
+        </div>
+        <br>
+    </div>
+</div>
+{% endblock %}

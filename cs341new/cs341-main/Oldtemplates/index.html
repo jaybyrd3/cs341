@@ -1,0 +1,185 @@
+<!--Note from Tarren: Deleted unused "home.html" but kept local backup of file in case needed-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>It's A Calendar!</title>
+        <link rel="stylesheet" href="../static/index.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/1f10d8fda7.js" crossorigin="anonymous"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"></script>
+    </head>
+    <body>
+        <ul class="nav nav-pills our-nav" id="navbar" style="padding-top: 10px;">
+            <li class="navbar-brand" href="/" >
+                <img src="{{ url_for('static', filename='dummylogo.png') }}" alt="" width="40" height="40" style="border-radius:50%">
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active text-white" href="/">Home</a>
+            </li>
+            {% if current_user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/booknew">Book New</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/viewappointments">View Appointments</a>
+                </li>
+                {% if current_user.jobTitle is not none and current_user.qualifications is not none
+                    and current_user.jobTitle != "" and current_user.qualifications != "" %}
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="/makeslot">Make Slot</a>
+                    </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="/account">My Account</a>
+                </li>
+                {% if current_user.is_admin %}
+                <li class="nav-item dropdown">
+                    <a id="admin" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+                    <div id="adminMenu" class="dropdown-menu">
+                        <a class="dropdown-item" href="/add">Add New User</a>
+                        <a class="dropdown-item" href="/users">View All Users</a>
+                        
+                    </div>
+                </li>
+                {% endif %}
+            {% endif %}
+            <li class="nav-item dropdown" style="margin-left: auto;">
+                <a id="log" class="nav-link dropdown-toggle text-white" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Log...</a>
+                <div id="logMenu" class="dropdown-menu dropdown-menu-right">
+                    {% if current_user.is_authenticated %}
+                        <a class="dropdown-item" href="/logout">Logout</a>
+                    {% else %}
+                        <a class="dropdown-item" href="/login">Login</a>
+                        <a class="dropdown-item" href="/signup">Sign Up</a>
+                    {% endif %}
+                </div>
+            </li>
+        </ul>
+
+        <script>
+            document.getElementById('navbar').addEventListener('click', function(event) {
+                if (event.target.id === 'admin') { 
+                    var adminMenu = document.getElementById('adminMenu');
+                    if (adminMenu.classList.contains('show')) {
+                        adminMenu.classList.remove('show');
+                    } else {
+                        adminMenu.classList.add('show');
+                    }
+                } else if (event.target.id === 'log') {
+                    var logMenu = document.getElementById('logMenu');
+                    if (logMenu.classList.contains('show')) {
+                        logMenu.classList.remove('show');
+                    } else {
+                        logMenu.classList.add('show');
+                    }
+                }
+            });
+        </script>
+
+        <!-- [START] FLASH MESSAGING FOR INDEX -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class=flashes>
+                    {% for category, message in messages %}
+			            <li class = "flash {{ category }}">{{ message }}</li>
+		            {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <!-- [END] FLASH MESSAGING FOR INDEX -->
+        
+        <div class="container maincontent rounded-3 my-5">
+	        {% if current_user.is_authenticated %}
+        	    <h1>Hello, {{ current_user.username }}!</h1>
+                <h3>Please browse the help/FAQ section below if you run into any issues.</h3>
+                <p>Thank you for using our app!</p>
+                <div class="accordion" id="accordionHelp">
+
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          <strong>How do I sign up to be a service provider?</strong>
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionHelp">
+                        <div class="accordion-body">
+                            You may sign up to be a service provider by clicking on the "My Account" link in the nav bar & filling in all of the required details under the "Add credentials to become a Service Provider" heading.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          <strong>How do I schedule an appointment with a service provider?</strong>
+                        </button>
+                      </h2>
+                      <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionHelp">
+                        <div class="accordion-body">
+                            In order to schedule an appointment with a service provider, you need to first select the "Book New" link in the nav bar. After that, you may either select a specific category of appointments to view or choose to show all available appointments. After doing this, all of the available slots will appear in a list that you may search through using the tools under the newly-added "Search by..." header.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                            <strong>How do I view my currently-scheduled appointments?</strong>
+                          </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionHelp">
+                          <div class="accordion-body">
+                            To view all of your currently-scheduled appointments, click on the "View Appointments" link in the nav-bar. (Note: This will also display any slots you have created if you are registered as a service provider)
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        <strong>How do I cancel an appointment?</strong>
+                          </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionHelp">
+                          <div class="accordion-body">
+                            To cancel an appointment, click on the "View Appointments" link in the nav bar & click the button labeled "Cancel" for each appointment you wish to do away with.
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingFive">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        <strong>How do I create a new appointment slot? (service providers only)</strong>
+                        </button>
+                      </h2>
+                      <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionHelp">
+                        <div class="accordion-body">
+                          To create a new appointment slot, select the "Make Slot" link in the nav bar & fill out the necessary information. 
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSix">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        <strong>How do I delete an appointment slot? (service providers only) </strong>
+                          </button>
+                        </h2>
+                        <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionHelp">
+                          <div class="accordion-body">
+                            To delete an appointment slot, click on the "View Appointments" link within the nav bar & hit the button labeled "Cancel" on any slot you'd like to delete. (Note: If you have appointments as both a client and a provider, you may need to scroll past your client appointments to get to your provider slots)
+                          </div>
+                        </div>
+                    </div>
+
+                </div>
+                <br>
+    	    {% else %}
+        	    <h1>Welcome!</h1>
+                <p> Please go to the drop-down menu at the top right and log in/sign up to continue.</p>
+            {% endif %}
+        </div>
+    </body>
+</html>
