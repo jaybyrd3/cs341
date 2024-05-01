@@ -106,7 +106,7 @@
         <ul>
             {% for user in users %}
                 {% if not user.is_active %}
-                    <li>Username: <strong>{{ user.username }}</strong> | Email: <strong>{{ user.email }}</strong> | <strong><a href="account/{{ user.email }}">Profile</a></strong> | <strong><a href="viewappointments/{{ user.email }}">Appointments</a></strong></li>
+                    <li>Username: <strong>{{ user.username }}</strong> | Email: <strong>{{ user.email }}</strong> | <strong><a href="reactivate/{{ user.email }}">Reactivate</a></strong>
                 {% endif %}
             {% endfor %}
         </ul>
