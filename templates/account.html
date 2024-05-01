@@ -150,9 +150,40 @@
                         <!--Submit Button-->
                         <button type="submit" class="btn btn-secondary">Submit</button>
                     </div>
+                    <br>
                     <div class="container">
                     </div>
                 </form>
+                <br>
+                <!--Deleting the account-->
+                <div class="accordion" id="accordionDelete">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="headingOne">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                            {% if current_user.is_authenticated and current_user.email == e_mail %}
+                                <strong>I want to delete my account...</strong>
+                            {% endif %}
+                            {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
+                                <strong>I want to delete this account...</strong>
+                            {% endif %}
+                        </button>
+                      </h2>
+                      <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionDelete">
+                        <div class="accordion-body">
+                            {% if current_user.is_authenticated and current_user.email == e_mail %}
+                                If you wish to delete your account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
+                                <!--Delete Button-->
+                                <a href="/delete" class="btn btn-danger">Delete My Account</a>
+                            {% endif %}
+                            {% if current_user.is_authenticated and current_user.is_admin and current_user.email != e_mail %}
+                                If you wish to delete this account, press the button below. <strong>Please be sure this is what you want to do, as account deletion is non-reversible.</strong>
+                                <!--Delete Button-->
+                                <a href="/delete/{{ e_mail }}" class="btn btn-danger">Delete This Account</a>
+                            {% endif %}
+                        </div>
+                      </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

@@ -296,6 +296,7 @@ def viewappointments():
     else:
          return render_template('viewappointments.html', pslots=None, cslots=None)
 
+
 @app.route('/viewappointments/<account_email>')
 @login_required
 def viewappointments_admin(account_email):
@@ -331,7 +332,7 @@ def login():
             password = request.form['password']
             # changed to support hashing
             user = User.query.filter_by(email=email).first()
-            if user and user.check_password(password):
+            if user and user.check_password(password) and user.is_active:
                 session['email'] = email
                 session['password'] = password
                 login_user(user)
@@ -358,6 +359,40 @@ def logout():
 	logout_user() # logs out user & cleans up cookies
 	flash(f"You are now logged out.", category="success")
 	return redirect(url_for('home'))
+
+
+@app.route('/delete')
+@login_required
+def delete():
+    user = User.query.filter_by(email=session.get('email')).first()
+    user.is_active = False
+    db.session.commit()
+    flash(f"You have successfully deleted your account.", category="success")
+    return redirect(url_for('home'))
+
+
+@app.route('/delete/<account_email>')
+@login_required
+def admin_delete(account_email):
+    current_email = session.get('email')
+    current_user = User.query.filter_by(email=current_email).first()
+    if current_user and current_user.is_admin:
+        requested_user = User.query.filter_by(email=account_email).first()
+        if not requested_user or not requested_user.is_active:
+            flash(f"Sorry - requested user not found!", category="error")
+            return redirect(url_for('home'))
+        else:
+            requested_user.is_active = False
+            db.session.commit()
+            flash(f"You have successfully deleted " + requested_user.email + "'s account.", category="success")
+            return redirect(url_for('home'))
+    else:
+        if not current_user:
+            flash(f"Sorry - you need to be logged in as an admin to access that page!", category="error")
+            return redirect(url_for('home'))
+        else:
+            flash(f"Sorry - you need to be an admin to access that page!", category="error")
+            return redirect(url_for('home'))
 
 
 @app.route('/signup', methods=['GET', 'POST'])
