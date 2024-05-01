@@ -169,14 +169,16 @@
                     </thead>
 
                     <tbody>
-                        {% for notification in notifications_ %}
-                            <th scope="row">{{ notification.sender }}</th>
-                            <td>{{ notification.time }}</td>
-                            <td>{{ notification.text }}</td>
-                            <td>
-                                <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
-                            </td>
-                        {% endfor %}
+                        {% if notifications_ %}
+                            {% for notification in notifications_ %}
+                                <th scope="row">{{ notification.sender }}</th>
+                                <td>{{ notification.time }}</td>
+                                <td>{{ notification.text }}</td>
+                                <td>
+                                    <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
+                                </td>
+                            {% endfor %}
+                        {% endif %}
                     </tbody>
 
                 </table>
