@@ -173,7 +173,7 @@
                             {% for notification in notifications_ %}
                                 <th scope="row">{{ notification.sender }}</th>
                                 <td>{{ notification.time }}</td>
-                                <td>{{ notification.text }}</td>
+                                <td>{{ notification.message }}</td>
                                 <td>
                                     <a href="/account/dismiss/{{ notification.id }}" class="btn btn-close"></a>
                                 </td>
