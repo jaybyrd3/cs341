@@ -42,7 +42,7 @@ class Slot(db.Model):
     endtime = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
     # if user_id == null, then appt slot is open
     client = db.Column(db.Text, unique=False, default='None', nullable=True)
-    provider = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
+    provider = db.Column(db.Text, unique=False, default=None, nullable=True)
     # slot will always have a provider
     description = db.Column(db.String(512), unique=False, nullable=True)
     category = db.Column(db.String(50), unique=False, nullable=True) # atm,: Medical|Beauty|Fitness
