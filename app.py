@@ -595,7 +595,7 @@ def dismiss(nID):
         if notification:
             db.session.delete(notification)
             db.session.commit()
-            return redirect(url_for('account'))
+        return redirect(url_for('account'))
     else:
         flash(f"Sorry - you need to be logged in to access that page!", category="error")
         return redirect(url_for('home'))
