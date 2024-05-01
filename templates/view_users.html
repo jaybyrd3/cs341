@@ -92,13 +92,21 @@
 
     <div class="container maincontent rounded-3 my-5">
         <h1>All Users</h1>
+        <h3>Active Users:</h3>
         <ul>
             {% for user in users %}
-                <br>
-                <li>Username: <strong>{{ user.username }}</strong> | Email: <strong>{{ user.email }}</strong> | Is Active: <strong>{{ user.is_active }}</strong> | <strong><a href="account/{{ user.email }}">Profile</a></strong> | <strong><a href="viewappointments/{{ user.email }}">Appointments</a></strong></li>
-                <br>
+                {% if user.is_active %}
+                    <li>Username: <strong>{{ user.username }}</strong> | Email: <strong>{{ user.email }}</strong> | <strong><a href="account/{{ user.email }}">Profile</a></strong> | <strong><a href="viewappointments/{{ user.email }}">Appointments</a></strong></li>
+                {% endif %}
             {% endfor %}
         </ul>
+        <br>
+        <h3>Inactive Users:</h3>
+            {% for user in users %}
+                {% if not user.is_active %}
+                    <li>Username: <strong>{{ user.username }}</strong> | Email: <strong>{{ user.email }}</strong> | <strong><a href="account/{{ user.email }}">Profile</a></strong> | <strong><a href="viewappointments/{{ user.email }}">Appointments</a></strong></li>
+                {% endif %}
+            {% endfor %}
         <a href="/add" style="display:inline-block; margin-top:20px; padding:10px; background-color:blue; color:white; text-decoration:none; border-radius:5px;" target="_blank">Add Another User</a>
         <br>
     </div>
