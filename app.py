@@ -419,7 +419,7 @@ def reactivate(account_email):
     current_user = User.query.filter_by(email=current_email).first()
     if current_user and current_user.is_admin:
         requested_user = User.query.filter_by(email=account_email).first()
-        if not requested_user or not requested_user.is_active:
+        if not requested_user:
             flash(f"Sorry - requested user not found!", category="error")
             return redirect(url_for('home'))
         elif requested_user.is_active:
