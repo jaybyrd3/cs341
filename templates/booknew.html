@@ -140,35 +140,5 @@
             </div>
         </div>
     {% endif %}
-
-    
-    <!-- {% if open_slots %}
-        <h3>Available Slots:</h3>
-        <ul style="list-style: none;">
-            {% for slot in open_slots %}
-                <li>
-                    <form action="/booknew" method="post">
-                        <div class="container">
-                            <div class="card col-sm-5">
-                                <div class="card-header">
-                                    {{ slot.description }}
-                                </div>
-                                <div class="card-body">
-                                    <h5>Provided by {{ slot.provider }}</h5> -->
-                                    <!--<p>Getting Got: {{ slot.client }}</p>-->
-                                    <!-- <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
-                                    <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
-                                    <p>[{{ slot.category }}]</p>
-                                    <input type="hidden" name="slot_id" value="{{ slot.id }}">
-                                    <button type="submit" class="btn btn-secondary">Book It!</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul><br> -->
-        <!--<p>No appointments available.</p>-->
-    <!-- {% endif %} -->
 </div>
 {% endblock %}

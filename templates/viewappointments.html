@@ -95,7 +95,7 @@
 
     <br>
 
-    {% if cslots %}
+    <!-- {% if cslots %}
     <h3>Client Appointments</h3><br>
     <ul style="list-style: none;">
         {% for slot in cslots %}
@@ -123,9 +123,76 @@
     </ul><br>
     {% else %}
         <p>No Client Appointments</p>
+    {% endif %} -->
+    {% if cslots %}
+    <h3>Available Slots:</h3>
+    <div class="container">
+        <div class="row">
+            {% for slot in cslots %}
+                <div class="col-md-4 mb-4"> <!-- Each card takes up 4 columns in a 12-column grid, allowing 3 cards per row -->
+                    <form action="/cancel_appointment" method="post">
+                        <div class="card">
+                            <div class="card-header">
+                                {{ slot.description }}
+                            </div>
+                            <div class="card-body">
+                                <h5>Provided by {{ slot.provider }}</h5>
+                                <p>Client: {{ slot.client }}</p>
+                                <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
+                                <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
+                                <p>[{{ slot.category }}]</p>
+                                <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                <button type="submit" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% if loop.index % 3 == 0 %} <!-- Clear fix for wrapping rows every three cards -->
+                    <div class="w-100"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No Client Appointments</p>
+    {% endif %}
+    </div>
     {% endif %}
 
+
     {% if pslots %}
+    <h3>Available Slots:</h3>
+    <div class="container">
+        <div class="row">
+            {% for slot in pslots %}
+                <div class="col-md-4 mb-4"> <!-- Each card takes up 4 columns in a 12-column grid, allowing 3 cards per row -->
+                    <form action="/cancel_appointment" method="post">
+                        <div class="card">
+                            <div class="card-header">
+                                {{ slot.description }}
+                            </div>
+                            <div class="card-body">
+                                <h5>Provided by {{ slot.provider }}</h5>
+                                <p>Client: {{ slot.client }}</p>
+                                <p>Time: {{ slot.starttime.strftime('%Y-%m-%d %I:%M %p') }} - </p>
+                                <p>      {{ slot.endtime.strftime('%Y-%m-%d %I:%M %p') }}</p>
+                                <p>[{{ slot.category }}]</p>
+                                <input type="hidden" name="slot_id" value="{{ slot.id }}">
+                                <button type="submit" class="btn btn-secondary">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                {% if loop.index % 3 == 0 %} <!-- Clear fix for wrapping rows every three cards -->
+                    <div class="w-100"></div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No Provider Appointments</p>
+    {% endif %}
+    </div>
+    {% endif %}
+    <!-- {% if pslots %}
         <h3>Provider Listings</h3>
         <ul style="list-style: none;">
             {% for slot in pslots %}
@@ -153,6 +220,6 @@
         </ul>
     {% else %}
         <p>No Provider Appointments</p>
-    {% endif %}
+    {% endif %} -->
 </div>
 {% endblock %}
