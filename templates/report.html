@@ -47,15 +47,14 @@
         /* setting up query parameters for searching */
         function setFormAction() {
             // Get values from input text boxes
-            var keyword = document.getElementById('keyword').value;
             var month = document.getElementById('month').value;
             var year = document.getElementById('year').value;
 
             // Start form action
-            var formAction = '/viewappointments' + '?';
+            var formAction = '/report' + '?';
 
             // Append new parameters
-            formAction += '&keyword=' + encodeURIComponent(keyword) + '&month=' + encodeURIComponent(month) + '&year=' + encodeURIComponent(year);
+            formAction += '&month=' + encodeURIComponent(month) + '&year=' + encodeURIComponent(year);
 
             console.log(formAction)
 
