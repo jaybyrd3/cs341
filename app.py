@@ -839,7 +839,43 @@ def dismiss_notification(notification_id):
 @app.route('/report')
 @login_required
 def generate_report(users=None, start_date=None, end_date=None):
-    slots = Slot.query.all()
+    month = request.args.get('month', '')
+    year = request.args.get('year', '')
+
+    slots_query = Slot.query.all()
+
+    if month:
+        try:
+            month_numeric = int(month)
+            if not 1 <= month_numeric <= 12:
+                raise ValueError("Month must be between 1 and 12")
+            else:
+                slots_query = slots_query.filter(
+                    or_(
+                        extract('month', Slot.starttime) == month_numeric,
+                        extract('month', Slot.endtime) == month_numeric
+                    )
+                )
+        except ValueError:
+            return 'Invalid month', 400
+        
+    if year:
+        try:
+            year_numeric = int(year)
+            if not 2024 <= year_numeric <= 2026:
+                raise ValueError("Year must be between 2024 and 2026")
+            else:
+                slots_query = slots_query.filter(
+                    or_(
+                        extract('year', Slot.starttime) == year_numeric,
+                        extract('year', Slot.endtime) == year_numeric
+                    )
+                )
+        except ValueError:
+            return 'Invalid year', 400
+        
+
+    slots = slots_query.all()
     cancelled = CancelledSlot.query.all()
     number_of_slots = len(slots)
     number_of_cancelled = len(cancelled)
