@@ -1,11 +1,13 @@
 from flask import Flask, request, session, render_template, redirect, url_for, flash, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
-from db_config import db, User, Slot
+from db_config import db, User, Slot, Notification
 from datetime import date, timedelta, datetime, timezone
 from logging import FileHandler, WARNING
 from sqlalchemy import or_, and_, extract, func, select, types
 from sqlalchemy.dialects.postgresql import TIMESTAMP
 import os
+
+nID = 0
 
 app = Flask(__name__)
 
@@ -550,10 +552,10 @@ def account():
         e_mail = current_email
         job_title = current_user.jobTitle
         qualifications_ = current_user.qualifications
-        #notificationCount = current_user.notificationCount
-        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
+        notifications_ = Notification.query.filter_by(recipient=current_email).all()
+        return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_, notifications_=notifications_)
     else:
-        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?")
+        return render_template('account.html', first_name="first name", last_name="last name", user_name="username", e_mail="email", job_title="job title", qualifications_="qualified?", notifications_=[]) # using "[]" here may make this break
 
 
 @app.route('/account/<account_email>')
@@ -573,7 +575,8 @@ def admin_view(account_email):
             e_mail = account_email
             job_title = requested_user.jobTitle
             qualifications_ = requested_user.qualifications
-            return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_)
+            notifications_ = Notification.query.filter_by(recipient=e_mail).all()
+            return render_template('account.html', first_name=first_name, last_name=last_name, user_name=user_name, e_mail=e_mail, job_title=job_title, qualifications_=qualifications_, notifications_=notifications_)
     else:
         if not current_user:
             flash(f"Sorry - you need to be logged in as an admin to access that page!", category="error")
@@ -582,6 +585,20 @@ def admin_view(account_email):
             flash(f"Sorry - you need to be an admin to access that page!", category="error")
             return redirect(url_for('home'))
 
+@app.route('/account/dismiss/<nID>')
+@login_required
+def dismiss(nID):
+    current_email = session.get('email')
+    current_user = User.query.filter_by(email=current_email).first()
+    if current_user:
+        notification = Notification.query.filter_by(id=nID).first()
+        if notification:
+            db.session.delete(notification)
+            db.session.commit()
+            return redirect(url_for('account'))
+    else:
+        flash(f"Sorry - you need to be logged in to access that page!", category="error")
+        return redirect(url_for('home'))
 
 # loads in demo 1 data after a db change
 @app.route('/demo1', methods=['GET'])

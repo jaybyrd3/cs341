@@ -49,4 +49,16 @@ class Slot(db.Model):
     
     def __repr__(self):
 	    return f'<Slot {self.description}>'
+    
+
+class Notification(db.Model):
+    __tablename__ = 'notification'
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.Text, unique=False, default='N/A', nullable=True)
+    recipient = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
+    sender = db.Column(db.Text, unique=False, default='N/A', nullable=True)
+    time = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
+
+    def __repr__(self):
+         return f'<Notification {self.text}>'
 
