@@ -55,7 +55,7 @@ class Notification(db.Model):
     __tablename__ = 'notification'
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.Text, unique=False, default='N/A', nullable=True)
-    recipient = db.Column(db.Text, db.ForeignKey('user.email'), nullable=True)
+    recipient = db.Column(db.Text, unique=False, default='N/A', nullable=True)
     sender = db.Column(db.Text, unique=False, default='N/A', nullable=True)
     #time_sent = db.Column(TIMESTAMP(timezone=True), default=datetime.now(timezone.utc))
 
