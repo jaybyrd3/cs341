@@ -369,9 +369,12 @@ def viewappointments():
          if pslots:
             pslots = pslots.all()
             
-         cancelled = CancelledSlot.query.filter((CancelledSlot.client == current_email) | (CancelledSlot.provider == current_email))
-         if cancelled:
-             cancelled = cancelled.all()
+         if user.is_admin:
+             cancelled = CancelledSlot.query.all()
+         else:
+             cancelled = CancelledSlot.query.filter((CancelledSlot.client == current_email) | (CancelledSlot.provider == current_email))
+             if cancelled:
+                 cancelled = cancelled.all()
          
          return render_template('viewappointments.html', pslots=pslots, cslots=cslots, isAdmin=isAdmin, cancelled=cancelled)
     else:
