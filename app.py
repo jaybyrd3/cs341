@@ -182,6 +182,7 @@ def booknewcat(category):
                 return 'Invalid year', 400
         
          open_slots_query = Slot.query.filter(Slot.client == 'None') # SWS removed Slot.category == category
+         # Maybe add here
 
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
@@ -204,6 +205,24 @@ def booknewcat(category):
 
          if category == 'all':
               open_slots = open_slots_query.all()
+
+              now = datetime.now()
+                      # Process cancellation for past slots
+              for slot in list(open_slots):  # Use list to duplicate items to modify during iteration
+                  if slot.starttime < now:
+                    # Add to cancelled slots
+                    cancelled_slot = CancelledSlot(
+                        starttime=slot.starttime,
+                        endtime=slot.endtime,
+                        client=slot.client,
+                        provider=slot.provider,
+                        description=slot.description,
+                        category=slot.category
+                    )
+                    db.session.add(cancelled_slot)
+                    db.session.delete(slot)
+
+              db.session.commit()
          else:
               open_slots = open_slots_query.filter_by(category=category).all()
          return render_template('booknew.html', open_slots=open_slots, cansearch=True)
