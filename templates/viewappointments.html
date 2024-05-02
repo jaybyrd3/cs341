@@ -96,7 +96,11 @@
     <br>
 
     {% if cslots %}
-    <h3>Client Appointments:</h3>
+        {% if isAdmin %}
+            <h3>Available Appointments:</h3>
+        {% else %}
+            <h3>Client Appointments:</h3>
+        {% endif $}
     <div class="container">
         <div class="row">
             {% for slot in cslots %}
@@ -124,12 +128,20 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>No Client Appointments</p>
+        {% if isAdmin %}
+            <h3>No Available Appointments.</h3>
+        {% else %}
+            <h3>No Appointments as Client.</h3>
+        {% endif $}
     {% endif %}
     </div>
 
     {% if pslots %}
-    <h3>Provider Appointments:</h3>
+        {% if isAdmin %}
+            <h3>Booked Appointments:</h3>
+        {% else %}
+            <h3>Provider Appointments:</h3>
+        {% endif $}
     <div class="container">
         <div class="row">
             {% for slot in pslots %}
@@ -157,7 +169,11 @@
             {% endfor %}
         </div>
     {% else %}
-        <p>No Provider Appointments</p>
+        {% if isAdmin %}
+            <h3>No Available Appointments.</h3>
+        {% else %}
+            <h3>No Appointments as Provider.</h3>
+        {% endif $}
     {% endif %}
     </div>
 </div>

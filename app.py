@@ -181,7 +181,7 @@ def booknewcat(category):
              except ValueError:
                 return 'Invalid year', 400
         
-         open_slots_query = Slot.query.filter(Slot.client == 'None') # SS removed Slot.category == category
+         open_slots_query = Slot.query.filter(Slot.client == 'None') # SWS removed Slot.category == category
 
          if keyword:
             open_slots_query = open_slots_query.filter(Slot.description.ilike(f'%{keyword}%'))
@@ -298,10 +298,12 @@ def viewappointments():
              except ValueError:
                 return 'Invalid year', 400
          
+         isAdmin = False
          user = User.query.filter_by(email=session.get('email')).first()
          if user.is_admin:
-             pslots = Slot.query
-             cslots = Slot.query
+             pslots = Slot.query # Booked Slots
+             cslots = Slot.query.filter(Slot.client == 'None') # Available Slots
+             isAdmin = True
          else:
             pslots = Slot.query.filter(Slot.provider == current_email) #.filter_by(provider=current_email).all()
             cslots = Slot.query.filter(Slot.client == current_email)
@@ -347,9 +349,9 @@ def viewappointments():
             cslots = cslots.all()
          if pslots:
             pslots = pslots.all()
-         return render_template('viewappointments.html', pslots=pslots, cslots=cslots)
+         return render_template('viewappointments.html', pslots=pslots, cslots=cslots, isAdmin=isAdmin)
     else:
-         return render_template('viewappointments.html', pslots=None, cslots=None)
+         return render_template('viewappointments.html', pslots=None, cslots=None, isAdmin=isAdmin)
 
 
 @app.route('/viewappointments/<account_email>')
