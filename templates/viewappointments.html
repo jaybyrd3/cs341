@@ -129,9 +129,9 @@
         </div>
     {% else %}
         {% if isAdmin %}
-            <h3>No Available Appointments.</h3>
+            <p class="text-danger">* No Available Appointments *</p>
         {% else %}
-            <h3>No Appointments as Client.</h3>
+            <p class="text-danger">* No Appointments as Client *</p>
         {% endif %}
     {% endif %}
     </div>
@@ -170,9 +170,9 @@
         </div>
     {% else %}
         {% if isAdmin %}
-            <h3>No Booked Appointments.</h3>
+            <p class="text-danger">* No Booked Appointments *<p>
         {% else %}
-            <h3>No Appointments as Provider.</h3>
+            <p class="text-danger">* No Appointments as Provider *<p>
         {% endif %}
     {% endif %}
     </div>
