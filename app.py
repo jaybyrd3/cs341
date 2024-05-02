@@ -206,7 +206,7 @@ def booknewcat(category):
          if category == 'all':
               open_slots = open_slots_query.all()
 
-              now = datetime.now()
+              now = datetime.now(timezone.utc)
                       # Process cancellation for past slots
               for slot in list(open_slots):  # Use list to duplicate items to modify during iteration
                   if slot.starttime < now:
