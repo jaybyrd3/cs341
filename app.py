@@ -256,28 +256,29 @@ def cancel_appointment():
 
             # Update the slot to indicate cancellation
             if user.is_admin:
+                flash('Appointment DESTROYED successfully', 'success')
+                add_notification(cancelled_slot.client.id, "Appointment Cancelled", "Your appointment with " + cancelled_slot.provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
+                add_notification(cancelled_slot.provider.id, "Appointment Cancelled", "Your appointment with " + cancelled_slot.client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
                 db.session.delete(slot)
                 db.session.commit()
-                flash('Appointment DESTROYED successfully', 'success')
-                add_notification(client.id, "Appointment Cancelled", "Your appointment with " + provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
-                add_notification(provider.id, "Appointment Cancelled", "Your appointment with " + client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
             elif slot.provider == current_email:
                 # If provider, delete from db & notify client
                 #db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
                 #nID += 1
+
+                flash('Appointment DESTROYED successfully', 'success')
+                add_notification(cancelled_slot.client.id, "Appointment Cancelled", "Your appointment with " + cancelled_slot.provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                 db.session.delete(slot)
                 db.session.commit()
-                flash('Appointment DESTROYED successfully', 'success')
-                add_notification(client.id, "Appointment Cancelled", "Your appointment with " + provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
             else:
                 slot.client = "None"  # or another appropriate action
                 # Notify provider
                 #db.session.add(Notification(id=nID, sender=current_email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled."))
                 #nID += 1
-                db.session.commit()
                 flash('Appointment canceled successfully.', 'success')
                 provider = User.query.filter_by(email=slot.provider).first()
-                add_notification(provider.id, "Appointment Cancelled", "Your appointment with " + client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
+                add_notification(provider.id, "Appointment Cancelled", "Your appointment with " + cancelled_slot.client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
+                db.session.commit()
         else:
             flash('You do not have permission to cancel this appointment', 'error')
     else:
