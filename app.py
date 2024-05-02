@@ -434,6 +434,18 @@ def delete():
                 #notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                 #nID += 1
                 #db.session.add(notif)
+                # Create a new cancelled slot with data from the original slot
+                cancelled_slot = CancelledSlot(
+                    starttime=slot.starttime,
+                    endtime=slot.endtime,
+                    client=slot.client,
+                    provider=slot.provider,
+                    description=slot.description,
+                    category=slot.category
+                )
+                db.session.add(cancelled_slot)  # Add the cancelled slot to the database
+
+                add_notification(slot.client.id, "Appointment Cancelled", "Your appointment with " + slot.provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                 db.session.delete(slot)
                 db.session.commit()
     if cslots:
@@ -441,6 +453,18 @@ def delete():
             #notif = Notification(id=nID, sender=user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
             #nID += 1
             #db.session.add(notif)
+            # Create a new cancelled slot with data from the original slot
+            cancelled_slot = CancelledSlot(
+                starttime=slot.starttime,
+                endtime=slot.endtime,
+                client=slot.client,
+                provider=slot.provider,
+                description=slot.description,
+                category=slot.category
+            )
+            db.session.add(cancelled_slot)  # Add the cancelled slot to the database
+
+            add_notification(slot.provider.id, "Appointment Cancelled", "Your appointment with " + slot.client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
             db.session.delete(slot)
             db.session.commit()
     flash(f"You have successfully deleted your account.", category="success")
@@ -470,6 +494,17 @@ def admin_delete(account_email):
                         #notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.provider + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                         #nID += 1
                        # db.session.add(notif)
+                                    # Create a new cancelled slot with data from the original slot
+                        cancelled_slot = CancelledSlot(
+                            starttime=slot.starttime,
+                            endtime=slot.endtime,
+                            client=slot.client,
+                            provider=slot.provider,
+                            description=slot.description,
+                            category=slot.category
+                        )
+                        db.session.add(cancelled_slot)  # Add the cancelled slot to the database
+                        add_notification(slot.client.id, "Appointment Cancelled", "Your appointment with " + slot.provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
                         db.session.delete(slot)
                         db.session.commit()
             if cslots:
@@ -477,6 +512,17 @@ def admin_delete(account_email):
                     #notif = Notification(id=nID, sender=requested_user.email, recipient=slot.client, message="Your appointment with " + slot.client + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                     #nID += 1
                     #db.session.add(notif)
+                    # Create a new cancelled slot with data from the original slot
+                    cancelled_slot = CancelledSlot(
+                        starttime=slot.starttime,
+                        endtime=slot.endtime,
+                        client=slot.client,
+                        provider=slot.provider,
+                        description=slot.description,
+                        category=slot.category
+                    )
+                    db.session.add(cancelled_slot)  # Add the cancelled slot to the database
+                    add_notification(slot.provider.id, "Appointment Cancelled", "Your appointment with " + slot.client.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled by an Admin.")
                     db.session.delete(slot)
                     db.session.commit()
             flash(f"You have successfully deleted " + requested_user.email + "'s account.", category="success")
@@ -524,6 +570,7 @@ def reactivate(account_email):
             requested_user.is_active = True
             db.session.commit()
             flash(f"You have successfully reactivated " + requested_user.email + "'s account.", category="success")
+            add_notification(requested_user, "Account Reactivated", "Your account has been reactivated by an Admin.")
             return redirect(url_for('home'))
     else:
         if not current_user:
