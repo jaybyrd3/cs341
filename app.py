@@ -267,7 +267,8 @@ def cancel_appointment():
                 #nID += 1
 
                 flash('Appointment DESTROYED successfully', 'success')
-                add_notification(client.id, "Appointment Cancelled", "Your appointment with " + provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
+                if client:
+                    add_notification(client.id, "Appointment Cancelled", "Your appointment with " + provider.firstName + " at " + slot.starttime.strftime('%B %d, %I:%M %p, %Y') + " has been cancelled.")
                 db.session.delete(slot)
                 db.session.commit()
             else:
