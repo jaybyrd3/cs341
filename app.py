@@ -349,7 +349,12 @@ def viewappointments():
             cslots = cslots.all()
          if pslots:
             pslots = pslots.all()
-         return render_template('viewappointments.html', pslots=pslots, cslots=cslots, isAdmin=isAdmin)
+            
+         cancelled = CancelledSlot.query.filter((CancelledSlot.client == current_email) | (CancelledSlot.provider == current_email))
+         if cancelled:
+             cancelled = cancelled.all()
+         
+         return render_template('viewappointments.html', pslots=pslots, cslots=cslots, isAdmin=isAdmin, cancelled=cancelled)
     else:
          return render_template('viewappointments.html', pslots=None, cslots=None, isAdmin=isAdmin)
 
@@ -367,7 +372,14 @@ def viewappointments_admin(account_email):
         else:
             pslots = Slot.query.filter(Slot.provider == account_email) #.filter_by(provider=current_email).all()
             cslots = Slot.query.filter(Slot.client == account_email)
-            return render_template('viewappointments.html', pslots=pslots, cslots=cslots, e_mail=account_email)
+            cancelled = CancelledSlot.query.filter((CancelledSlot.client == account_email) | (CancelledSlot.provider == account_email))
+            if pslots:
+                pslots = pslots.all()
+            if cslots:
+                cslots = cslots.all()
+            if cancelled:
+                cancelled = cancelled.all()
+            return render_template('viewappointments.html', pslots=pslots, cslots=cslots, e_mail=account_email, cancelled=cancelled)
     else:
         if not current_user:
             flash(f"Sorry - you need to be logged in as an admin to access that page!", category="error")
