@@ -606,7 +606,7 @@ def reactivate(account_email):
             requested_user.is_active = True
             db.session.commit()
             flash(f"You have successfully reactivated " + requested_user.email + "'s account.", category="success")
-            add_notification(requested_user, "Account Reactivated", "Your account has been reactivated by an Admin.")
+            add_notification(requested_user.id, "Account Reactivated", "Your account has been reactivated by an Admin.")
             return redirect(url_for('home'))
     else:
         if not current_user:
